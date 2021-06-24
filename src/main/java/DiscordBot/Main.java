@@ -1,19 +1,12 @@
 package DiscordBot;
 
-// Arc imports
-import arc.Core;
-import arc.util.*;
-
-// Mindustry imports
+import arc.util.Log;
 import mindustry.gen.Call;
-
-// Javacord imports
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-import org.javacord.api.entity.channel.*;
+import org.javacord.api.entity.channel.ServerTextChannel;
+import org.json.JSONObject;
 
-// Org.json imports
-import org.json.*;
 
 public class Main {
     //public static void main(String[] args) {
@@ -26,19 +19,21 @@ public class Main {
                 event.getChannel().sendMessage("Pong!");
             }
 
-            ServerTextChannel channel = event.getServerTextChannel().get();
-            if (channel.getIdAsString().equals(config.getJSONObject("discord").getString("channel_id")) && event.getMessageAuthor().isRegularUser()) {
-                String name = "";
-                if (event.getMessageAuthor().getDisplayName().toLowerCase().contains("admin") || event.getMessageAuthor().getDisplayName().toLowerCase().contains("adm")) {
-                    name = "retardado";
-                } else if (event.getMessageAuthor().getDisplayName().toLowerCase().contains("dono")) {
-                    name = "retardado²";
-                } else {
-                    name = event.getMessageAuthor().getDisplayName();
-                }
+            if (event.getServerTextChannel().isPresent()) {
+                ServerTextChannel channel = event.getServerTextChannel().get();
+                if (channel.getIdAsString().equals(config.getJSONObject("discord").getString("channel_id")) && event.getMessageAuthor().isRegularUser()) {
+                    String name;
+                    if (event.getMessageAuthor().getDisplayName().toLowerCase().contains("admin") || event.getMessageAuthor().getDisplayName().toLowerCase().contains("adm")) {
+                        name = "retardado";
+                    } else if (event.getMessageAuthor().getDisplayName().toLowerCase().contains("dono")) {
+                        name = "retardado²";
+                    } else {
+                        name = event.getMessageAuthor().getDisplayName();
+                    }
 
-                Call.sendMessage("[orange][[[]" + name + "[orange]]:[] " + event.getMessage().getReadableContent().replace("\n", " "));
-                Log.info("DISCORD > [" + event.getMessageAuthor().getDisplayName() + "]: " + event.getMessage().getReadableContent().replace("\n", " "));
+                    Call.sendMessage("[orange][[[]" + name + "[orange]]:[] " + event.getMessage().getReadableContent().replace("\n", " "));
+                    Log.info("DISCORD > [" + event.getMessageAuthor().getDisplayName() + "]: " + event.getMessage().getReadableContent().replace("\n", " "));
+                }
             }
         });
 

@@ -1,22 +1,18 @@
-// Custom imports
 import DiscordBot.Main;
-
-// Mindustry imports
 import arc.*;
 import arc.util.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.mod.Plugin;
-import static mindustry.Vars.*;
+import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.channel.ServerTextChannel;
+import org.json.JSONObject;
 
-// Org imports
-import org.javacord.api.*;
-import org.javacord.api.entity.channel.*;
-import org.json.*;
-
-// Java imports
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static mindustry.Vars.state;
+
 
 public class MindustryBR extends Plugin{
     public JSONObject config;
@@ -166,6 +162,8 @@ public class MindustryBR extends Plugin{
             for (String ds : discordStrings) {
                 defaultDiscordConfig.put(ds, "");
             }
+
+            defaultDiscordConfig.put("prefix", "!");
 
             defaultConfig.put("discord", defaultDiscordConfig);
 
