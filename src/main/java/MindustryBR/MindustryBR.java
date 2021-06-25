@@ -1,4 +1,7 @@
-import DiscordBot.Main;
+package MindustryBR;
+
+import MindustryBR.DiscordBot.Bot;
+import MindustryBR.util.*;
 import arc.*;
 import arc.util.*;
 import mindustry.game.EventType.*;
@@ -15,7 +18,7 @@ import static mindustry.Vars.state;
 
 
 public class MindustryBR extends Plugin{
-    public JSONObject config;
+    private JSONObject config;
     private DiscordApi bot;
 
     public MindustryBR() {
@@ -108,29 +111,7 @@ public class MindustryBR extends Plugin{
 
         Events.on(PlayerChatEvent.class, e -> {
             // Send message to discord
-            if (!this.config.getJSONObject("discord").getString("token").isBlank()) {
-                Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(this.config.getJSONObject("discord").getString("channel_id"));
-                Optional<ServerTextChannel> optionalLogChannel = bot.getServerTextChannelById(this.config.getJSONObject("discord").getString("log_channel_id"));
-
-
-                String msg = "**" + Strings.stripColors(e.player.name) + "**: " + e.message;
-
-                if (optionalChannel.isPresent() && !e.message.startsWith("/")) {
-                    ServerTextChannel channel = optionalChannel.get();
-
-                    channel.sendMessage(msg);
-                } else {
-                    Log.info("[MindustryBR] The channel id provided is invalid or the channel is unreachable");
-                }
-
-                if (optionalLogChannel.isPresent()) {
-                    ServerTextChannel logChannel = optionalLogChannel.get();
-
-                    logChannel.sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
-                } else {
-                    Log.info("[MindustryBR] The log channel id provided is invalid or the channel is unreachable");
-                }
-            }
+            if (!this.config.getJSONObject("discord").getString("token").isBlank()) new sendMsgToDiscord(bot, config, e);
         });
     }
 
@@ -175,20 +156,18 @@ public class MindustryBR extends Plugin{
 
         // Start the discord bot if token was provided
         if (!this.config.isEmpty() && !this.config.getJSONObject("discord").getString("token").isBlank()) {
-            this.bot = Main.run(this.config);
+            this.bot = Bot.run(this.config);
         }
     }
 
     //register commands that run on the server
     @Override
     public void registerServerCommands(CommandHandler handler){
-        handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
-           this.reloadConfig();
-        });
+        handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.reloadConfig());
 
         // Start discord bot
         handler.register("startbot", "[MindustryBR] Start bot", args -> {
-            this.bot = Main.run(this.config);
+            if (!Bot.logged) this.bot = Bot.run(this.config);
         });
     }
 
@@ -198,7 +177,7 @@ public class MindustryBR extends Plugin{
         //register a whisper command which can be used to send other players messages
         handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> {
             //find player by name
-            Player other = Groups.player.find(p -> p.name.contains(args[0]));
+            Player other = Groups.player.find(p -> p.name.toLowerCase().contains(args[0].toLowerCase()));
 
             //give error message with scarlet-colored text if player isn't found
             if(other == null){
