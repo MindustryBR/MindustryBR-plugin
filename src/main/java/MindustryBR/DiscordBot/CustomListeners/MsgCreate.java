@@ -1,12 +1,22 @@
 package MindustryBR.DiscordBot.CustomListeners;
 
 import MindustryBR.DiscordBot.Commands.GameInfo;
+import MindustryBR.util.Util;
 import MindustryBR.util.sendMsgToGame;
+import mindustry.gen.Groups;
+import mindustry.gen.Player;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.json.JSONObject;
+
+import java.util.Optional;
+
+import static mindustry.Vars.state;
 
 public class MsgCreate implements MessageCreateListener {
     private final JSONObject config;
@@ -19,13 +29,16 @@ public class MsgCreate implements MessageCreateListener {
 
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
+
         if (event.getServerTextChannel().isPresent()) {
             ServerTextChannel channel = event.getServerTextChannel().get();
             if (channel.getIdAsString().equals(config.getJSONObject("discord").getString("channel_id")) && event.getMessageAuthor().isRegularUser()) {
                 new sendMsgToGame(bot, event, config);
             }
 
-            if(event.getMessageContent().startsWith("!gameinfo")) {
+            if (!event.getMessageAuthor().isRegularUser() || !event.getMessageContent().startsWith("!")) return;
+
+            if(event.getMessageContent().equalsIgnoreCase("!gameinfo")) {
                 new GameInfo(bot, config, event);
             }
         }

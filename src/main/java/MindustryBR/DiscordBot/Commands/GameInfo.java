@@ -1,6 +1,6 @@
 package MindustryBR.DiscordBot.Commands;
 
-import static mindustry.Vars.state;
+import static mindustry.Vars.*;
 
 import MindustryBR.util.Util;
 import mindustry.gen.Groups;
@@ -16,38 +16,35 @@ import java.util.Optional;
 
 public class GameInfo {
     public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event) {
-        Optional<ServerTextChannel> optionalChannel = event.getServerTextChannel();
+        ServerTextChannel channel = event.getServerTextChannel().get();
 
-        if(optionalChannel.isPresent()) {
-            ServerTextChannel channel = optionalChannel.get();
+        String stats = "Wave: " + state.wave +
+                "\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted) +
+                "\nInimigos vivos: " + state.enemies +
+                "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
+                "\nBlocos construidos: " + state.stats.buildingsBuilt +
+                "\nBlocos descontruidos: " + state.stats.buildingsDeconstructed +
+                "\nBlocos destruidos: " + state.stats.buildingsDestroyed;
 
-            String stats = "Wave: " + state.wave +
-                    "\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted) +
-                    "\nInimigos vivos: " + state.enemies +
-                    "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
-                    "\nBlocos construidos: " + state.stats.buildingsBuilt +
-                    "\nBlocos descontruidos: " + state.stats.buildingsDeconstructed +
-                    "\nBlocos destruidos: " + state.stats.buildingsDestroyed;
+        String map = "Nome: " + state.map.name() +
+                "\nAutor: " + state.map.author() +
+                "\nTamanho: " + state.map.width + "x" + state.map.height +
+                "\nDescricao: " + state.map.description();
 
-            String map = "Nome: " + state.map.name() +
-                    "\nAutor: " + state.map.author() +
-                    "\nTamanho: " + state.map.width + "x" + state.map.height +
-                    "\nDescrição: " + state.map.description();
-
-            StringBuilder players = new StringBuilder();
+        StringBuilder players = new StringBuilder();
+        if (Groups.player.size() > 1) {
             for (Player p : Groups.player) {
                 players.append(p.name).append("\n");
             }
+        } else players.append("Nenhum jogador");
 
-            new MessageBuilder()
-                    .setEmbed(new EmbedBuilder()
+        new MessageBuilder()
+                .setEmbed(new EmbedBuilder()
                         .setTitle("Estatisticas do jogo atual")
                         .setColor(Util.randomColor())
                         .setDescription(stats)
                         .addInlineField("Jogadores", players.toString())
-                        .addInlineField("Mapa", map)
-                        .setThumbnail(state.map.previewFile().file()))
-                    .send(channel);
-        }
+                        .addInlineField("Mapa", map))
+                .send(channel).join();
     }
 }
