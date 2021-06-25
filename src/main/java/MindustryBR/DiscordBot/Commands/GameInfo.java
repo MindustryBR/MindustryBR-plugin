@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.util.Optional;
 
 public class GameInfo {
-    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event) {
+    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         String stats = "Wave: " + state.wave +

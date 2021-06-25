@@ -1,22 +1,14 @@
 package MindustryBR.DiscordBot.CustomListeners;
 
 import MindustryBR.DiscordBot.Commands.GameInfo;
-import MindustryBR.util.Util;
 import MindustryBR.util.sendMsgToGame;
-import mindustry.gen.Groups;
-import mindustry.gen.Player;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.json.JSONObject;
 
-import java.util.Optional;
-
-import static mindustry.Vars.state;
+import java.util.stream.Stream;
 
 public class MsgCreate implements MessageCreateListener {
     private final JSONObject config;
@@ -38,8 +30,10 @@ public class MsgCreate implements MessageCreateListener {
 
             if (!event.getMessageAuthor().isRegularUser() || !event.getMessageContent().startsWith("!")) return;
 
-            if(event.getMessageContent().equalsIgnoreCase("!gameinfo")) {
-                new GameInfo(bot, config, event);
+            String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
+
+            if(event.getMessageContent().toLowerCase().startsWith("!gameinfo")) {
+                new GameInfo(bot, config, event, args);
             }
         }
     }
