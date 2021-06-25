@@ -13,7 +13,7 @@ public class Bot {
         DiscordApi api = new DiscordApiBuilder().setToken(config.getJSONObject("discord").getString("token")).login().join();
 
         // Add custom MessageCreateListener
-        api.addListener(new MsgCreate(config));
+        api.addListener(new MsgCreate(api, config));
 
         // Print logged account
         System.out.println("Bot logged in as " + api.getYourself().getDiscriminatedName());
