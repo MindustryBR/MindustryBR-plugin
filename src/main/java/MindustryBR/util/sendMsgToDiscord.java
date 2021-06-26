@@ -13,16 +13,31 @@ import java.util.Optional;
 public class sendMsgToDiscord {
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
         String msg = "**" + Strings.stripColors(e.player.name) + "**: " + e.message;
+        JSONObject discordConfig = config.getJSONObject("discord");
 
-        if(!config.getJSONObject("discord").getString("channel_id").isBlank()) {
-            Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
+        // Check if log_channel_id is not blank
+        if (!discordConfig.getString("log_channel_id").isBlank()) {
+            // Check if the message is a command
+            if (e.message.startsWith("/")) {
+                Optional<ServerTextChannel> optionalLogChannel = bot.getServerTextChannelById(discordConfig.getString("log_channel_id"));
 
-            if (optionalChannel.isPresent() && !e.message.startsWith("/")) {
-                ServerTextChannel channel = optionalChannel.get();
+                // If the log channel exists, send message
+                if (optionalLogChannel.isPresent()) {
+                    optionalLogChannel.get().sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
+                } else Log.info("[MindustryBR] The log channel id is invalid or the channel is unreachable");
+            }
+        }
 
-                channel.sendMessage(msg);
-            } else {
-                Log.info("[MindustryBR] The channel id provided is invalid or the channel is unreachable");
+        // Check if log_channel_id is not blank
+        if (!discordConfig.getString("channel_id").isBlank()) {
+            // Check if the message isn't a command
+            if (!e.message.startsWith("/")) {
+                Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(discordConfig.getString("channel_id"));
+
+                // If the channel exists, send message
+                if (optionalChannel.isPresent()) {
+                    optionalChannel.get().sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
+                } else Log.info("[MindustryBR] The channel id is invalid or the channel is unreachable");
             }
         }
     }

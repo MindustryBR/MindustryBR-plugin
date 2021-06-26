@@ -2,6 +2,7 @@ package MindustryBR.DiscordBot.CustomListeners;
 
 import MindustryBR.DiscordBot.Commands.GameInfo;
 import MindustryBR.util.sendMsgToGame;
+import arc.util.Log;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -31,6 +32,8 @@ public class MsgCreate implements MessageCreateListener {
             if (!event.getMessageAuthor().isRegularUser() || !event.getMessageContent().startsWith("!")) return;
 
             String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
+
+            for (String s : args) Log.info(s);
 
             if(event.getMessageContent().toLowerCase().startsWith("!gameinfo")) {
                 new GameInfo(bot, config, event, args);

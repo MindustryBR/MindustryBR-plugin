@@ -21,7 +21,7 @@ public class sendMsgToGame {
                     name = event.getMessageAuthor().getDisplayName();
                 }
 
-                Call.sendMessage("[orange][[[]" + name + "[orange]]:[] " + event.getMessage().getReadableContent().replace("\n", " "));
+                Call.sendMessage("[blue]\uE80D[] [orange][[[]" + name + "[orange]]:[] " + event.getMessage().getReadableContent().replace("\n", " "));
                 Log.info("DISCORD > [" + event.getMessageAuthor().getDisplayName() + "]: " + event.getMessage().getReadableContent().replace("\n", " "));
             }
         }

@@ -3,9 +3,11 @@ package MindustryBR;
 import MindustryBR.DiscordBot.Bot;
 import MindustryBR.util.*;
 import arc.*;
+import arc.struct.Seq;
 import arc.util.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
+import mindustry.maps.*;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
@@ -118,6 +120,14 @@ public class MindustryBR extends Plugin{
     // Called when game initializes
     @Override
     public void init() {
+        // Create map previews
+        Maps allMaps = new Maps();
+        Seq<Map> customMaps = allMaps.customMaps();
+
+        for (Map m : customMaps) {
+            allMaps.queueNewPreview(m);
+        }
+
         // Create config file if it doesn't exist
         if (!Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
             JSONObject defaultConfig = new JSONObject();
