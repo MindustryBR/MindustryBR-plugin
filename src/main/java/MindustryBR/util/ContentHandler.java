@@ -42,9 +42,7 @@ import java.util.zip.InflaterInputStream;
 import static mindustry.Vars.*;
 
 public class ContentHandler{
-    public static final String schemHeader = schematicBaseStart;
 
-    Color co = new Color();
     Graphics2D currentGraphics;
     BufferedImage currentImage;
     ObjectMap<String, Fi> imageFiles = new ObjectMap<>();
@@ -84,12 +82,10 @@ public class ContentHandler{
             page.texture.height = (int)page.height;
         });
 
-        data.getRegions().each(reg -> {
-            Core.atlas.addRegion(reg.name, new AtlasRegion(reg.page.texture, reg.left, reg.top, reg.width, reg.height){{
-                name = reg.name;
-                texture = reg.page.texture;
-            }});
-        });
+        data.getRegions().each(reg -> Core.atlas.addRegion(reg.name, new AtlasRegion(reg.page.texture, reg.left, reg.top, reg.width, reg.height){{
+            name = reg.name;
+            texture = reg.page.texture;
+        }}));
 
         Lines.useLegacyLine = true;
         Core.atlas.setErrorRegion("error");
