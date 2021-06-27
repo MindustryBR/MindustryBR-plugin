@@ -57,7 +57,7 @@ public class GameInfo {
                 "\nDescricao: " + state.map.description();
 
         StringBuilder players = new StringBuilder();
-        if (Groups.player.size() > 1) {
+        if (Groups.player.size() > 0) {
             for (Player p : Groups.player) {
                 players.append(Strings.stripColors(p.name)).append("\n");
             }
