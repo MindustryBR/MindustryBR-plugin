@@ -20,7 +20,7 @@ import static mindustry.Vars.state;
 
 
 public class MindustryBR extends Plugin{
-    public static JSONObject config;
+    public static JSONObject config = new JSONObject();
     private DiscordApi bot;
 
     public MindustryBR() {
@@ -113,13 +113,7 @@ public class MindustryBR extends Plugin{
     // Called when game initializes
     @Override
     public void init() {
-        // Create map previews
-        Maps allMaps = new Maps();
-        Seq<Map> customMaps = allMaps.customMaps();
-
-        for (Map m : customMaps) {
-            allMaps.queueNewPreview(m);
-        }
+        createConfig();
 
         // Start the discord bot if token was provided
         if (!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
@@ -163,8 +157,6 @@ public class MindustryBR extends Plugin{
         defaultPrefix.put("owner_prefix", "[sky][Dono][] %1");
         defaultPrefix.put("admin_prefix", "[blue][Admin][] %1");
         defaultPrefix.put("user_prefix", "%1");
-
-        defaultConfig.put("prefix", defaultPrefix);
 
         JSONObject defaultDiscordConfig = new JSONObject();
         String[] discordStrings = {

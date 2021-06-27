@@ -36,7 +36,7 @@ public class sendMsgToDiscord {
 
                 // If the channel exists, send message
                 if (optionalChannel.isPresent()) {
-                    optionalChannel.get().sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
+                    optionalChannel.get().sendMessage(msg);
                 } else Log.info("[MindustryBR] The channel id is invalid or the channel is unreachable");
             }
         }

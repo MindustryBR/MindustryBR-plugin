@@ -3,7 +3,6 @@ plugins {
 }
 
 ext {
-    projectName = 'MindustryBR'
     versions = [
             mindustry: '126.2',
             javacord : '3.3.0',
@@ -11,7 +10,7 @@ ext {
     ]
 }
 
-group "org.${projectName}"
+group "org.MindustryBR"
 version 0.1
 
 repositories {
@@ -28,7 +27,7 @@ dependencies {
 }
 
 jar{
-    archiveFileName.set("${name}.jar")
+    archiveFileName.set("MindustryBR.jar")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from({configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}}){
