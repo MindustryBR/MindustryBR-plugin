@@ -2,7 +2,16 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+ext {
+    projectName = 'MindustryBR'
+    versions = [
+            mindustry: '126.2',
+            javacord : '3.3.0',
+            json     : '20210307'
+    ]
+}
+
+group "org.${projectName}"
 version 0.1
 
 repositories {
@@ -11,15 +20,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.Anuken.Arc:arc-core:126.2'
-    compileOnly 'com.github.Anuken.Mindustry:core:126.2'
+    compileOnly "com.github.Anuken.Arc:arc-core:${versions.mindustry}"
+    compileOnly "com.github.Anuken.Mindustry:core:${versions.mindustry}"
 
-    implementation 'org.json:json:20210307'
-    implementation 'org.javacord:javacord:3.3.0'
+    implementation "org.json:json:${versions.json}"
+    implementation "org.javacord:javacord:${versions.javacord}"
 }
 
 jar{
-    archiveFileName.set("MindustryBR.jar")
+    archiveFileName.set("${name}.jar")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from({configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}}){
