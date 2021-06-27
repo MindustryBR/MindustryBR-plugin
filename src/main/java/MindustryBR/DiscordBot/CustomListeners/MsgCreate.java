@@ -9,6 +9,7 @@ import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
 public class MsgCreate implements MessageCreateListener {
@@ -33,7 +34,11 @@ public class MsgCreate implements MessageCreateListener {
             String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
 
             if(event.getMessageContent().toLowerCase().startsWith(prefix + "gameinfo")) {
-                new GameInfo(bot, config, event, args);
+                try {
+                    new GameInfo(bot, config, event, args);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

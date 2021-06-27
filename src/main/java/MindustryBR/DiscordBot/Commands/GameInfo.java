@@ -1,23 +1,38 @@
 package MindustryBR.DiscordBot.Commands;
 
-import static mindustry.Vars.state;
-
+import MindustryBR.util.ContentHandler;
+import MindustryBR.util.Net;
 import MindustryBR.util.Util;
-import arc.util.Strings;
+import arc.files.Fi;
+import arc.util.io.Streams;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import org.javacord.api.*;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.*;
+
+import static mindustry.Vars.state;
 
 public class GameInfo {
-    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
         ServerTextChannel channel = event.getServerTextChannel().get();
+
+
+        //--------------------------------------------------------------------
+        // idk wtf im doing here
+        ContentHandler.Map map1 = ContentHandler.readMap(new DataInputStream(new FileInputStream(state.map.file.file())));
+        new File("cache/").mkdir();
+        File mapFile = new File("cache/" + state.map.file.name());
+        Fi imageFile = Fi.get("cache/image_" + state.map.file.name().replace(".msav", ".png"));
+        Streams.copy(new DataInputStream(new FileInputStream(state.map.file.file())), new FileOutputStream(mapFile));
+        ImageIO.write(map1.image, "png", imageFile.file());
+        //------------------------------------------------------------------------
 
         if (args.length > 1 && args[1].equalsIgnoreCase("raw")) {
             String raw = "> Estatisticas" +
@@ -37,7 +52,7 @@ public class GameInfo {
                     .append(raw)
                     .append("\n\n\n" + state.map.previewFile().absolutePath());
 
-            if (state.map.previewFile().exists()) msgBuilder.addAttachment(new File(state.map.previewFile().absolutePath()));
+            if (imageFile.exists()) msgBuilder.addAttachment(imageFile.file());
 
             msgBuilder.send(channel);
             return;
@@ -59,7 +74,7 @@ public class GameInfo {
         StringBuilder players = new StringBuilder();
         if (Groups.player.size() > 0) {
             for (Player p : Groups.player) {
-                players.append(Strings.stripColors(p.name)).append("\n");
+                players.append(Util.handleName(p, true)).append("\n");
             }
         } else players.append("Nenhum jogador");
 
@@ -70,7 +85,7 @@ public class GameInfo {
                 .addInlineField("Mapa", map)
                 .addInlineField("Jogadores", players.toString());
 
-        if (state.map.previewFile().exists()) embed.setImage(state.map.previewFile().absolutePath());
+        if (imageFile.exists()) embed.setImage(imageFile.file());
 
         new MessageBuilder()
                 .setEmbed(embed)
