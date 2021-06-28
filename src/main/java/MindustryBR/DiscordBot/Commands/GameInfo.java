@@ -1,15 +1,13 @@
 package MindustryBR.DiscordBot.Commands;
 
-import MindustryBR.util.ContentHandler;
-import MindustryBR.util.Util;
-import arc.files.Fi;
-import arc.struct.Seq;
-import arc.struct.StringMap;
-import arc.util.io.Streams;
+import MindustryBR.internal.util.Util;
+import mindustry.content.Items;
+import mindustry.game.Team;
+import mindustry.game.Teams;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import mindustry.maps.Map;
-import mindustry.maps.Maps;
+import mindustry.world.blocks.storage.CoreBlock.CoreBuild;
+import mindustry.world.modules.ItemModule;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -17,8 +15,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
-import java.io.*;
+import java.io.IOException;
 
 import static mindustry.Vars.state;
 
@@ -26,29 +23,60 @@ public class GameInfo {
     public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
-        /*
-        //--------------------------------------------------------------------
-        // idk wtf im doing here
-        Maps maps = new Maps();
-        Seq<Map> customMaps = maps.customMaps();
-        Map chosen = new Map(new StringMap());
+        // Default player team
+        Teams.TeamData data = state.teams.get(Team.sharded);
+        // Items are shared between cores, so it doesnt matter which one we get
+        CoreBuild core = data.cores.first();
+        ItemModule items = core.items;
 
-        for (Map m : customMaps) {
-            if (m.name().equals(state.map.name())) chosen = m;
-        }
+        String[] itemsName = {
+                "Composto de explosão",
+                "Carvão",
+                "Cobre",
+                "Grafite",
+                "Chumbo",
+                "Metavidro",
+                "Tecido de fase",
+                "Plastanio",
+                "Piratita",
+                "Areia",
+                "Sucata",
+                "Capsula de esporos",
+                "Liga de surto",
+                "Tório",
+                "Titânio"
+        };
 
-        ContentHandler.Map map1 = ContentHandler.readMap(new DataInputStream(new FileInputStream(chosen.file.file())));
-        new File("cache/").mkdir();
-        File mapFile = new File("cache/" + state.map.file.name());
-        Fi imageFile = Fi.get("cache/image_" + state.map.file.name().replace(".msav", ".png"));
-        Streams.copy(new DataInputStream(new FileInputStream(chosen.file.file())), new FileOutputStream(mapFile));
-        ImageIO.write(map1.image, "png", imageFile.file());
-        //------------------------------------------------------------------------
-        */
+        short[] itemsID = {
+                Items.blastCompound.id,
+                Items.coal.id,
+                Items.copper.id,
+                Items.graphite.id,
+                Items.lead.id,
+                Items.metaglass.id,
+                Items.phaseFabric.id,
+                Items.plastanium.id,
+                Items.pyratite.id,
+                Items.sand.id,
+                Items.scrap.id,
+                Items.silicon.id,
+                Items.sporePod.id,
+                Items.surgeAlloy.id,
+                Items.thorium.id,
+                Items.titanium.id
+        };
 
         if (args.length > 1 && args[1].equalsIgnoreCase("raw")) {
+            StringBuilder players = new StringBuilder();
+            if (Groups.player.size() > 0) {
+                for (Player p : Groups.player) {
+                    players.append(Util.handleName(p, true)).append("\n");
+                }
+            } else players.append("Nenhum jogador");
+
             String raw = "> Estatisticas" +
                     "\nWave: " + state.wave +
+                    "\nProxima wave em " + Math.round(state.wavetime / 60) + " segundos" +
                     "\nTempo de jogo: " + state.stats.timeLasted + " / " + Util.msToDuration(state.stats.timeLasted) +
                     "\nInimigos vivos: " + state.enemies +
                     "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
@@ -59,7 +87,10 @@ public class GameInfo {
                     "\nNome: " + state.map.name() +
                     "\nAutor: " + state.map.author() +
                     "\nTamanho: " + state.map.width + "x" + state.map.height +
-                    "\nDescricao: " + state.map.description();
+                    "\nDescricao: " + state.map.description() +
+                    "\n\n> Jogadores" +
+                    players.toString();
+
             MessageBuilder msgBuilder = new MessageBuilder()
                     .append(raw)
                     .append("\n\n\n" + state.map.previewFile().absolutePath());
@@ -67,10 +98,24 @@ public class GameInfo {
             if (state.map.previewFile().exists()) msgBuilder.addAttachment(state.map.previewFile().file());
 
             msgBuilder.send(channel);
+
+            // Resource info
+            MessageBuilder msgBuilder2 = new MessageBuilder();
+            if (!state.rules.waves) {
+                channel.sendMessage("Only available in survival mode!");
+                return;
+            }
+
+            for(int i = 0; i < itemsName.length; i++) {
+                msgBuilder2.append(itemsName[i] + ": " + items.get(itemsID[i]));
+            }
+
+            msgBuilder2.send(channel);
             return;
         }
 
         String stats = "Wave: " + state.wave +
+                "\nProxima wave em " + Math.round(state.wavetime / 60) + " segundos" +
                 "\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted) +
                 "\nInimigos vivos: " + state.enemies +
                 "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
@@ -90,10 +135,16 @@ public class GameInfo {
             }
         } else players.append("Nenhum jogador");
 
+        StringBuilder res = new StringBuilder();
+        for(int i = 0; i < itemsName.length; i++) {
+            res.append(itemsName[i]).append(": ").append(items.get(itemsID[i]));
+        }
+
         EmbedBuilder embed= new EmbedBuilder()
                 .setTitle("Estatisticas do jogo atual")
                 .setColor(Util.randomColor())
                 .setDescription(stats)
+                .addInlineField("Recursos", res.toString())
                 .addInlineField("Mapa", map)
                 .addInlineField("Jogadores", players.toString());
 

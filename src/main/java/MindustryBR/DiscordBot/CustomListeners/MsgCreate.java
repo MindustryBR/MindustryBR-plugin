@@ -3,7 +3,7 @@ package MindustryBR.DiscordBot.CustomListeners;
 import static MindustryBR.MindustryBR.config;
 
 import MindustryBR.DiscordBot.Commands.GameInfo;
-import MindustryBR.util.sendMsgToGame;
+import MindustryBR.internal.util.sendMsgToGame;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;

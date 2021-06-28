@@ -1,4 +1,4 @@
-package MindustryBR.util;
+package MindustryBR.internal.util;
 
 import arc.util.Strings;
 import mindustry.gen.Player;

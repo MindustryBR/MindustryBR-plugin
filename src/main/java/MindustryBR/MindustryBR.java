@@ -1,13 +1,19 @@
 package MindustryBR;
 
 import MindustryBR.DiscordBot.Bot;
-import MindustryBR.util.*;
-import arc.*;
-import arc.struct.Seq;
-import arc.util.*;
-import mindustry.game.EventType.*;
-import mindustry.gen.*;
-import mindustry.maps.*;
+import MindustryBR.internal.util.Util;
+import MindustryBR.internal.util.sendMsgToDiscord;
+import arc.Core;
+import arc.Events;
+import arc.util.CommandHandler;
+import arc.util.Log;
+import arc.util.Strings;
+import mindustry.game.EventType.PlayerChatEvent;
+import mindustry.game.EventType.PlayerJoin;
+import mindustry.game.EventType.PlayerLeave;
+import mindustry.gen.Call;
+import mindustry.gen.Groups;
+import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
@@ -182,6 +188,7 @@ public class MindustryBR extends Plugin{
             Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
             config = defaultConfig;
         } else {
+            // Load existing config
             loadConfig();
         }
     }
@@ -192,6 +199,6 @@ public class MindustryBR extends Plugin{
     private void loadConfig() {
         config = new JSONObject(this.getConfig().readString());
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(config.toString(4));
-        Log.info("[MindustryBR] Config reloaded");
+        Log.info("[MindustryBR] Config loaded");
     }
 }

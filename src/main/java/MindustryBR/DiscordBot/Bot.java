@@ -10,17 +10,23 @@ public class Bot {
     public static boolean logged = false;
 
     public static DiscordApi run() {
-        DiscordApi api = new DiscordApiBuilder().setToken(config.getJSONObject("discord").getString("token")).login().join();
+        DiscordApi bot = new DiscordApiBuilder()
+                .setToken(config.getJSONObject("discord").getString("token"))
+                .setAllIntents()
+                .login().join();
+
+        bot.setAutomaticMessageCacheCleanupEnabled(true);
+        bot.setMessageCacheSize(10, 60);
 
         // Add custom MessageCreateListener
-        api.addListener(new MsgCreate(api));
+        bot.addListener(new MsgCreate(bot));
 
         // Print logged account
-        System.out.println("Bot logged in as " + api.getYourself().getDiscriminatedName());
+        System.out.println("Bot logged in as " + bot.getYourself().getDiscriminatedName());
 
         logged = true;
 
-        return api;
+        return bot;
     }
 
 }
