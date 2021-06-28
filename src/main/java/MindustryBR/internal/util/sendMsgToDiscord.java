@@ -1,4 +1,4 @@
-package MindustryBR.util;
+package MindustryBR.internal.util;
 
 import arc.util.Log;
 import arc.util.Strings;
