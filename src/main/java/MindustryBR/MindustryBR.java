@@ -1,118 +1,38 @@
 package MindustryBR;
 
 import MindustryBR.DiscordBot.Bot;
-import MindustryBR.internal.util.Util;
+import MindustryBR.Events.playerJoin;
+import MindustryBR.Events.playerLeave;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
 import MindustryBR.internal.util.sendMsgToDiscord;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
-import arc.util.Strings;
 import mindustry.game.EventType.PlayerChatEvent;
 import mindustry.game.EventType.PlayerJoin;
 import mindustry.game.EventType.PlayerLeave;
-import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.ServerTextChannel;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static mindustry.Vars.state;
-
-
 public class MindustryBR extends Plugin{
-    static JSONObject config = new JSONObject();
-    private DiscordApi bot;
+    private static JSONObject config = new JSONObject();
+    private static DiscordApi bot;
 
     public MindustryBR() {
-        Events.on(PlayerJoin.class, e -> {
-            // Check for non-admin players with admin in name
-            e.player.name = Util.handleName(e.player, false);
-
-            // Rename players to use the tag system
-            JSONObject prefix = config.getJSONObject("prefix");
-
-            if (e.player.getInfo().id.equals(config.getString("owner_id"))) {
-                e.player.name = prefix.getString("owner_prefix").replace("%1", e.player.name);
-            } else if (e.player.admin) {
-                e.player.name = prefix.getString("admin_prefix").replace("%1", e.player.name);
-            } else {
-                e.player.name = prefix.getString("user_prefix").replace("%1", e.player.name);
-            }
-
-            // Unpause the game if one or more player is connected
-            if (Groups.player.size() >= 1 && state.serverPaused) {
-                state.serverPaused = false;
-                Log.info("auto-pause: " + Groups.player.size() + " jogador conectado -> Jogo despausado...");
-                Call.sendMessage("[scarlet][Server][]: Jogo despausado..");
-            }
-
-            // Send connect message to discord
-            if (!config.getJSONObject("discord").getString("token").isBlank()) {
-                Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
-                Optional<ServerTextChannel> optionalLogChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("log_channel_id"));
-
-                String msg = ":inbox_tray: " + Strings.stripColors(e.player.name) + " conectou";
-
-                if (optionalChannel.isPresent()) {
-                    ServerTextChannel channel = optionalChannel.get();
-
-                    channel.sendMessage(msg);
-                } else {
-                    Log.info("[MindustryBR] The channel id provided is invalid or the channel is unreachable");
-                }
-
-                if (optionalLogChannel.isPresent()) {
-                    ServerTextChannel logChannel = optionalLogChannel.get();
-
-                    logChannel.sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
-                } else {
-                    Log.info("[MindustryBR] The log channel id provided is invalid or the channel is unreachable");
-                }
-            }
-        });
-
-        Events.on(PlayerLeave.class, e -> {
-            // Pause the game if no one is connected
-            if (Groups.player.size()-1 < 1) {
-                state.serverPaused = true;
-                Log.info("auto-pause: nenhum jogador conectado -> Jogo pausado...");
-            }
-
-
-            // Send disconnect message to discord
-            if (!config.getJSONObject("discord").getString("token").isBlank()) {
-                Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
-                Optional<ServerTextChannel> optionalLogChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("log_channel_id"));
-
-                String msg = ":outbox_tray: " + Strings.stripColors(e.player.name) + " desconectou";
-
-                if (optionalChannel.isPresent()) {
-                    ServerTextChannel channel = optionalChannel.get();
-
-                    channel.sendMessage(msg);
-                } else {
-                    Log.info("[MindustryBR] The channel id provided is invalid or the channel is unreachable");
-                }
-
-                if (optionalLogChannel.isPresent()) {
-                    ServerTextChannel logChannel = optionalLogChannel.get();
-
-                    logChannel.sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
-                } else {
-                    Log.info("[MindustryBR] The log channel id provided is invalid or the channel is unreachable");
-                }
-            }
-        });
+        Events.on(PlayerJoin.class, e -> { playerJoin.run(bot, config, e); });
+        Events.on(PlayerLeave.class, e -> { playerLeave.run(bot, config, e); });
 
         Events.on(PlayerChatEvent.class, e -> {
             // Send message to discord
-            if (!config.getJSONObject("discord").getString("token").isBlank()) new sendMsgToDiscord(bot, config, e);
+            if (!config.getJSONObject("discord").getString("token").isBlank()) {
+                if (e.message.startsWith("/")) {
+                    new sendLogMsgToDiscord(bot, config, e);
+                } else new sendMsgToDiscord(bot, config, e);
+            }
         });
     }
 
@@ -123,7 +43,7 @@ public class MindustryBR extends Plugin{
 
         // Start the discord bot if token was provided
         if (!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
-            this.bot = Bot.run();
+            bot = Bot.run();
         }
     }
 
@@ -136,24 +56,31 @@ public class MindustryBR extends Plugin{
     //register commands that player can invoke in-game
     @Override
     public void registerClientCommands(CommandHandler handler){
-        //register a whisper command which can be used to send other players messages
+        // Register a DM command
         handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> {
-            //find player by name
+            // Find player by name
             Player other = Groups.player.find(p -> p.name.toLowerCase().contains(args[0].toLowerCase()));
 
-            //give error message with scarlet-colored text if player isn't found
+            // Give error message if player isn't found
             if(other == null){
                 player.sendMessage("[scarlet]Nenhum jogador encontrado com esse nome!");
                 return;
             }
 
-            //send the other player a message, using [lightgray] for gray text color and [] to reset color
+            // Send the other player a private message
             other.sendMessage("[lightgray](DM)[] " + player.name + "[white]:[] " + args[1]);
+            // Send a message to the player that used the command
             player.sendMessage("[lightgray](DM)[] " + player.name + "[white]:[] " + args[1]);
         });
     }
 
     private void createConfig() {
+        // Load config file if it already exists
+        if (Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
+            loadConfig();
+            return;
+        }
+
         // Make default config
         JSONObject defaultConfig = new JSONObject();
         defaultConfig.put("owner_id", "");
@@ -183,14 +110,9 @@ public class MindustryBR extends Plugin{
 
         defaultConfig.put("discord", defaultDiscordConfig);
 
-        // Create config file if it doesn't exist
-        if (!Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
-            Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
-            config = defaultConfig;
-        } else {
-            // Load existing config
-            loadConfig();
-        }
+        // Create config file
+        Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
+        config = defaultConfig;
     }
 
     /**
