@@ -18,8 +18,8 @@ import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 public class MindustryBR extends Plugin{
-    private static JSONObject config = new JSONObject();
-    private static DiscordApi bot;
+    public static JSONObject config = new JSONObject();
+    public static DiscordApi bot;
 
     public MindustryBR() {
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));

@@ -30,8 +30,8 @@ public class GameInfo {
         ItemModule items = core.items;
 
         String[] itemsName = {
-                "Composto de explosão",
-                "Carvão",
+                "Composto de explosao",
+                "Carvao",
                 "Cobre",
                 "Grafite",
                 "Chumbo",
@@ -43,8 +43,8 @@ public class GameInfo {
                 "Sucata",
                 "Capsula de esporos",
                 "Liga de surto",
-                "Tório",
-                "Titânio"
+                "Torio",
+                "Titanio"
         };
 
         short[] itemsID = {
@@ -137,7 +137,7 @@ public class GameInfo {
 
         StringBuilder res = new StringBuilder();
         for(int i = 0; i < itemsName.length; i++) {
-            res.append(itemsName[i]).append(": ").append(items.get(itemsID[i]));
+            res.append(itemsName[i]).append(": ").append(items.get(itemsID[i])).append("\n");
         }
 
         EmbedBuilder embed= new EmbedBuilder()
