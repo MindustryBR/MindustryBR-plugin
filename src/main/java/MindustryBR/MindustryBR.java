@@ -26,7 +26,7 @@ import static mindustry.Vars.state;
 
 
 public class MindustryBR extends Plugin{
-    public static JSONObject config = new JSONObject();
+    static JSONObject config = new JSONObject();
     private DiscordApi bot;
 
     public MindustryBR() {
