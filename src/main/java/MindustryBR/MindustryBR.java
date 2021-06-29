@@ -1,10 +1,10 @@
 package MindustryBR;
 
 import MindustryBR.DiscordBot.Bot;
+import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.playerJoin;
 import MindustryBR.Events.playerLeave;
-import MindustryBR.internal.util.sendLogMsgToDiscord;
-import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.Events.playerChat;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
@@ -12,7 +12,6 @@ import arc.util.Log;
 import mindustry.game.EventType.PlayerChatEvent;
 import mindustry.game.EventType.PlayerJoin;
 import mindustry.game.EventType.PlayerLeave;
-import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
@@ -23,17 +22,9 @@ public class MindustryBR extends Plugin{
     private static DiscordApi bot;
 
     public MindustryBR() {
-        Events.on(PlayerJoin.class, e -> { playerJoin.run(bot, config, e); });
-        Events.on(PlayerLeave.class, e -> { playerLeave.run(bot, config, e); });
-
-        Events.on(PlayerChatEvent.class, e -> {
-            // Send message to discord
-            if (!config.getJSONObject("discord").getString("token").isBlank()) {
-                if (e.message.startsWith("/")) {
-                    new sendLogMsgToDiscord(bot, config, e);
-                } else new sendMsgToDiscord(bot, config, e);
-            }
-        });
+        Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
+        Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
+        Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
     }
 
     // Called when game initializes
@@ -56,22 +47,9 @@ public class MindustryBR extends Plugin{
     //register commands that player can invoke in-game
     @Override
     public void registerClientCommands(CommandHandler handler){
-        // Register a DM command
-        handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> {
-            // Find player by name
-            Player other = Groups.player.find(p -> p.name.toLowerCase().contains(args[0].toLowerCase()));
+        handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> new dm(args, player));
 
-            // Give error message if player isn't found
-            if(other == null){
-                player.sendMessage("[scarlet]Nenhum jogador encontrado com esse nome!");
-                return;
-            }
-
-            // Send the other player a private message
-            other.sendMessage("[lightgray](DM)[] " + player.name + "[white]:[] " + args[1]);
-            // Send a message to the player that used the command
-            player.sendMessage("[lightgray](DM)[] " + player.name + "[white]:[] " + args[1]);
-        });
+        // handler.<Player>register("name", "params", "description", (args, player) -> { /* code here */ });
     }
 
     private void createConfig() {
@@ -115,9 +93,6 @@ public class MindustryBR extends Plugin{
         config = defaultConfig;
     }
 
-    /**
-     * Load config
-     */
     private void loadConfig() {
         config = new JSONObject(this.getConfig().readString());
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(config.toString(4));
