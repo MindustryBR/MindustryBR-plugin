@@ -15,12 +15,10 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import static mindustry.Vars.state;
 
 public class GameInfo {
-    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
+    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         // Default player team
@@ -116,12 +114,12 @@ public class GameInfo {
 
         String stats = "Wave: " + state.wave +
                 "\nProxima wave em " + Math.round(state.wavetime / 60) + " segundos" +
-                "\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted) +
-                "\nInimigos vivos: " + state.enemies +
-                "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
-                "\nBlocos construidos: " + state.stats.buildingsBuilt +
-                "\nBlocos descontruidos: " + state.stats.buildingsDeconstructed +
-                "\nBlocos destruidos: " + state.stats.buildingsDestroyed;
+                //"\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted) +
+                "\nInimigos vivos: " + state.enemies;
+                //"\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
+                //"\nBlocos construidos: " + state.stats.buildingsBuilt +
+                //"\nBlocos descontruidos: " + state.stats.buildingsDeconstructed +
+                //"\nBlocos destruidos: " + state.stats.buildingsDestroyed;
 
         String map = "Nome: " + state.map.name() +
                 "\nAutor: " + state.map.author() +
