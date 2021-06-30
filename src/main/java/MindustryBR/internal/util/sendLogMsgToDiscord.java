@@ -18,7 +18,9 @@ public class sendLogMsgToDiscord {
      * @param e Event
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
-        String msg = "**" + Strings.stripColors(e.player.name) + "**: " + e.message;
+        String msg = "**" + e.player.name + "**: " + e.message;
+        msg = Strings.stripColors(msg);
+
         JSONObject discordConfig = config.getJSONObject("discord");
 
         // Check if log_channel_id is not blank
@@ -40,7 +42,9 @@ public class sendLogMsgToDiscord {
      * @param message Message
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
-        String msg = "**" + Strings.stripColors(name) + "**: " + message;
+        String msg = "**" + name + "**: " + message;
+        msg = Strings.stripColors(msg);
+
         JSONObject discordConfig = config.getJSONObject("discord");
 
         // Check if log_channel_id is not blank
@@ -61,6 +65,8 @@ public class sendLogMsgToDiscord {
      * @param message Message
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, String message) {
+        message = Strings.stripColors(message);
+
         JSONObject discordConfig = config.getJSONObject("discord");
 
         // Check if log_channel_id is not blank

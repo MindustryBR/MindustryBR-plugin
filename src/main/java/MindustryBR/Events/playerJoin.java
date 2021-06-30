@@ -39,7 +39,7 @@ public class playerJoin {
         }
 
         // Send connect message to discord
-        String msg = ":inbox_tray: **" + Util.handleName(e.player.name, true) + "** conectou";
+        String msg = ":inbox_tray: **" + Util.handleName(e.player, true) + "** conectou";
         new sendMsgToDiscord(bot, config, msg);
         new sendLogMsgToDiscord(bot, config, msg);
     }

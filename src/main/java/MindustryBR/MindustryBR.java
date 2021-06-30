@@ -1,5 +1,6 @@
 package MindustryBR;
 
+import MindustryBR.Commands.server.say;
 import MindustryBR.DiscordBot.Bot;
 import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.playerJoin;
@@ -42,12 +43,14 @@ public class MindustryBR extends Plugin{
     @Override
     public void registerServerCommands(CommandHandler handler){
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.loadConfig());
+
+        handler.register("say", "[MindustryBR] Send message as Server", args -> new say(bot, config, args));
     }
 
     //register commands that player can invoke in-game
     @Override
     public void registerClientCommands(CommandHandler handler){
-        handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> new dm(args, player));
+        handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> new dm(bot , config, args, player));
 
         // handler.<Player>register("name", "params", "description", (args, player) -> { /* code here */ });
     }

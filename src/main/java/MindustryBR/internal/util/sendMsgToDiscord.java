@@ -11,7 +11,9 @@ import java.util.Optional;
 
 public class sendMsgToDiscord {
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
-        String msg = "**" + Strings.stripColors(e.player.name) + "**: " + e.message;
+        String msg = "**" + e.player.name + "**: " + e.message;
+        msg = Strings.stripColors(msg);
+
         JSONObject discordConfig = config.getJSONObject("discord");
 
         // Check if channel_id is not blank
@@ -33,7 +35,9 @@ public class sendMsgToDiscord {
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
-        String msg = "**" + Strings.stripColors(name) + "**: " + message;
+        String msg = "**" + name + "**: " + message;
+        msg = Strings.stripColors(msg);
+
         JSONObject discordConfig = config.getJSONObject("discord");
 
         // Check if log_channel_id is not blank
@@ -54,15 +58,17 @@ public class sendMsgToDiscord {
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String message) {
+        message = Strings.stripColors(message);
+
         JSONObject discordConfig = config.getJSONObject("discord");
 
-        // Check if log_channel_id is not blank
+        // Check if channel_id is not blank
         if (!discordConfig.getString("channel_id").isBlank()) {
-            Optional<ServerTextChannel> optionalLogChannel = bot.getServerTextChannelById(discordConfig.getString("channel_id"));
+            Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(discordConfig.getString("channel_id"));
 
-            // If the log channel exists, send message
-            if (optionalLogChannel.isPresent()) {
-                optionalLogChannel.get().sendMessage(message);
+            // If the channel exists, send message
+            if (optionalChannel.isPresent()) {
+                optionalChannel.get().sendMessage(message);
             } else Log.info("[MindustryBR] The channel id is invalid or the channel is unreachable");
         }
     }

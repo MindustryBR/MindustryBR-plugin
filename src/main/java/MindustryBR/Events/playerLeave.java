@@ -1,15 +1,14 @@
 package MindustryBR.Events;
 
+import MindustryBR.internal.util.Util;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToDiscord;
 import arc.util.Log;
-import arc.util.Strings;
 import mindustry.game.EventType.PlayerLeave;
+import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.ServerTextChannel;
 import org.json.JSONObject;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static mindustry.Vars.state;
 
@@ -19,31 +18,15 @@ public class playerLeave {
         if (Groups.player.size()-1 < 1) {
             state.serverPaused = true;
             Log.info("auto-pause: nenhum jogador conectado -> Jogo pausado...");
+            Call.sendMessage("[scarlet][Server][]: Jogo pausado...");
+
+            new sendMsgToDiscord(bot, config, "**Server:** Jogo pausado...");
+            new sendLogMsgToDiscord(bot, config, "**Server:** Jogo pausado...");
         }
 
-
-        // Send disconnect message to discord
-        if (!config.getJSONObject("discord").getString("token").isBlank()) {
-            Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
-            Optional<ServerTextChannel> optionalLogChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("log_channel_id"));
-
-            String msg = ":outbox_tray: " + Strings.stripColors(e.player.name) + " desconectou";
-
-            if (optionalChannel.isPresent()) {
-                ServerTextChannel channel = optionalChannel.get();
-
-                channel.sendMessage(msg);
-            } else {
-                Log.info("[MindustryBR] The channel id provided is invalid or the channel is unreachable");
-            }
-
-            if (optionalLogChannel.isPresent()) {
-                ServerTextChannel logChannel = optionalLogChannel.get();
-
-                logChannel.sendMessage("[" + LocalDateTime.now().toString().substring(0, 19) + "] " + msg);
-            } else {
-                Log.info("[MindustryBR] The log channel id provided is invalid or the channel is unreachable");
-            }
-        }
+        // Send connect message to discord
+        String msg = ":outbox_tray: **" + Util.handleName(e.player, true) + "** desconectou";
+        new sendMsgToDiscord(bot, config, msg);
+        new sendLogMsgToDiscord(bot, config, msg);
     }
 }

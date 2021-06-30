@@ -2,9 +2,11 @@ package MindustryBR.Commands.client;
 
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
+import org.javacord.api.DiscordApi;
+import org.json.JSONObject;
 
 public class dm {
-    public dm(String[] args, Player player) {
+    public dm(DiscordApi bot, JSONObject config, String[] args, Player player) {
         // Find player by name
         Player other = Groups.player.find(p -> p.name.toLowerCase().contains(args[0].toLowerCase()));
 
