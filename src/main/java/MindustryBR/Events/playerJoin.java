@@ -34,8 +34,8 @@ public class playerJoin {
             Log.info("auto-pause: " + Groups.player.size() + " jogador conectado -> Jogo despausado...");
             Call.sendMessage("[scarlet][Server][]: Jogo despausado...");
 
-            new sendMsgToDiscord(bot, config, "**Server:** Jogo despausado...");
-            new sendLogMsgToDiscord(bot, config, "**Server:** Jogo despausado...");
+            new sendMsgToDiscord(bot, config, "**[Server]:** Jogo despausado...");
+            new sendLogMsgToDiscord(bot, config, "**[Server]:** Jogo despausado...");
         }
 
         // Send connect message to discord

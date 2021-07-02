@@ -20,8 +20,8 @@ public class playerLeave {
             Log.info("auto-pause: nenhum jogador conectado -> Jogo pausado...");
             Call.sendMessage("[scarlet][Server][]: Jogo pausado...");
 
-            new sendMsgToDiscord(bot, config, "**Server:** Jogo pausado...");
-            new sendLogMsgToDiscord(bot, config, "**Server:** Jogo pausado...");
+            new sendMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
+            new sendLogMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
         }
 
         // Send connect message to discord

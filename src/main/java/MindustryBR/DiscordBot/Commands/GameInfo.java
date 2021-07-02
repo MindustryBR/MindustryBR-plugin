@@ -39,6 +39,7 @@ public class GameInfo {
                 "Piratita",
                 "Areia",
                 "Sucata",
+                "Silicio",
                 "Capsula de esporos",
                 "Liga de surto",
                 "Torio",
@@ -105,7 +106,7 @@ public class GameInfo {
             }
 
             for(int i = 0; i < itemsName.length; i++) {
-                msgBuilder2.append(itemsName[i] + ": " + items.get(itemsID[i]));
+                msgBuilder2.append(itemsName[i] + ": " + items.get(itemsID[i]) + "\n");
             }
 
             msgBuilder2.send(channel);
@@ -121,6 +122,11 @@ public class GameInfo {
                 //"\nBlocos descontruidos: " + state.stats.buildingsDeconstructed +
                 //"\nBlocos destruidos: " + state.stats.buildingsDestroyed;
 
+        StringBuilder res = new StringBuilder();
+        for(int i = 0; i < itemsName.length; i++) {
+            res.append(itemsName[i]).append(": ").append(items.get(itemsID[i])).append("\n");
+        }
+
         String map = "Nome: " + state.map.name() +
                 "\nAutor: " + state.map.author() +
                 "\nTamanho: " + state.map.width + "x" + state.map.height +
@@ -132,11 +138,6 @@ public class GameInfo {
                 players.append(Util.handleName(p, true)).append("\n");
             }
         } else players.append("Nenhum jogador");
-
-        StringBuilder res = new StringBuilder();
-        for(int i = 0; i < itemsName.length; i++) {
-            res.append(itemsName[i]).append(": ").append(items.get(itemsID[i])).append("\n");
-        }
 
         EmbedBuilder embed= new EmbedBuilder()
                 .setTitle("Estatisticas do jogo atual")
