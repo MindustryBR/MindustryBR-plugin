@@ -1,7 +1,6 @@
 package MindustryBR.DiscordBot.Commands;
 
 import MindustryBR.internal.util.Util;
-import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.gen.Groups;
@@ -27,43 +26,8 @@ public class GameInfo {
         CoreBuild core = data.cores.first();
         ItemModule items = core.items;
 
-        String[] itemsName = {
-                "Composto de explosao",
-                "Carvao",
-                "Cobre",
-                "Grafite",
-                "Chumbo",
-                "Metavidro",
-                "Tecido de fase",
-                "Plastanio",
-                "Piratita",
-                "Areia",
-                "Sucata",
-                "Silicio",
-                "Capsula de esporos",
-                "Liga de surto",
-                "Torio",
-                "Titanio"
-        };
-
-        short[] itemsID = {
-                Items.blastCompound.id,
-                Items.coal.id,
-                Items.copper.id,
-                Items.graphite.id,
-                Items.lead.id,
-                Items.metaglass.id,
-                Items.phaseFabric.id,
-                Items.plastanium.id,
-                Items.pyratite.id,
-                Items.sand.id,
-                Items.scrap.id,
-                Items.silicon.id,
-                Items.sporePod.id,
-                Items.surgeAlloy.id,
-                Items.thorium.id,
-                Items.titanium.id
-        };
+        String[] resourcesName = Util.resourcesName;
+        short[] resourcesID = Util.resourcesID;
 
         if (args.length > 1 && args[1].equalsIgnoreCase("raw")) {
             StringBuilder players = new StringBuilder();
@@ -105,8 +69,8 @@ public class GameInfo {
                 return;
             }
 
-            for(int i = 0; i < itemsName.length; i++) {
-                msgBuilder2.append(itemsName[i] + ": " + items.get(itemsID[i]) + "\n");
+            for(int i = 0; i < resourcesName.length; i++) {
+                msgBuilder2.append(Util.getResourceEmoji(resourcesID[i], config) + " " + resourcesName[i] + ": " + items.get(resourcesID[i]) + "\n");
             }
 
             msgBuilder2.send(channel);
@@ -123,8 +87,8 @@ public class GameInfo {
                 //"\nBlocos destruidos: " + state.stats.buildingsDestroyed;
 
         StringBuilder res = new StringBuilder();
-        for(int i = 0; i < itemsName.length; i++) {
-            res.append(itemsName[i]).append(": ").append(items.get(itemsID[i])).append("\n");
+        for(int i = 0; i < resourcesName.length; i++) {
+            res.append(Util.getResourceEmoji(resourcesID[i], config)).append(" ").append(resourcesName[i]).append(": ").append(items.get(resourcesID[i])).append("\n");
         }
 
         String map = "Nome: " + state.map.name() +

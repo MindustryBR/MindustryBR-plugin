@@ -6,6 +6,7 @@ import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.playerJoin;
 import MindustryBR.Events.playerLeave;
 import MindustryBR.Events.playerChat;
+import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
@@ -64,15 +65,17 @@ public class MindustryBR extends Plugin{
 
         // Make default config
         JSONObject defaultConfig = new JSONObject();
+        JSONObject defaultPrefix = new JSONObject();
+        JSONObject defaultDiscordConfig = new JSONObject();
+        JSONObject defaultResourceEmoji = new JSONObject();
+
         defaultConfig.put("owner_id", "");
         defaultConfig.put("version", 1);
 
-        JSONObject defaultPrefix = new JSONObject();
         defaultPrefix.put("owner_prefix", "[sky][Dono][] %1");
         defaultPrefix.put("admin_prefix", "[blue][Admin][] %1");
         defaultPrefix.put("user_prefix", "%1");
 
-        JSONObject defaultDiscordConfig = new JSONObject();
         String[] discordStrings = {
                 "token",
                 "channel_id",
@@ -88,6 +91,10 @@ public class MindustryBR extends Plugin{
         }
 
         defaultDiscordConfig.put("prefix", "!");
+
+        for (String rn : Util.resourcesRawName) {
+            defaultResourceEmoji.put(rn, "");
+        }
 
         defaultConfig.put("discord", defaultDiscordConfig);
 
