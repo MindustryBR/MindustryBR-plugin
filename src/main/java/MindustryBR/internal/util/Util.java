@@ -137,22 +137,22 @@ public class Util {
     };
 
     public static short[] resourcesID = {
-            Items.blastCompound.id,
-            Items.coal.id,
-            Items.copper.id,
-            Items.graphite.id,
-            Items.lead.id,
-            Items.metaglass.id,
-            Items.phaseFabric.id,
-            Items.plastanium.id,
-            Items.pyratite.id,
-            Items.sand.id,
-            Items.scrap.id,
-            Items.silicon.id,
-            Items.sporePod.id,
-            Items.surgeAlloy.id,
-            Items.thorium.id,
-            Items.titanium.id
+            Items.blastCompound.id,     // 0
+            Items.coal.id,              // 1
+            Items.copper.id,            // 2
+            Items.graphite.id,          // 3
+            Items.lead.id,              // 4
+            Items.metaglass.id,         // 5
+            Items.phaseFabric.id,       // 6
+            Items.plastanium.id,        // 7
+            Items.pyratite.id,          // 8
+            Items.sand.id,              // 9
+            Items.scrap.id,             // 10
+            Items.silicon.id,           // 11
+            Items.sporePod.id,          // 12
+            Items.surgeAlloy.id,        // 13
+            Items.thorium.id,           // 14
+            Items.titanium.id           // 15
     };
 
     /**
@@ -161,7 +161,7 @@ public class Util {
      * @param config Plugin config
      * @return Discord emoji tag
      */
-    public static String getResourceEmoji(short resourceID, JSONObject config) {
+    public static String getResourceEmojiID(short resourceID, JSONObject config) {
         JSONObject emojis = config.getJSONObject("discord").getJSONObject("emojis");
 
         if (resourceID == resourcesID[0]) return emojis.getString(resourcesRawName[0]).isBlank() ? "" : emojis.getString(resourcesRawName[0]);
@@ -179,6 +179,7 @@ public class Util {
         else if (resourceID == resourcesID[12]) return emojis.getString(resourcesRawName[12]).isBlank() ? "" : emojis.getString(resourcesRawName[12]);
         else if (resourceID == resourcesID[13]) return emojis.getString(resourcesRawName[13]).isBlank() ? "" : emojis.getString(resourcesRawName[13]);
         else if (resourceID == resourcesID[14]) return emojis.getString(resourcesRawName[14]).isBlank() ? "" : emojis.getString(resourcesRawName[14]);
+        else if (resourceID == resourcesID[15]) return emojis.getString(resourcesRawName[15]).isBlank() ? "" : emojis.getString(resourcesRawName[15]);
         else return "";
     }
 }

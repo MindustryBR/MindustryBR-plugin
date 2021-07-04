@@ -3,17 +3,13 @@ package MindustryBR;
 import MindustryBR.Commands.server.say;
 import MindustryBR.DiscordBot.Bot;
 import MindustryBR.Commands.client.dm;
-import MindustryBR.Events.playerJoin;
-import MindustryBR.Events.playerLeave;
-import MindustryBR.Events.playerChat;
+import MindustryBR.Events.*;
 import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
-import mindustry.game.EventType.PlayerChatEvent;
-import mindustry.game.EventType.PlayerJoin;
-import mindustry.game.EventType.PlayerLeave;
+import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
@@ -27,6 +23,10 @@ public class MindustryBR extends Plugin{
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
+
+        // Testing
+        Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
+        Events.on(WaveEvent.class, e-> wave.run(bot, config, e));
     }
 
     // Called when game initializes
@@ -45,13 +45,13 @@ public class MindustryBR extends Plugin{
     public void registerServerCommands(CommandHandler handler){
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.loadConfig());
 
-        handler.register("say", "[MindustryBR] Send message as Server", args -> new say(bot, config, args));
+        handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
     }
 
     //register commands that player can invoke in-game
     @Override
     public void registerClientCommands(CommandHandler handler){
-        handler.<Player>register("dm", "<player> <texto...>", "Mande uma mensagem privada para um jogador.", (args, player) -> new dm(bot , config, args, player));
+        handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot , config, args, player));
 
         // handler.<Player>register("name", "params", "description", (args, player) -> { /* code here */ });
     }
@@ -96,6 +96,7 @@ public class MindustryBR extends Plugin{
             defaultResourceEmoji.put(rn, "");
         }
 
+        defaultDiscordConfig.put("emojis", defaultResourceEmoji);
         defaultConfig.put("discord", defaultDiscordConfig);
 
         // Create config file

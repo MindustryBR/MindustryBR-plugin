@@ -24,9 +24,11 @@ public class playerLeave {
             new sendLogMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
         }
 
-        // Send connect message to discord
+        // Send disconnect message to discord
         String msg = ":outbox_tray: **" + Util.handleName(e.player, true) + "** desconectou";
         new sendMsgToDiscord(bot, config, msg);
-        new sendLogMsgToDiscord(bot, config, msg);
+
+        String logMsg = ":outbox_tray: **" + Util.handleName(e.player, true) + "** (" + e.player.getInfo().id + ") desconectou";
+        new sendLogMsgToDiscord(bot, config, logMsg);
     }
 }

@@ -18,7 +18,7 @@ public class sendLogMsgToDiscord {
      * @param e Event
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
-        String msg = "**" + e.player.name + "**: " + e.message;
+        String msg = "(" + e.player.getInfo().id + ") **" + e.player.name + "**: " + e.message;
         msg = Strings.stripColors(msg);
 
         JSONObject discordConfig = config.getJSONObject("discord");

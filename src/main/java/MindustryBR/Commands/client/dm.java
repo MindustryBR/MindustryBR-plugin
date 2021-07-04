@@ -6,7 +6,7 @@ import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 public class dm {
-    public dm(DiscordApi bot, JSONObject config, String[] args, Player player) {
+    public static void run (DiscordApi bot, JSONObject config, String[] args, Player player) {
         // Find player by name
         Player other = Groups.player.find(p -> p.name.toLowerCase().contains(args[0].toLowerCase()));
 

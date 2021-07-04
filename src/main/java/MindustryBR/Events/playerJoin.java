@@ -41,6 +41,8 @@ public class playerJoin {
         // Send connect message to discord
         String msg = ":inbox_tray: **" + Util.handleName(e.player, true) + "** conectou";
         new sendMsgToDiscord(bot, config, msg);
-        new sendLogMsgToDiscord(bot, config, msg);
+
+        String logMsg = ":inbox_tray: **" + Util.handleName(e.player, true) + "** (" + e.player.getInfo().id + ") conectou";
+        new sendLogMsgToDiscord(bot, config, logMsg);
     }
 }

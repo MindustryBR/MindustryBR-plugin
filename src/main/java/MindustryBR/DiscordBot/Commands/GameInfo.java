@@ -1,24 +1,39 @@
 package MindustryBR.DiscordBot.Commands;
 
 import MindustryBR.internal.util.Util;
+import arc.files.Fi;
+import arc.graphics.Pixmap;
+import arc.graphics.PixmapIO;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
+import mindustry.io.MapIO;
 import mindustry.world.blocks.storage.CoreBlock.CoreBuild;
 import mindustry.world.modules.ItemModule;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import static mindustry.Vars.mapPreviewDirectory;
 import static mindustry.Vars.state;
 
 public class GameInfo {
-    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
         ServerTextChannel channel = event.getServerTextChannel().get();
+
+        /*
+        Pixmap previewRaw = MapIO.generatePreview(state.map);
+        Fi f = mapPreviewDirectory.child("preview.png");
+        PixmapIO.writePNG(f, previewRaw);
+        */
 
         // Default player team
         Teams.TeamData data = state.teams.get(Team.sharded);
@@ -70,7 +85,7 @@ public class GameInfo {
             }
 
             for(int i = 0; i < resourcesName.length; i++) {
-                msgBuilder2.append(Util.getResourceEmoji(resourcesID[i], config) + " " + resourcesName[i] + ": " + items.get(resourcesID[i]) + "\n");
+                msgBuilder2.append(bot.getCustomEmojiById(Util.getResourceEmojiID(resourcesID[i], config)) + " " + resourcesName[i] + ": " + items.get(resourcesID[i]) + "\n");
             }
 
             msgBuilder2.send(channel);
@@ -88,7 +103,8 @@ public class GameInfo {
 
         StringBuilder res = new StringBuilder();
         for(int i = 0; i < resourcesName.length; i++) {
-            res.append(Util.getResourceEmoji(resourcesID[i], config)).append(" ").append(resourcesName[i]).append(": ").append(items.get(resourcesID[i])).append("\n");
+            Optional<KnownCustomEmoji> emoji = bot.getCustomEmojiById(Util.getResourceEmojiID(resourcesID[i], config));
+            res.append(emoji.map(knownCustomEmoji -> knownCustomEmoji.getMentionTag() + " ").orElse("")).append(resourcesName[i]).append(": ").append(items.get(resourcesID[i])).append("\n");
         }
 
         String map = "Nome: " + state.map.name() +
@@ -116,5 +132,12 @@ public class GameInfo {
         new MessageBuilder()
                 .setEmbed(embed)
                 .send(channel).join();
+        /*
+        new MessageBuilder()
+                .setEmbed(new EmbedBuilder()
+                    .setTitle("Recursos")
+                    .setDescription(res.toString()))
+                .send(channel).join();
+        */
     }
 }
