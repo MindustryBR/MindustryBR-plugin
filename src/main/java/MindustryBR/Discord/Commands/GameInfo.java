@@ -1,14 +1,10 @@
-package MindustryBR.DiscordBot.Commands;
+package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.util.Util;
-import arc.files.Fi;
-import arc.graphics.Pixmap;
-import arc.graphics.PixmapIO;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import mindustry.io.MapIO;
 import mindustry.world.blocks.storage.CoreBlock.CoreBuild;
 import mindustry.world.modules.ItemModule;
 import org.javacord.api.DiscordApi;
@@ -22,7 +18,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Optional;
 
-import static mindustry.Vars.mapPreviewDirectory;
 import static mindustry.Vars.state;
 
 public class GameInfo {

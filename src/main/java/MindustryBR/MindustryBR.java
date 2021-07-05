@@ -1,7 +1,7 @@
 package MindustryBR;
 
 import MindustryBR.Commands.server.say;
-import MindustryBR.DiscordBot.Bot;
+import MindustryBR.Discord.Bot;
 import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.*;
 import MindustryBR.internal.util.Util;

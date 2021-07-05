@@ -1,8 +1,8 @@
-package MindustryBR.DiscordBot.CustomListeners;
+package MindustryBR.Discord.CustomListeners;
 
 import static MindustryBR.MindustryBR.config;
 
-import MindustryBR.DiscordBot.Commands.GameInfo;
+import MindustryBR.Discord.Commands.GameInfo;
 import MindustryBR.internal.util.sendMsgToGame;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;

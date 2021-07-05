@@ -1,6 +1,6 @@
-package MindustryBR.DiscordBot;
+package MindustryBR.Discord;
 
-import MindustryBR.DiscordBot.CustomListeners.MsgCreate;
+import MindustryBR.Discord.CustomListeners.MsgCreate;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
