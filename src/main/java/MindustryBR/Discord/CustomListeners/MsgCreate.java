@@ -1,6 +1,6 @@
 package MindustryBR.Discord.CustomListeners;
 
-import static MindustryBR.MindustryBR.config;
+import static MindustryBR.Main.config;
 
 import MindustryBR.Discord.Commands.GameInfo;
 import MindustryBR.internal.util.sendMsgToGame;

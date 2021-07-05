@@ -23,7 +23,7 @@ public class sendMsgToDiscord {
             // If the channel exists, send message
             if (optionalChannel.isPresent()) {
                 optionalChannel.get().sendMessage(msg);
-            } else Log.info("[MindustryBR] The channel id is invalid or the channel is unreachable");
+            } else Log.info("[Main] The channel id is invalid or the channel is unreachable");
         }
     }
 
@@ -47,7 +47,7 @@ public class sendMsgToDiscord {
             // If the log channel exists, send message
             if (optionalLogChannel.isPresent()) {
                 optionalLogChannel.get().sendMessage(msg);
-            } else Log.info("[MindustryBR] The channel id is invalid or the channel is unreachable");
+            } else Log.info("[Main] The channel id is invalid or the channel is unreachable");
         }
     }
 
@@ -69,7 +69,7 @@ public class sendMsgToDiscord {
             // If the channel exists, send message
             if (optionalChannel.isPresent()) {
                 optionalChannel.get().sendMessage(message);
-            } else Log.info("[MindustryBR] The channel id is invalid or the channel is unreachable");
+            } else Log.info("[Main] The channel id is invalid or the channel is unreachable");
         }
     }
 }

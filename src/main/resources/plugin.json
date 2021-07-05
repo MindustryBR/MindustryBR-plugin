@@ -1,7 +1,7 @@
 {
   "name": "MindustryBR",
-  "author": "KingBR",
-  "main": "MindustryBR.MindustryBR",
+  "author": "King-BR",
+  "main": "MindustryBR.Main",
   "description": "Plugin made for the MindustryBR server",
   "version": 0.1
 }

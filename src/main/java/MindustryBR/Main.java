@@ -15,11 +15,11 @@ import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
-public class MindustryBR extends Plugin{
+public class Main extends Plugin{
     public static JSONObject config = new JSONObject();
     public static DiscordApi bot;
 
-    public MindustryBR() {
+    public Main() {
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
@@ -43,9 +43,9 @@ public class MindustryBR extends Plugin{
     //register commands that run on the server
     @Override
     public void registerServerCommands(CommandHandler handler){
-        handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.loadConfig());
+        handler.register("reloadconfig", "[Main] Reload plugin config", args -> this.loadConfig());
 
-        handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
+        handler.register("saydc", "<message...>", "[Main] Send message as Server", args -> say.run(bot, config, args));
     }
 
     //register commands that player can invoke in-game
@@ -58,7 +58,7 @@ public class MindustryBR extends Plugin{
 
     private void createConfig() {
         // Load config file if it already exists
-        if (Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
+        if (Core.settings.getDataDirectory().child("mods/Main/config.json").exists()) {
             loadConfig();
             return;
         }
@@ -100,13 +100,13 @@ public class MindustryBR extends Plugin{
         defaultConfig.put("discord", defaultDiscordConfig);
 
         // Create config file
-        Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
+        Core.settings.getDataDirectory().child("mods/Main/config.json").writeString(defaultConfig.toString(4));
         config = defaultConfig;
     }
 
     private void loadConfig() {
         config = new JSONObject(this.getConfig().readString());
-        Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(config.toString(4));
-        Log.info("[MindustryBR] Config loaded");
+        Core.settings.getDataDirectory().child("mods/Main/config.json").writeString(config.toString(4));
+        Log.info("[Main] Config loaded");
     }
 }

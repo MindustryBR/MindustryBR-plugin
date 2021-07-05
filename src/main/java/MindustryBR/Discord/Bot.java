@@ -4,7 +4,7 @@ import MindustryBR.Discord.CustomListeners.MsgCreate;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
-import static MindustryBR.MindustryBR.config;
+import static MindustryBR.Main.config;
 
 public class Bot {
     public static boolean logged = false;
