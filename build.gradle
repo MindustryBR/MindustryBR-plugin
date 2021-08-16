@@ -2,15 +2,7 @@ plugins {
     id 'java'
 }
 
-ext {
-    versions = [
-            mindustry: '126.2',
-            javacord : '3.3.0',
-            json     : '20210307'
-    ]
-}
-
-group "org.MindustryBR"
+group "MindustryBR"
 version 0.1
 
 repositories {
@@ -19,11 +11,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly "com.github.Anuken.Arc:arc-core:${versions.mindustry}"
-    compileOnly "com.github.Anuken.Mindustry:core:${versions.mindustry}"
+    compileOnly "com.github.Anuken.Arc:arc-core:126.2"
+    compileOnly "com.github.Anuken.Mindustry:core:126.2"
 
-    implementation "org.json:json:${versions.json}"
-    implementation "org.javacord:javacord:${versions.javacord}"
+    implementation "org.json:json:20210307"
+    implementation "org.javacord:javacord:3.3.2"
 }
 
 jar{

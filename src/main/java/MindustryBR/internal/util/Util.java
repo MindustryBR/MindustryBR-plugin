@@ -82,6 +82,25 @@ public class Util {
     /**
      * Handle player name
      *
+     * @param name Player name
+     * @param removeColor Whether or not to remove color tags
+     * @param discord Whether or not to handle discord markdown
+     * @return Handled name
+     */
+    public static String handleName(String name, Boolean removeColor, Boolean discord) {
+        if (name.toLowerCase().contains("admin") || name.toLowerCase().contains("adm")) name = "retardado";
+        else if (name.toLowerCase().contains("dono")) name = "retardado²";
+
+        if (removeColor) name = Strings.stripColors(name);
+
+        if (discord) name = name.replaceAll("_", "\\_").replaceAll("\\*", "\\*");
+
+        return name;
+    }
+
+    /**
+     * Handle player name
+     *
      * @param player Player to handle
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
@@ -94,6 +113,27 @@ public class Util {
         else if (player.name.toLowerCase().contains("dono")) player.name = "retardado²";
 
         if (removeColor) name = Strings.stripColors(name);
+
+        return name;
+    }
+
+    /**
+     * Handle player name
+     *
+     * @param player Player to handle
+     * @param removeColor Whether or not to remove color tags
+     * @return Handled name
+     */
+    public static String handleName(Player player, Boolean removeColor, Boolean discord) {
+        String name = player.name;
+
+        if (!player.admin) if (player.name.toLowerCase().contains("admin") || player.name.toLowerCase().contains("adm"))
+            player.name = "retardado";
+        else if (player.name.toLowerCase().contains("dono")) player.name = "retardado²";
+
+        if (removeColor) name = Strings.stripColors(name);
+
+        if (discord) name = name.replaceAll("_", "\\_").replaceAll("\\*", "\\*");
 
         return name;
     }

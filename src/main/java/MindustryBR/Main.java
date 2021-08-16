@@ -25,8 +25,8 @@ public class Main extends Plugin{
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
 
         // Testing
-        Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
-        Events.on(WaveEvent.class, e-> wave.run(bot, config, e));
+        //Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
+        //Events.on(WaveEvent.class, e-> wave.run(bot, config, e));
     }
 
     // Called when game initializes
@@ -46,6 +46,14 @@ public class Main extends Plugin{
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.loadConfig());
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
+
+        handler.register("startbot", "[force]", "[MindustryBR] Start the discord bot if it isnt already online", args -> {
+            // Start the discord bot if token was provided and the bot isnt online
+            if (((!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) || args.length > 0) && !Bot.logged) {
+                if (args.length > 0) Log.info("force starting bot");
+                bot = Bot.run();
+            }
+        });
     }
 
     //register commands that player can invoke in-game
@@ -98,6 +106,7 @@ public class Main extends Plugin{
 
         defaultDiscordConfig.put("emojis", defaultResourceEmoji);
         defaultConfig.put("discord", defaultDiscordConfig);
+        defaultConfig.put("prefix", defaultPrefix);
 
         // Create config file
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));

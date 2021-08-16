@@ -18,8 +18,8 @@ public class sendLogMsgToDiscord {
      * @param e Event
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
-        String msg = "(" + e.player.getInfo().id + ") **" + e.player.name + "**: " + e.message;
-        msg = Strings.stripColors(msg);
+        String msg = "(" + e.player.getInfo().id + ") **" + e.player.name.replace("@everyone", "@.everyone").replace("@here", "@.here") + "**: " + e.message;
+        msg = Strings.stripColors(msg).replace("@everyone", "@.everyone").replace("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
@@ -43,7 +43,7 @@ public class sendLogMsgToDiscord {
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
         String msg = "**" + name + "**: " + message;
-        msg = Strings.stripColors(msg);
+        msg = Strings.stripColors(msg).replace("@everyone", "@.everyone").replace("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
@@ -65,7 +65,7 @@ public class sendLogMsgToDiscord {
      * @param message Message
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, String message) {
-        message = Strings.stripColors(message);
+        message = Strings.stripColors(message).replace("@everyone", "@.everyone").replace("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 

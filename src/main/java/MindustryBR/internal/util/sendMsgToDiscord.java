@@ -6,13 +6,14 @@ import mindustry.game.EventType.PlayerChatEvent;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.json.JSONObject;
+import MindustryBR.internal.util.Util;
 
 import java.util.Optional;
 
 public class sendMsgToDiscord {
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
-        String msg = "**" + e.player.name + "**: " + e.message;
-        msg = Strings.stripColors(msg);
+        String msg = "**" + Util.handleName(e.player, true, true) + "**: " + e.message;
+        msg = Strings.stripColors(msg).replace("@everyone", "@.everyone").replace("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
@@ -35,8 +36,8 @@ public class sendMsgToDiscord {
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
-        String msg = "**" + name + "**: " + message;
-        msg = Strings.stripColors(msg);
+        String msg = "**" + Util.handleName(name, true, true) + "**: " + message;
+        msg = Strings.stripColors(msg).replace("@everyone", "@.everyone").replace("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
@@ -58,7 +59,7 @@ public class sendMsgToDiscord {
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String message) {
-        message = Strings.stripColors(message);
+        message = Strings.stripColors(message).replace("@everyone", "@.everyone").replace("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 

@@ -1,6 +1,7 @@
 package MindustryBR.Discord;
 
 import MindustryBR.Discord.CustomListeners.MsgCreate;
+import arc.util.Log;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
@@ -22,6 +23,7 @@ public class Bot {
         bot.addListener(new MsgCreate(bot));
 
         // Print logged account
+        Log.info("Bot logged in as " + bot.getYourself().getDiscriminatedName());
         System.out.println("Bot logged in as " + bot.getYourself().getDiscriminatedName());
 
         logged = true;

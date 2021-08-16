@@ -19,6 +19,6 @@ public class say {
 
         Call.sendMessage(name + msg);
         Log.info(Strings.stripColors(name + msg));
-        new sendMsgToDiscord(bot, config, name, msg);
+        new sendMsgToDiscord(bot, config, name + msg);
     }
 }
