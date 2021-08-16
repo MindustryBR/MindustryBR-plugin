@@ -50,7 +50,7 @@ public class GameInfo {
             String raw = "> Estatisticas" +
                     "\nWave: " + state.wave +
                     "\nProxima wave em " + Math.round(state.wavetime / 60) + " segundos" +
-                    "\nTempo de jogo: " + state.stats.timeLasted + " / " + Util.msToDuration(state.stats.timeLasted) +
+                    "\nTempo de jogo: " + state.stats.timeLasted + " / " + Util.msToDuration(state.stats.timeLasted, false) +
                     "\nInimigos vivos: " + state.enemies +
                     "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
                     "\nBlocos construidos: " + state.stats.buildingsBuilt +
@@ -88,8 +88,8 @@ public class GameInfo {
         }
 
         String stats = "Wave: " + state.wave +
-                "\nProxima wave em " + Math.round(state.wavetime / 60) + " segundos" +
-                //"\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted) +
+                "\nProxima wave em " + Util.msToDuration(state.wavetime, true) + " segundos" +
+                //"\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted, false) +
                 "\nInimigos vivos: " + state.enemies;
                 //"\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
                 //"\nBlocos construidos: " + state.stats.buildingsBuilt +

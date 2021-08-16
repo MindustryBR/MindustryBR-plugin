@@ -29,9 +29,10 @@ public class Util {
      * Convert a millisecond duration to a string format
      *
      * @param millis A duration to convert to a string form
-     * @return A string of the form "X Horas Y Minutos Z Segundos".
+     * @param shortTime
+     * @return A string of the form "X Hours Y Minutes Z Seconds".
      */
-    public static String msToDuration(long millis) {
+    public static String msToDuration(long millis, boolean shortTime) {
         if(millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
 
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
@@ -40,7 +41,28 @@ public class Util {
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+        if (!shortTime) return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+        return(minutes + " Minutos " + seconds + " Segundos");
+    }
+
+    /**
+     * Convert a millisecond duration to a string format
+     *
+     * @param millis A duration to convert to a string form
+     * @param shortTime
+     * @return A string of the form "X Hours Y Minutes Z Seconds".
+     */
+    public static String msToDuration(float millis, boolean shortTime) {
+        if(millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
+
+        long hours = TimeUnit.MILLISECONDS.toHours((long) millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes((long) millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millis);
+
+        if (!shortTime) return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+        return(minutes + " Minutos " + seconds + " Segundos");
     }
 
     /**

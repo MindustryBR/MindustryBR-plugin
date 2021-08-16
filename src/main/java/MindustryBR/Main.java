@@ -25,7 +25,7 @@ public class Main extends Plugin{
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
 
         // Testing
-        //Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
+        Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
         //Events.on(WaveEvent.class, e-> wave.run(bot, config, e));
     }
 
