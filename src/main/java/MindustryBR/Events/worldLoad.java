@@ -11,7 +11,11 @@ import java.awt.*;
 import java.util.Optional;
 
 public class worldLoad {
-    public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) throws InterruptedException {
+    private static boolean started = false;
+
+    public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
+        if(started) return;
+
         Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
 
         if (optionalChannel.isEmpty()) return;
@@ -26,5 +30,7 @@ public class worldLoad {
         new MessageBuilder()
                 .setEmbed(embed)
                 .send(channel).join();
+
+        started = true;
     }
 }

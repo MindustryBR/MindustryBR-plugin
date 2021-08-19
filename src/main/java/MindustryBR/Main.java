@@ -4,6 +4,7 @@ import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.*;
+import MindustryBR.internal.util.PauseTask;
 import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
@@ -15,6 +16,9 @@ import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
+
 public class Main extends Plugin{
     public static JSONObject config = new JSONObject();
     public static DiscordApi bot;
@@ -23,17 +27,11 @@ public class Main extends Plugin{
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
-
-        // Testing
         Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
         Events.on(WaveEvent.class, e -> wave.run(bot, config, e));
-        Events.on(WorldLoadEvent.class, e -> {
-            try {
-                worldLoad.run(bot, config, e);
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-        });
+
+        // Testing
+        Events.on(WorldLoadEvent.class, e -> worldLoad.run(bot, config, e));
     }
 
     // Called when game initializes
@@ -45,6 +43,11 @@ public class Main extends Plugin{
         if (!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
             bot = Bot.run();
         }
+
+        // Auto pause timer
+        Timer time = new Timer(); // Instantiate Timer Object
+        time.schedule(new PauseTask(), 0, TimeUnit.MINUTES.toMillis(2));
+
     }
 
     //register commands that run on the server

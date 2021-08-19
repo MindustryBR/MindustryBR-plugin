@@ -24,12 +24,6 @@ public class GameInfo {
     public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
-        /*
-        Pixmap previewRaw = MapIO.generatePreview(state.map);
-        Fi f = mapPreviewDirectory.child("preview.png");
-        PixmapIO.writePNG(f, previewRaw);
-        */
-
         // Default player team
         Teams.TeamData data = state.teams.get(Team.sharded);
         // Items are shared between cores, so it doesnt matter which one we get
@@ -84,17 +78,18 @@ public class GameInfo {
             }
 
             msgBuilder2.send(channel);
+
+            // Map tags info
+            MessageBuilder msgBuilder3 = new MessageBuilder()
+                    .append(state.map.tags.toString("\n"));
+
+            msgBuilder3.send(channel);
             return;
         }
 
         String stats = "Wave: " + state.wave +
                 "\nProxima wave em " + Util.msToDuration((state.wavetime / 60) * 1000, true) +
-                //"\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted, false) +
                 "\nInimigos vivos: " + state.enemies;
-                //"\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +
-                //"\nBlocos construidos: " + state.stats.buildingsBuilt +
-                //"\nBlocos descontruidos: " + state.stats.buildingsDeconstructed +
-                //"\nBlocos destruidos: " + state.stats.buildingsDestroyed;
 
         StringBuilder res = new StringBuilder();
         for(int i = 0; i < resourcesName.length; i++) {
@@ -127,12 +122,5 @@ public class GameInfo {
         new MessageBuilder()
                 .setEmbed(embed)
                 .send(channel).join();
-        /*
-        new MessageBuilder()
-                .setEmbed(new EmbedBuilder()
-                    .setTitle("Recursos")
-                    .setDescription(res.toString()))
-                .send(channel).join();
-        */
     }
 }

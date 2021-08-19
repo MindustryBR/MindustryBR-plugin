@@ -125,7 +125,7 @@ public class Util {
      * @param remove if true, remove all markdown notations. If false, escape it
      * @return Handled string
      */
-    public static String handleDiscordMD(String str, Boolean remove) {
+    public static String handleDiscordMD(String str, boolean remove) {
         if (remove) {
             str = str.replaceAll("_", "").replaceAll("", "").replaceAll("~", "");
         } else {
@@ -142,7 +142,7 @@ public class Util {
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
      */
-    public static String handleName(String name, Boolean removeColor) {
+    public static String handleName(String name, boolean removeColor) {
         if (name.toLowerCase().contains("admin") || name.toLowerCase().contains("adm")) name = "retardado";
         else if (name.toLowerCase().contains("dono")) name = "retardado²";
 
@@ -159,7 +159,7 @@ public class Util {
      * @param discord Whether or not to handle discord markdown
      * @return Handled name
      */
-    public static String handleName(String name, Boolean removeColor, Boolean discord) {
+    public static String handleName(String name, boolean removeColor, boolean discord) {
         name = handleName(name, removeColor);
 
         if (discord) name = handleDiscordMD(name);
@@ -174,7 +174,7 @@ public class Util {
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
      */
-    public static String handleName(Player player, Boolean removeColor) {
+    public static String handleName(Player player, boolean removeColor) {
         String name = player.name;
 
         if (!player.admin) if (player.name.toLowerCase().contains("admin") || player.name.toLowerCase().contains("adm"))
@@ -193,7 +193,7 @@ public class Util {
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
      */
-    public static String handleName(Player player, Boolean removeColor, Boolean discord) {
+    public static String handleName(Player player, boolean removeColor, boolean discord) {
         String name = handleName(player, removeColor);
 
         if (discord) name = handleDiscordMD(name);
