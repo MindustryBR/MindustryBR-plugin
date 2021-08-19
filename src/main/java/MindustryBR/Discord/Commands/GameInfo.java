@@ -88,7 +88,7 @@ public class GameInfo {
         }
 
         String stats = "Wave: " + state.wave +
-                "\nProxima wave em " + Util.msToDuration(state.wavetime, true) + " segundos" +
+                "\nProxima wave em " + Util.msToDuration((state.wavetime / 60) * 1000, true) +
                 //"\nTempo de jogo: " + Util.msToDuration(state.stats.timeLasted, false) +
                 "\nInimigos vivos: " + state.enemies;
                 //"\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +

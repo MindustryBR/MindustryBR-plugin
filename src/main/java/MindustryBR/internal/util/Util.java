@@ -1,14 +1,23 @@
 package MindustryBR.internal.util;
 
+import arc.Core;
+import arc.files.Fi;
+import arc.util.Log;
 import arc.util.Strings;
+import mindustry.Vars;
 import mindustry.content.Items;
+import mindustry.core.GameState;
 import mindustry.gen.Player;
+import mindustry.io.SaveIO;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static mindustry.Vars.*;
 
 public class Util {
     /**
@@ -29,45 +38,59 @@ public class Util {
      * Convert a millisecond duration to a string format
      *
      * @param millis A duration to convert to a string form
-     * @param shortTime
+     * @param shortTime if true, return only minutes and seconds
      * @return A string of the form "X Hours Y Minutes Z Seconds".
      */
     public static String msToDuration(long millis, boolean shortTime) {
         if(millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
 
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        millis -= TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        if (!shortTime) {
+            long hours = TimeUnit.MILLISECONDS.toHours(millis);
+            millis -= TimeUnit.HOURS.toMillis(hours);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+            millis -= TimeUnit.MINUTES.toMillis(minutes);
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        if (!shortTime) return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
-        return(minutes + " Minutos " + seconds + " Segundos");
+            return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+        } else {
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+            millis -= TimeUnit.MINUTES.toMillis(minutes);
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+            return(minutes + " Minutos " + seconds + " Segundos");
+        }
     }
 
     /**
      * Convert a millisecond duration to a string format
      *
      * @param millis A duration to convert to a string form
-     * @param shortTime
+     * @param shortTime if true, return only minutes and seconds
      * @return A string of the form "X Hours Y Minutes Z Seconds".
      */
     public static String msToDuration(float millis, boolean shortTime) {
-        if(millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
+        if (millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
 
-        long hours = TimeUnit.MILLISECONDS.toHours((long) millis);
-        millis -= TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes((long) millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millis);
+        if (!shortTime) {
+            long hours = TimeUnit.MILLISECONDS.toHours((long) millis);
+            millis -= TimeUnit.HOURS.toMillis(hours);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes((long) millis);
+            millis -= TimeUnit.MINUTES.toMillis(minutes);
+            long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millis);
 
-        if (!shortTime) return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
-        return(minutes + " Minutos " + seconds + " Segundos");
+            return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+        } else {
+            long minutes = TimeUnit.MILLISECONDS.toMinutes((long) millis);
+            millis -= TimeUnit.MINUTES.toMillis(minutes);
+            long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millis);
+
+            return(minutes + " Minutos " + seconds + " Segundos");
+        }
     }
 
     /**
      * Merge "source" into "target". If fields have equal name, merge them recursively.
-     * taken from https://stackoverflow.com/a/15070484
+     * adapted from https://stackoverflow.com/a/15070484
      *
      * @return the merged object (target).
      */
@@ -83,6 +106,33 @@ public class Util {
             } else target.put(key, value);
         }
         return target;
+    }
+
+    /**
+     * Handle discord markdown
+     *
+     * @param str String to handle
+     * @return Handled string
+     */
+    public static String handleDiscordMD(String str) {
+        return str.replaceAll("_", "\\_").replaceAll("\\*", "\\*").replaceAll("~", "\\~");
+    }
+
+    /**
+     * Handle discord markdown
+     *
+     * @param str String to handle
+     * @param remove if true, remove all markdown notations. If false, escape it
+     * @return Handled string
+     */
+    public static String handleDiscordMD(String str, Boolean remove) {
+        if (remove) {
+            str = str.replaceAll("_", "").replaceAll("", "").replaceAll("~", "");
+        } else {
+            str = str.replaceAll("_", "\\_").replaceAll("\\*", "\\*").replaceAll("~", "\\~");
+        }
+
+        return str;
     }
 
     /**
@@ -110,12 +160,9 @@ public class Util {
      * @return Handled name
      */
     public static String handleName(String name, Boolean removeColor, Boolean discord) {
-        if (name.toLowerCase().contains("admin") || name.toLowerCase().contains("adm")) name = "retardado";
-        else if (name.toLowerCase().contains("dono")) name = "retardado²";
+        name = handleName(name, removeColor);
 
-        if (removeColor) name = Strings.stripColors(name);
-
-        if (discord) name = name.replaceAll("_", "\\_").replaceAll("\\*", "\\*");
+        if (discord) name = handleDiscordMD(name);
 
         return name;
     }
@@ -147,17 +194,44 @@ public class Util {
      * @return Handled name
      */
     public static String handleName(Player player, Boolean removeColor, Boolean discord) {
-        String name = player.name;
+        String name = handleName(player, removeColor);
 
-        if (!player.admin) if (player.name.toLowerCase().contains("admin") || player.name.toLowerCase().contains("adm"))
-            player.name = "retardado";
-        else if (player.name.toLowerCase().contains("dono")) player.name = "retardado²";
-
-        if (removeColor) name = Strings.stripColors(name);
-
-        if (discord) name = name.replaceAll("_", "\\_").replaceAll("\\*", "\\*");
+        if (discord) name = handleDiscordMD(name);
 
         return name;
+    }
+
+    /**
+     * Save game if the server is open and its not paused
+     */
+    public static void saveGame(){
+        if(!Vars.state.is(GameState.State.playing) || Vars.state.serverPaused) return;
+
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat ("_yyyy-MM-dd-hh:mm");
+        String fname = "rollback_";
+        Fi file = saveDirectory.child(fname + Strings.stripColors(state.map.name().replaceAll(" ", "-")) + "_" + state.wave + ft.format(dNow) + "." + saveExtension);
+        Fi latest = saveDirectory.child("latest." + saveExtension);
+        Fi[] files = saveDirectory.list((dir, name) -> name.startsWith(fname));
+        Arrays.sort(files, (f1, f2) -> {
+            long diff = f1.lastModified() - f2.lastModified();
+            if (diff > 0)
+                return -1;
+            else if (diff == 0)
+                return 0;
+            else
+                return 1;
+        });
+        if(files.length >= 10){
+            for(int index= 9; index<files.length; index++){
+                files[index].delete();
+            }
+        }
+        Core.app.post(() -> {
+            SaveIO.save(file);
+            SaveIO.save(latest);
+            Log.info("Saved to @.", file.nameWithoutExtension());
+        });
     }
 
     public static String[] resourcesRawName = {

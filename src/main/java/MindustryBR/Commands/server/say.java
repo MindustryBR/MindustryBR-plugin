@@ -14,11 +14,11 @@ public class say {
         for (String s : args) {
             msgBuilder.append(s).append(" ");
         }
-        String name = "[red][Server][]: ";
+        String name = "[red][Server][]";
         String msg = msgBuilder.toString();
 
-        Call.sendMessage(name + msg);
+        Call.sendMessage(name + ": " + msg);
         Log.info(Strings.stripColors(name + msg));
-        new sendMsgToDiscord(bot, config, name + msg);
+        new sendMsgToDiscord(bot, config, name, msg);
     }
 }

@@ -26,7 +26,14 @@ public class Main extends Plugin{
 
         // Testing
         Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
-        //Events.on(WaveEvent.class, e-> wave.run(bot, config, e));
+        Events.on(WaveEvent.class, e -> wave.run(bot, config, e));
+        Events.on(WorldLoadEvent.class, e -> {
+            try {
+                worldLoad.run(bot, config, e);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        });
     }
 
     // Called when game initializes
@@ -47,8 +54,8 @@ public class Main extends Plugin{
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
 
-        handler.register("startbot", "[force]", "[MindustryBR] Start the discord bot if it isnt already online", args -> {
-            // Start the discord bot if token was provided and the bot isnt online
+        handler.register("startbot", "[force]", "[MindustryBR] Start the discord bot if it isn't already online", args -> {
+            // Start the discord bot if token was provided and the bot isn't online
             if (((!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) || args.length > 0) && !Bot.logged) {
                 if (args.length > 0) Log.info("force starting bot");
                 bot = Bot.run();

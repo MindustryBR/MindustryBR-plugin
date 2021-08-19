@@ -13,9 +13,13 @@ public class sendMsgToGame {
             ServerTextChannel channel = event.getServerTextChannel().get();
             if (channel.getIdAsString().equals(config.getJSONObject("discord").getString("channel_id")) && event.getMessageAuthor().isRegularUser()) {
                 String name = Util.handleName(event.getMessageAuthor().getDisplayName(), false);
+                name = Util.handleDiscordMD(name, true);
 
-                Call.sendMessage("[blue]\uE80D[] [orange][[[]" + name + "[orange]]:[] " + event.getMessage().getReadableContent().replace("\n", " "));
-                Log.info("DISCORD > [" + name + "]: " + event.getMessage().getReadableContent().replace("\n", " "));
+                String msg = event.getMessage().getReadableContent().replace("\n", " ");
+                msg = Util.handleDiscordMD(msg, true);
+
+                Call.sendMessage("[blue]\uE80D[] [orange][[[]" + name + "[orange]]:[] " + msg);
+                Log.info("DISCORD > [" + name + "]: " + msg);
             }
         }
     }
