@@ -1,6 +1,7 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.util.Util;
+import mindustry.game.SpawnGroup;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.gen.Groups;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static mindustry.Vars.state;
+import static mindustry.Vars.waves;
 
 public class GameInfo {
     public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
@@ -78,12 +80,6 @@ public class GameInfo {
             }
 
             msgBuilder2.send(channel);
-
-            // Map tags info
-            MessageBuilder msgBuilder3 = new MessageBuilder()
-                    .append(state.map.tags.toString("\n"));
-
-            msgBuilder3.send(channel);
             return;
         }
 

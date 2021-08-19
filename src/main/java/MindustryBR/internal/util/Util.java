@@ -208,10 +208,10 @@ public class Util {
         if(!Vars.state.is(GameState.State.playing) || Vars.state.serverPaused) return;
 
         Date dNow = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat ("_yyyy-MM-dd-hh:mm");
+        SimpleDateFormat ft = new SimpleDateFormat ("_yyyy-MM-dd-hh-mm");
         String fname = "rollback_";
-        Fi file = saveDirectory.child(fname + Strings.stripColors(state.map.name().replaceAll(" ", "-")) + "_" + state.wave + ft.format(dNow) + "." + saveExtension);
-        Fi latest = saveDirectory.child("latest." + saveExtension);
+        Fi file = saveDirectory.child(fname + Strings.stripColors(state.map.name().replaceAll(" ", "-")) + "_" + state.wave + ft.format(dNow) + ".msav");
+        Fi latest = saveDirectory.child("latest.msav");
         Fi[] files = saveDirectory.list((dir, name) -> name.startsWith(fname));
         Arrays.sort(files, (f1, f2) -> {
             long diff = f1.lastModified() - f2.lastModified();
@@ -223,14 +223,14 @@ public class Util {
                 return 1;
         });
         if(files.length >= 10){
-            for(int index= 9; index<files.length; index++){
+            for(int index = 9; index < files.length; index++){
                 files[index].delete();
             }
         }
         Core.app.post(() -> {
             SaveIO.save(file);
             SaveIO.save(latest);
-            Log.info("Saved to @.", file.nameWithoutExtension());
+            Log.info("Saved to @", file);
         });
     }
 
