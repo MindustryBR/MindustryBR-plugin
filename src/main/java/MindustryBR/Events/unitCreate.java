@@ -11,6 +11,6 @@ public class unitCreate {
     public static void run (DiscordApi bot, JSONObject config, EventType.UnitCreateEvent e) {
         stats.unitsBuilt++;
 
-        Log.info("Unit created of team: " + e.unit.team.name);
+        //Log.info("Unit created of team: " + e.unit.team.name);
     }
 }

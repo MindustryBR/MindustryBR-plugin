@@ -11,6 +11,6 @@ public class unitDestroy {
     public static void run (DiscordApi bot, JSONObject config, EventType.UnitDestroyEvent e) {
         stats.unitsDestroyed++;
 
-        Log.info("Unit destroyed of team: " + e.unit.team.name);
+        //Log.info("Unit destroyed of team: " + e.unit.team.name);
     }
 }

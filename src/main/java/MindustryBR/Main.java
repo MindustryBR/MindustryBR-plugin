@@ -47,11 +47,6 @@ public class Main extends Plugin{
         if (!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
             bot = Bot.run();
         }
-
-        // Auto pause timer
-        Timer time = new Timer(); // Instantiate Timer Object
-        time.schedule(new PauseTask(), 0, TimeUnit.MINUTES.toMillis(2));
-
     }
 
     // Register commands that run on the server

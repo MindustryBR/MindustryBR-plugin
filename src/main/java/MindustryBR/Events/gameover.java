@@ -29,9 +29,9 @@ public class gameover {
 
         String statsStr = "Unidades construidas: " + stats.unitsBuilt +
                 "\nUnidades destruidas: " + stats.unitsDestroyed +
-                "\nConstruções construidas: " + stats.buildingsConstructed +
-                "\nConstruções descontruidas: " + stats.buildingsDesconstructed +
-                "\nConstruções destruidas: " + stats.buildingsDestroyed;
+                "\nConstrucoes construidas: " + stats.buildingsConstructed +
+                "\nConstrucoes descontruidas: " + stats.buildingsDesconstructed +
+                "\nConstrucoes destruidas: " + stats.buildingsDestroyed;
 
         String map = "Nome: " + state.map.name() +
                 "\nAutor: " + state.map.author() +
@@ -41,7 +41,7 @@ public class gameover {
         StringBuilder players = new StringBuilder();
         if (Groups.player.size() > 0) {
             for (Player p : Groups.player) {
-                players.append(Util.handleName(p, true)).append("\n");
+                players.append(Util.handleName(p, true)).append(", ");
             }
         } else players.append("Nenhum jogador");
 
@@ -51,7 +51,7 @@ public class gameover {
                 .setDescription(wave)
                 .addInlineField("Estatisticas", statsStr)
                 .addInlineField("Mapa", map)
-                .addInlineField("Jogadores", players.toString());
+                .addField("Jogadores", players.toString());
 
         if (state.map.previewFile().exists()) embed.setImage(state.map.previewFile().file());
 

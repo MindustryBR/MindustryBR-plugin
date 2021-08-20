@@ -83,9 +83,15 @@ public class GameInfo {
             return;
         }
 
-        String stats = "Wave: " + state.wave +
+        String waves = "Wave: " + state.wave +
                 "\nProxima wave em " + Util.msToDuration((state.wavetime / 60) * 1000, true) +
                 "\nInimigos vivos: " + state.enemies;
+
+        String statsStr = "Unidades construidas: " + stats.unitsBuilt +
+                "\nUnidades destruidas: " + stats.unitsDestroyed +
+                "\nConstrucoes construidas: " + stats.buildingsConstructed +
+                "\nConstrucoes descontruidas: " + stats.buildingsDesconstructed +
+                "\nConstrucoes destruidas: " + stats.buildingsDestroyed;
 
         StringBuilder res = new StringBuilder();
         for(int i = 0; i < resourcesName.length; i++) {
@@ -101,17 +107,18 @@ public class GameInfo {
         StringBuilder players = new StringBuilder();
         if (Groups.player.size() > 0) {
             for (Player p : Groups.player) {
-                players.append(Util.handleName(p, true)).append("\n");
+                players.append(Util.handleName(p, true)).append(", ");
             }
         } else players.append("Nenhum jogador");
 
         EmbedBuilder embed= new EmbedBuilder()
-                .setTitle("Estatisticas do jogo atual")
+                .setTitle("Informacoes do jogo atual")
                 .setColor(Util.randomColor())
-                .setDescription(stats)
+                .setDescription(waves)
                 .addInlineField("Recursos", res.toString())
-                .addInlineField("Mapa", map)
-                .addInlineField("Jogadores", players.toString());
+                .addInlineField("Estatisticas", statsStr)
+                .addField("Mapa", map)
+                .addField("Jogadores", players.toString());
 
         if (state.map.previewFile().exists()) embed.setImage(state.map.previewFile().file());
 

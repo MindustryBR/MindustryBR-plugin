@@ -2,8 +2,12 @@ package MindustryBR.Events;
 
 import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.util.Util;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToDiscord;
 import arc.util.Log;
 import mindustry.game.EventType;
+import mindustry.gen.Call;
+import mindustry.gen.Groups;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -21,8 +25,9 @@ public class worldLoad {
 
     public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
         stats = new Stats();
-        Log.info("wave time: " + Util.msToDuration((state.wavetime/60)*1000, true));
-        state.serverPaused = true;
+
+        // Unpause the game if one or more player is connected
+        if (Groups.player.size() >= 1 && state.serverPaused) state.serverPaused = false;
 
         if(started) return;
 

@@ -11,6 +11,6 @@ public class unitDrown {
     public static void run (DiscordApi bot, JSONObject config, EventType.UnitDrownEvent e) {
         stats.unitsDestroyed++;
 
-        Log.info("Unit drowned of team: " + e.unit.team.name);
+        //Log.info("Unit drowned of team: " + e.unit.team.name);
     }
 }
