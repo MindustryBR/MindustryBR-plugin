@@ -1,5 +1,8 @@
 package MindustryBR.Events;
 
+import MindustryBR.internal.classes.Stats;
+import MindustryBR.internal.util.Util;
+import arc.util.Log;
 import mindustry.game.EventType;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
@@ -10,10 +13,16 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.Optional;
 
+import static mindustry.Vars.state;
+import static MindustryBR.Discord.Commands.GameInfo.stats;
+
 public class worldLoad {
     private static boolean started = false;
 
     public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
+        stats = new Stats();
+        Log.info("wave time: " + Util.msToDuration((state.wavetime/60)*1000, true));
+
         if(started) return;
 
         Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));

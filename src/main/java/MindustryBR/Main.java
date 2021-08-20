@@ -4,8 +4,7 @@ import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.*;
-import MindustryBR.internal.util.PauseTask;
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.util.*;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
@@ -32,9 +31,14 @@ public class Main extends Plugin{
 
         // Testing
         Events.on(WorldLoadEvent.class, e -> worldLoad.run(bot, config, e));
+        Events.on(BlockBuildEndEvent.class, e -> blockBuildEnd.run(bot, config, e));
+        Events.on(BlockDestroyEvent.class, e -> blockDestroy.run(bot, config, e));
+        Events.on(UnitCreateEvent.class, e -> unitCreate.run(bot, config, e));
+        Events.on(UnitDestroyEvent.class, e -> unitDestroy.run(bot, config, e));
+        Events.on(UnitDrownEvent.class, e -> unitDrown.run(bot, config, e));
     }
 
-    // Called when game initializes
+    // Called when the server initializes
     @Override
     public void init() {
         createConfig();
@@ -50,7 +54,7 @@ public class Main extends Plugin{
 
     }
 
-    //register commands that run on the server
+    // Register commands that run on the server
     @Override
     public void registerServerCommands(CommandHandler handler){
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.loadConfig());
@@ -66,7 +70,7 @@ public class Main extends Plugin{
         });
     }
 
-    //register commands that player can invoke in-game
+    // Register commands that player can invoke in-game
     @Override
     public void registerClientCommands(CommandHandler handler){
         handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot , config, args, player));

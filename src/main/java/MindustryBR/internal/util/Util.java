@@ -295,7 +295,7 @@ public class Util {
      * Get the discord emoji tag corresponding to the given resource
      * @param resourceID Resource in-game ID
      * @param config Plugin config
-     * @return Discord emoji tag
+     * @return Discord emoji ID
      */
     public static String getResourceEmojiID(short resourceID, JSONObject config) {
         JSONObject emojis = config.getJSONObject("discord").getJSONObject("emojis");

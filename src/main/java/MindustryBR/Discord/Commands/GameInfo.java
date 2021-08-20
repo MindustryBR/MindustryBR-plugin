@@ -1,7 +1,7 @@
 package MindustryBR.Discord.Commands;
 
+import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.util.Util;
-import mindustry.game.SpawnGroup;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.gen.Groups;
@@ -16,14 +16,14 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static mindustry.Vars.state;
-import static mindustry.Vars.waves;
 
 public class GameInfo {
-    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
+    public static Stats stats = new Stats();
+
+    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         // Default player team
@@ -45,7 +45,7 @@ public class GameInfo {
 
             String raw = "> Estatisticas" +
                     "\nWave: " + state.wave +
-                    "\nProxima wave em " + Math.round(state.wavetime / 60) + " segundos" +
+                    "\nProxima wave em " + Util.msToDuration((state.wavetime / 60) * 1000, true) +
                     "\nTempo de jogo: " + state.stats.timeLasted + " / " + Util.msToDuration(state.stats.timeLasted, false) +
                     "\nInimigos vivos: " + state.enemies +
                     "\nInimigos mortos: " + state.stats.enemyUnitsDestroyed +

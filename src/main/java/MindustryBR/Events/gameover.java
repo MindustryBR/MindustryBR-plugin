@@ -1,17 +1,11 @@
 package MindustryBR.Events;
 
 import MindustryBR.internal.util.Util;
-import arc.util.Log;
 import mindustry.game.EventType.GameOverEvent;
-import mindustry.game.Team;
-import mindustry.game.Teams;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import mindustry.world.blocks.storage.CoreBlock;
-import mindustry.world.modules.ItemModule;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
-import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
@@ -20,6 +14,7 @@ import java.awt.*;
 import java.util.Optional;
 
 import static mindustry.Vars.state;
+import static MindustryBR.Discord.Commands.GameInfo.stats;
 
 public class gameover {
     public static void run(DiscordApi bot, JSONObject config, GameOverEvent e) {
@@ -29,26 +24,14 @@ public class gameover {
 
         ServerTextChannel channel = optionalChannel.get();
 
-        /*
-        // Default player team
-        Teams.TeamData data = state.teams.get(Team.sharded);
-        // Items are shared between cores, so it doesnt matter which one we get
-        CoreBlock.CoreBuild core = data.cores.first();
-        ItemModule items = core.items;
-        String[] resourcesName = Util.resourcesName;
-        short[] resourcesID = Util.resourcesID;
-        */
-
-        String stats = "Wave: " + state.wave +
+        String wave = "Wave: " + state.wave +
                 "\nInimigos vivos: " + state.enemies;
 
-        /*
-        StringBuilder res = new StringBuilder();
-        for(int i = 0; i < resourcesName.length; i++) {
-            Optional<KnownCustomEmoji> emoji = bot.getCustomEmojiById(Util.getResourceEmojiID(resourcesID[i], config));
-            res.append(emoji.map(knownCustomEmoji -> knownCustomEmoji.getMentionTag() + " ").orElse("")).append(resourcesName[i]).append(": ").append(items.get(resourcesID[i])).append("\n");
-        }
-        */
+        String statsStr = "Unidades construidas: " + stats.unitsBuilt +
+                "\nUnidades destruidas: " + stats.unitsDestroyed +
+                "\nConstruções construidas: " + stats.buildingsConstructed +
+                "\nConstruções descontruidas: " + stats.buildingsDesconstructed +
+                "\nConstruções destruidas: " + stats.buildingsDestroyed;
 
         String map = "Nome: " + state.map.name() +
                 "\nAutor: " + state.map.author() +
@@ -62,11 +45,11 @@ public class gameover {
             }
         } else players.append("Nenhum jogador");
 
-        EmbedBuilder embed= new EmbedBuilder()
+        EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Gameover!")
                 .setColor(Color.red)
-                .setDescription(stats)
-                //.addInlineField("Recursos", res.toString())
+                .setDescription(wave)
+                .addInlineField("Estatisticas", statsStr)
                 .addInlineField("Mapa", map)
                 .addInlineField("Jogadores", players.toString());
 
