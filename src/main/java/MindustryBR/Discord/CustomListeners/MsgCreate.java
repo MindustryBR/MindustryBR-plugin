@@ -34,11 +34,7 @@ public class MsgCreate implements MessageCreateListener {
             String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
 
             if(event.getMessageContent().toLowerCase().startsWith(prefix + "gameinfo")) {
-                try {
-                    new GameInfo(bot, config, event, args);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new GameInfo(bot, config, event, args);
             }
         }
     }

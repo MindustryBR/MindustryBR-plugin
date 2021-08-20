@@ -22,6 +22,7 @@ public class worldLoad {
     public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
         stats = new Stats();
         Log.info("wave time: " + Util.msToDuration((state.wavetime/60)*1000, true));
+        state.serverPaused = true;
 
         if(started) return;
 
