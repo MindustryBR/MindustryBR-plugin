@@ -127,7 +127,7 @@ public class Util {
      */
     public static String handleDiscordMD(String str, boolean remove) {
         if (remove) {
-            str = str.replaceAll("_", "").replaceAll("", "").replaceAll("~", "");
+            str = str.replaceAll("_", "").replaceAll("\\*", "").replaceAll("~", "");
         } else {
             str = str.replaceAll("_", "\\_").replaceAll("\\*", "\\*").replaceAll("~", "\\~");
         }
