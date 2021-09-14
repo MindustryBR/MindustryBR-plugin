@@ -2,7 +2,7 @@ package MindustryBR.Discord.CustomListeners;
 
 import static MindustryBR.Main.config;
 
-import MindustryBR.Discord.Commands.GameInfo;
+import MindustryBR.Discord.Commands.*;
 import MindustryBR.internal.util.sendMsgToGame;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
@@ -33,8 +33,11 @@ public class MsgCreate implements MessageCreateListener {
 
             String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
 
-            if(event.getMessageContent().toLowerCase().startsWith(prefix + "gameinfo")) {
-                new GameInfo(bot, config, event, args);
+            switch (args[0].replaceFirst(prefix, "")) {
+                case "gameinfo" -> new GameInfo(bot, config, event, args);
+                case "ip" -> new ip(bot, config, event, args);
+                case "banid" -> new BanID(bot, config, event, args);
+                case "banip" -> new BanIP(bot, config, event, args);
             }
         }
     }

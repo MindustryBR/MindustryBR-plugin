@@ -12,15 +12,14 @@ import arc.util.Log;
 import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
+import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
-
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 public class Main extends Plugin{
     public static JSONObject config = new JSONObject();
     public static DiscordApi bot;
+    public static Administration adm = new Administration();
 
     public Main() {
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
@@ -88,6 +87,7 @@ public class Main extends Plugin{
 
         defaultConfig.put("owner_id", "");
         defaultConfig.put("version", 1);
+        defaultConfig.put("ip", "");
 
         defaultPrefix.put("owner_prefix", "[sky][Dono][] %1");
         defaultPrefix.put("admin_prefix", "[blue][Admin][] %1");

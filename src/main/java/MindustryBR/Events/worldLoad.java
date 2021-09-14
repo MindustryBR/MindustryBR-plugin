@@ -21,7 +21,7 @@ import static mindustry.Vars.state;
 import static MindustryBR.Discord.Commands.GameInfo.stats;
 
 public class worldLoad {
-    private static boolean started = false;
+    public static boolean started = false;
 
     public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
         stats = new Stats();
