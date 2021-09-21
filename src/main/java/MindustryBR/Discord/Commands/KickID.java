@@ -2,22 +2,22 @@ package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.util.*;
 import arc.util.Strings;
+import mindustry.core.GameState;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
+import mindustry.net.Packets;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static mindustry.Vars.netServer;
+import static mindustry.Vars.state;
 
-public class BanID {
-    public BanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+public class KickID {
+    public KickID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -46,35 +46,25 @@ public class BanID {
             return;
         }
 
-        Optional<ServerTextChannel> c1 = bot.getServerTextChannelById(config.getJSONObject("discord").getString("mod_channel_id"));
-        if (c1.isEmpty()) return;
-        ServerTextChannel c2 = c1.get();
+        if(!state.is(GameState.State.playing)) {
+            new MessageBuilder()
+                    .append("Server nem ta aberto ainda precoce fdp")
+                    .send(channel)
+                    .join();
+            return;
+        }
 
         Player target = Groups.player.find(p -> Strings.stripColors(p.name()).equalsIgnoreCase(args[1]));
 
         if(target != null){
-            netServer.admins.banPlayer(target.uuid());
+            target.kick(Packets.KickReason.kick);
 
-            new sendMsgToGame(bot, "[red][Server][]", target.name() + " foi banido do servidor", config);
-            new sendMsgToDiscord(bot, config, target.name() + " foi banido do servidor");
-            new sendLogMsgToDiscord(bot, config, target.name() + " foi banido do servidor");
-
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor(event.getMessageAuthor().asUser().get())
-                    .setTitle(target.name() + " foi banido")
-                    .setDescription("UUID: " + target.uuid() + "\n" +
-                            "Nomes usados: " + target.getInfo().names.toString(", ") + "\n" +
-                            "Entrou " + target.getInfo().timesJoined + " vezes\n" +
-                            "Kickado " + target.getInfo().timesKicked + " vezes\n")
-                    .setTimestampToNow();
-
+            new sendMsgToGame(bot, "[red][Server][]", target.name() + " foi kickado do servidor", config);
+            new sendMsgToDiscord(bot, config, target.name() + " foi kickado do servidor");
+            new sendLogMsgToDiscord(bot, config, target.name() + " foi kickado do servidor");
+        } else{
             new MessageBuilder()
-                    .setEmbed(embed)
-                    .send(c2)
-                    .join();
-        } else {
-            new MessageBuilder()
-                    .append("Não achei esse jogador")
+                    .append("Não achei ninguem com esse nome")
                     .send(channel)
                     .join();
         }

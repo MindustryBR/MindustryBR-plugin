@@ -35,6 +35,23 @@ public class Util {
     }
 
     /**
+     * Check is string is a Long
+     * @param strNum String to check
+     * @return either or not it is a Long
+     */
+    public static boolean isLong(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            Long.parseLong(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Convert a millisecond duration to a string format
      *
      * @param millis A duration to convert to a string form
