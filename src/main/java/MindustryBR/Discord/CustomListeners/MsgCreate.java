@@ -40,6 +40,7 @@ public class MsgCreate implements MessageCreateListener {
                 case "ubp", "unbanplayer" -> new UnbanID(bot, config, event, args);
                 case "kp", "kickplayer" -> new KickID(bot, config, event, args);
                 case "pp", "pardonplayer" -> new PardonID(bot, config, event, args);
+                case "pi", "playerinfo" -> new InfoPlayer(bot, config, event, args);
             }
         }
     }

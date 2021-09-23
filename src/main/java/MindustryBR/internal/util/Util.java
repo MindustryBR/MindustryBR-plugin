@@ -34,6 +34,22 @@ public class Util {
         return new Color(r, g, b);
     }
 
+    public static String randomCode(int size) {
+        String abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        abc += abc.toLowerCase() + "1234567890";
+
+        Random rd = new Random();
+
+        StringBuilder res = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            char letter = abc.charAt(rd.nextInt(abc.length()));
+            res.append(letter);
+        }
+
+        return res.toString();
+    }
+
     /**
      * Check is string is a Long
      * @param strNum String to check

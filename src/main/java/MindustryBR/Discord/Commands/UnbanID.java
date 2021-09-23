@@ -78,8 +78,8 @@ public class UnbanID {
             EmbedBuilder embed = new EmbedBuilder()
                     .setAuthor(event.getMessageAuthor().asUser().get())
                     .setTitle(target.lastName + " foi desbanido")
-                    .setDescription("UUID: " + target.id + "\n" +
-                            "Nomes usados: " + target.names.toString(", ") + "\n" +
+                    .setDescription("UUID: `" + target.id + "`\n" +
+                            "Nomes usados: `" + target.names.toString(", ") + "`\n" +
                             "Entrou " + target.timesJoined + " vez(es)\n" +
                             "Kickado " + target.timesKicked + " vez(es)\n")
                     .setTimestampToNow();

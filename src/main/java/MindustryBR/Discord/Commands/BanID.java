@@ -76,8 +76,8 @@ public class BanID {
             EmbedBuilder embed = new EmbedBuilder()
                     .setAuthor(event.getMessageAuthor().asUser().get())
                     .setTitle(target.name() + " foi banido")
-                    .setDescription("UUID: " + target.getInfo().id + "\n" +
-                            "Nomes usados: " + target.getInfo().names.toString(", ") + "\n" +
+                    .setDescription("UUID: `" + target.getInfo().id + "`\n" +
+                            "Nomes usados: `" + target.getInfo().names.toString(", ") + "`\n" +
                             "Entrou " + target.getInfo().timesJoined + " vez(es)\n" +
                             "Kickado " + target.getInfo().timesKicked + " vez(es)\n")
                     .setTimestampToNow();

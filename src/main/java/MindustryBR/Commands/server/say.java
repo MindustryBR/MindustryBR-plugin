@@ -18,7 +18,7 @@ public class say {
         String msg = msgBuilder.toString();
 
         Call.sendMessage(name + ": " + msg);
-        Log.info(Strings.stripColors(name + msg));
+        Log.info(Strings.stripColors(name + ": " + msg));
         new sendMsgToDiscord(bot, config, name, msg);
     }
 }
