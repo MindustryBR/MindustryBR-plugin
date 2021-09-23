@@ -33,10 +33,13 @@ public class MsgCreate implements MessageCreateListener {
             String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
 
             switch (args[0].replaceFirst(prefix, "")) {
+                case "help" -> new Help(bot, config, event, args);
                 case "gameinfo" -> new GameInfo(bot, config, event, args);
                 case "ip" -> new ip(bot, config, event, args);
                 case "bp", "banplayer" -> new BanID(bot, config, event, args);
+                case "ubp", "unbanplayer" -> new UnbanID(bot, config, event, args);
                 case "kp", "kickplayer" -> new KickID(bot, config, event, args);
+                case "pp", "pardonplayer" -> new PardonID(bot, config, event, args);
             }
         }
     }

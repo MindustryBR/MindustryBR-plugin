@@ -1,11 +1,10 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.*;
-import arc.util.Strings;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToGame;
 import mindustry.core.GameState;
-import mindustry.gen.Groups;
-import mindustry.gen.Player;
-import mindustry.net.Packets;
+import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -14,10 +13,11 @@ import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
-public class KickID {
-    public KickID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+public class PardonID {
+    public PardonID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -54,17 +54,17 @@ public class KickID {
             return;
         }
 
-        Player target = Groups.player.find(p -> Strings.stripColors(p.name()).equalsIgnoreCase(args[1]));
+        Administration.PlayerInfo info = netServer.admins.getInfoOptional(args[1]);
 
-        if(target != null){
-            target.kick("Você foi kickado do servidor", 60000 * target.getInfo().timesKicked);
+        if(info != null){
+            info.lastKicked = 0;
 
-            new sendMsgToGame(bot, "[red][Server][]", target.name() + " foi kickado do servidor", config);
-            new sendMsgToDiscord(bot, config, "**" + target.name() + "** (" + target.getInfo().id + ") foi kickado do servidor");
-            new sendLogMsgToDiscord(bot, config, "**" + target.name() + "** (" + target.getInfo().id + ") foi kickado do servidor");
-        } else{
+            new sendMsgToGame(bot, "[red][Server][]", info.lastName + " teve o kick perdoado", config);
+            new sendMsgToDiscord(bot, config, "**" + info.lastName + "** (" + info.id + ") teve o kick perdoado");
+            new sendLogMsgToDiscord(bot, config, "**" + info.lastName + "** (" + info.id + ") teve o kick perdoado");
+        } else {
             new MessageBuilder()
-                    .append("Nao achei ninguem com esse nome")
+                    .append("Nao achei ninguem com esse ID")
                     .send(channel)
                     .join();
         }

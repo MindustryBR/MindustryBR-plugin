@@ -1,23 +1,28 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.util.*;
+import arc.struct.Seq;
 import arc.util.Strings;
 import mindustry.core.GameState;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
+import mindustry.net.Administration;
 import mindustry.net.Packets;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
-public class KickID {
-    public KickID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+public class UnbanID {
+    public UnbanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -54,19 +59,41 @@ public class KickID {
             return;
         }
 
-        Player target = Groups.player.find(p -> Strings.stripColors(p.name()).equalsIgnoreCase(args[1]));
+        Optional<ServerTextChannel> c1 = bot.getServerTextChannelById(config.getJSONObject("discord").getString("mod_channel_id"));
+        if (c1.isEmpty()) return;
+        ServerTextChannel c2 = c1.get();
 
-        if(target != null){
-            target.kick("Você foi kickado do servidor", 60000 * target.getInfo().timesKicked);
+        Seq<Administration.PlayerInfo> bans = netServer.admins.getBanned();
+        Administration.PlayerInfo target = null;
 
-            new sendMsgToGame(bot, "[red][Server][]", target.name() + " foi kickado do servidor", config);
-            new sendMsgToDiscord(bot, config, "**" + target.name() + "** (" + target.getInfo().id + ") foi kickado do servidor");
-            new sendLogMsgToDiscord(bot, config, "**" + target.name() + "** (" + target.getInfo().id + ") foi kickado do servidor");
-        } else{
+        for(Administration.PlayerInfo banned : bans) {
+            if (banned.id.equals(args[1])) target = banned;
+        }
+
+        if(netServer.admins.unbanPlayerID(args[1]) && target != null){
+            new sendMsgToGame(bot, "[red][Server][]", target.lastName + " foi desbanido do servidor", config);
+            new sendMsgToDiscord(bot, config, "**" + target.lastName + "** (" + target.id + ") foi desbanido do servidor");
+            new sendLogMsgToDiscord(bot, config, "**" + target.lastName + "** (" + target.id + ") foi desbanido do servidor");
+
+            EmbedBuilder embed = new EmbedBuilder()
+                    .setAuthor(event.getMessageAuthor().asUser().get())
+                    .setTitle(target.lastName + " foi desbanido")
+                    .setDescription("UUID: " + target.id + "\n" +
+                            "Nomes usados: " + target.names.toString(", ") + "\n" +
+                            "Entrou " + target.timesJoined + " vez(es)\n" +
+                            "Kickado " + target.timesKicked + " vez(es)\n")
+                    .setTimestampToNow();
+
             new MessageBuilder()
-                    .append("Nao achei ninguem com esse nome")
+                    .setEmbed(embed)
+                    .send(c2)
+                    .join();
+        } else {
+            new MessageBuilder()
+                    .append("Nao achei esse jogador")
                     .send(channel)
                     .join();
         }
     }
 }
+

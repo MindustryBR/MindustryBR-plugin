@@ -1,10 +1,10 @@
 package MindustryBR;
 
+import MindustryBR.Commands.client.dm;
 import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
-import MindustryBR.Commands.client.dm;
 import MindustryBR.Events.*;
-import MindustryBR.internal.util.*;
+import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
@@ -12,14 +12,12 @@ import arc.util.Log;
 import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
-import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
-public class Main extends Plugin{
+public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static DiscordApi bot;
-    public static Administration adm = new Administration();
 
     public Main() {
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
@@ -97,6 +95,7 @@ public class Main extends Plugin{
                 "token",
                 "channel_id",
                 "log_channel_id",
+                "mod_channel_id",
                 "serverstatus_channel_id",
                 "admin_role_id",
                 "owner_role_id",
