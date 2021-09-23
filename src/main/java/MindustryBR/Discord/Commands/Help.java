@@ -21,7 +21,8 @@ public class Help {
                         prefix + "banplayer <Nome|ID> - Bane um jogador pelo nome ou ID\n" +
                         prefix + "unbanplayer <ID> - Desbane um jogador pelo ID\n" +
                         prefix + "kickplayer <Nome> - Kicka um jogador pelo nome\n" +
-                        prefix + "pardonplayer <ID> - Perdoa o kick de um jogador pelo ID\n")
+                        prefix + "pardonplayer <ID> - Perdoa o kick de um jogador pelo ID\n" +
+                        prefix + "playerinfo <Nome|ID> - Pesquisa e mostra informacoes dos jogadores\n")
                 .setColor(Util.randomColor())
                 .setTimestampToNow();
 
