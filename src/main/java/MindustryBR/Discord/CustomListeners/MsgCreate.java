@@ -43,6 +43,13 @@ public class MsgCreate implements MessageCreateListener {
                 case "kp", "kickplayer" -> new KickID(bot, config, event, args);
                 case "pp", "pardonplayer" -> new PardonID(bot, config, event, args);
                 case "pi", "playerinfo" -> new InfoPlayer(bot, config, event, args);
+                case "hs", "hoststatus", "status" -> {
+                    try {
+                        new HostStatus(bot, config, event, args);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

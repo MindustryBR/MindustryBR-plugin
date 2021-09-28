@@ -12,7 +12,13 @@ import mindustry.io.SaveIO;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.awt.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +26,42 @@ import java.util.concurrent.TimeUnit;
 import static mindustry.Vars.*;
 
 public class Util {
+    /**
+     * Get cpu usage percent
+     * @return
+     * @throws Exception
+     */
+    public static double getProcessCpuLoad() throws Exception {
+        MBeanServer mbs    = ManagementFactory.getPlatformMBeanServer();
+        ObjectName name    = ObjectName.getInstance("java.lang:type=OperatingSystem");
+        AttributeList list = mbs.getAttributes(name, new String[]{ "ProcessCpuLoad" });
+
+        if (list.isEmpty())     return Double.NaN;
+
+        Attribute att = (Attribute)list.get(0);
+        Double value  = (Double)att.getValue();
+
+        // usually takes a couple of seconds before we get real values
+        if (value == -1.0)      return Double.NaN;
+        // returns a percentage value with 1 decimal point precision
+        return ((int)(value * 1000) / 10.0);
+    }
+
+    /**
+     * Get memory usage
+     * @return
+     */
+    public static String getMemoryUsage() {
+        StringBuilder str = new StringBuilder();
+
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+
+        str.append(String.format("%.2f", (double)memoryMXBean.getHeapMemoryUsage().getUsed() /1073741824))
+            .append(String.format("/%.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getMax() /1073741824));
+
+        return str.toString();
+    }
+
     /**
      *
      * @return A random color
