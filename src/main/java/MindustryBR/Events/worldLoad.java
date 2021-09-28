@@ -40,7 +40,7 @@ public class worldLoad {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Servidor online!")
                 .setColor(Color.green)
-                .setDescription("**IP:** `mindustryptbr.ddns.net`");
+                .setDescription("**IP:** `"+ config.getString("ip") + "`");
 
         new MessageBuilder()
                 .setEmbed(embed)
