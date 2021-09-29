@@ -4,6 +4,7 @@ import MindustryBR.Commands.client.dm;
 import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Events.*;
+import MindustryBR.Filters.ReactorFilter;
 import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
@@ -15,24 +16,29 @@ import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
+import static mindustry.Vars.netServer;
+
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static DiscordApi bot;
 
     public Main() {
+        // Events
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
         Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
         Events.on(WaveEvent.class, e -> wave.run(bot, config, e));
 
-        // Testing
+        // Testing events
         Events.on(WorldLoadEvent.class, e -> worldLoad.run(bot, config, e));
         Events.on(BlockBuildEndEvent.class, e -> blockBuildEnd.run(bot, config, e));
         Events.on(BlockDestroyEvent.class, e -> blockDestroy.run(bot, config, e));
         Events.on(UnitCreateEvent.class, e -> unitCreate.run(bot, config, e));
         Events.on(UnitDestroyEvent.class, e -> unitDestroy.run(bot, config, e));
         Events.on(UnitDrownEvent.class, e -> unitDrown.run(bot, config, e));
+
+        Events.on(BlockBuildBeginEvent.class, e -> blockBuildBegin.run(bot, config, e));
     }
 
     // Called when the server initializes
