@@ -4,7 +4,6 @@ import MindustryBR.Commands.client.dm;
 import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Events.*;
-import MindustryBR.Filters.ReactorFilter;
 import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
@@ -16,10 +15,9 @@ import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
-import static mindustry.Vars.netServer;
-
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
+    public static JSONObject resources = new JSONObject();
     public static DiscordApi bot;
 
     public Main() {
@@ -45,9 +43,10 @@ public class Main extends Plugin {
     @Override
     public void init() {
         createConfig();
+        createResources();
 
         // Start the discord bot if token was provided
-        if (!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
+        if (!config.isEmpty() && !config.getJSONObject("discord").isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
             bot = Bot.run();
         }
     }
@@ -55,7 +54,10 @@ public class Main extends Plugin {
     // Register commands that run on the server
     @Override
     public void registerServerCommands(CommandHandler handler){
-        handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> this.loadConfig());
+        handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
+            this.loadConfig();
+            this.loadResources();
+        });
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
 
@@ -76,6 +78,24 @@ public class Main extends Plugin {
         // handler.<Player>register("name", "params", "description", (args, player) -> { /* code here */ });
     }
 
+    private void createResources() {
+        // Load config file if it already exists
+        if (Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").exists()) {
+            loadResources();
+            return;
+        }
+
+        JSONObject defaultResources = new JSONObject("{\"blast-compound\": \"Composto de explosao\", \"coal\": \"Carvao\", \"copper\": \"Cobre\", \"graphite\": \"Grafite\", \"lead\": \"Chumbo\", \"metaglass\": \"Metavidro\", \"phase-fabric\": \"Tecido de fase\", \"plastanium\": \"Plastanio\", \"pyratite\": \"Piratita\", \"sand\": \"Areia\", \"scrap\": \"Sucata\", \"silicon\": \"Silicio\", \"spore-pod\": \"Capsula de esporos\", \"surge-alloy\": \"Liga de surto\", \"thorium\": \"Torio\", \"titanium\": \"Titanio\"}");
+
+        Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").writeString(defaultResources.toString(4));
+        resources = defaultResources;
+    }
+
+    private void loadResources() {
+        resources = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").readString());
+        Log.info("[MindustryBR] Resources loaded");
+    }
+
     private void createConfig() {
         // Load config file if it already exists
         if (Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
@@ -87,7 +107,6 @@ public class Main extends Plugin {
         JSONObject defaultConfig = new JSONObject();
         JSONObject defaultPrefix = new JSONObject();
         JSONObject defaultDiscordConfig = new JSONObject();
-        JSONObject defaultResourceEmoji = new JSONObject();
 
         defaultConfig.put("owner_id", "");
         defaultConfig.put("version", 1);
@@ -105,7 +124,8 @@ public class Main extends Plugin {
                 "serverstatus_channel_id",
                 "admin_role_id",
                 "owner_role_id",
-                "mod_role_id"
+                "mod_role_id",
+                "emoji-bank"
         };
 
         for (String ds : discordStrings) {
@@ -114,13 +134,9 @@ public class Main extends Plugin {
 
         defaultDiscordConfig.put("prefix", "!");
 
-        for (String rn : Util.resourcesRawName) {
-            defaultResourceEmoji.put(rn, "");
-        }
-
-        defaultDiscordConfig.put("emojis", defaultResourceEmoji);
         defaultConfig.put("discord", defaultDiscordConfig);
         defaultConfig.put("prefix", defaultPrefix);
+        defaultConfig.put("name", "Survival");
 
         // Create config file
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
@@ -129,7 +145,6 @@ public class Main extends Plugin {
 
     private void loadConfig() {
         config = new JSONObject(this.getConfig().readString());
-        Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(config.toString(4));
         Log.info("[MindustryBR] Config loaded");
     }
 }

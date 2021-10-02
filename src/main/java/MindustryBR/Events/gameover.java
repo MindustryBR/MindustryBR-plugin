@@ -24,6 +24,14 @@ public class gameover {
 
         ServerTextChannel channel = optionalChannel.get();
 
+        String title = "Gameover!";
+        Color cor = Color.red;
+
+        if (Groups.player.size() > 0 && Groups.player.first().team() == e.winner) {
+            title = "Vitoria do time " + e.winner.localized();
+            cor = Color.green;
+        }
+
         String wave = "Wave: " + state.wave +
                 "\nInimigos vivos: " + state.enemies;
 
@@ -46,8 +54,8 @@ public class gameover {
         } else players.append("Nenhum jogador");
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("Gameover!")
-                .setColor(Color.red)
+                .setTitle(title)
+                .setColor(cor)
                 .setDescription(wave)
                 .addInlineField("Estatisticas", statsStr)
                 .addInlineField("Mapa", map)

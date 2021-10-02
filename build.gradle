@@ -11,8 +11,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly "com.github.Anuken.Arc:arc-core:126.2"
-    compileOnly "com.github.Anuken.Mindustry:core:126.2"
+    def version = "126.2"
+    compileOnly "com.github.Anuken.Arc:arc-core:$version"
+    compileOnly "com.github.Anuken.Mindustry:core:$version"
+    compileOnly "com.github.Anuken.Mindustry:server:$version"
 
     implementation "org.json:json:20210307"
     implementation "org.javacord:javacord:3.3.2"

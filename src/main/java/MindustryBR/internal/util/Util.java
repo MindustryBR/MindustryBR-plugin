@@ -2,13 +2,17 @@ package MindustryBR.internal.util;
 
 import arc.Core;
 import arc.files.Fi;
+import arc.struct.ArrayMap;
+import arc.struct.ObjectSet;
 import arc.util.Log;
 import arc.util.Strings;
 import mindustry.Vars;
 import mindustry.content.Items;
 import mindustry.core.GameState;
+import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.io.SaveIO;
+import mindustry.net.Administration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -321,88 +325,11 @@ public class Util {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
-    public static String[] resourcesRawName = {
-            "blast_compound",
-            "coal",
-            "copper",
-            "graphite",
-            "lead",
-            "metaglass",
-            "phase_fabric",
-            "plastanium",
-            "pyratite",
-            "sand",
-            "scrap",
-            "silicon",
-            "spore_pod",
-            "surge_alloy",
-            "thorium",
-            "titanium"
-    };
+    public static Player getPlayer(String str) {
+        return Groups.player.find(p -> Strings.stripColors(p.name()).equalsIgnoreCase(str) || (p.getInfo().names.find(n -> Strings.stripColors(n).equalsIgnoreCase(str)) != null) || p.getInfo().id.equals(str));
+    }
 
-    public static String[] resourcesName = {
-            "Composto de explosao", // Blast compound
-            "Carvao",               // Coal
-            "Cobre",                // Copper
-            "Grafite",              // Graphite
-            "Chumbo",               // Lead
-            "Metavidro",            // Metaglass
-            "Tecido de fase",       // Phase fabric
-            "Plastanio",            // Plastanium
-            "Piratita",             // Pyratite
-            "Areia",                // Sand
-            "Sucata",               // Scrap
-            "Silicio",              // Silicon
-            "Capsula de esporos",   // Spore pod
-            "Liga de surto",        // Surge alloy
-            "Torio",                // Thorium
-            "Titanio"               // Titanium
-    };
-
-    public static short[] resourcesID = {
-            Items.blastCompound.id,     // 0
-            Items.coal.id,              // 1
-            Items.copper.id,            // 2
-            Items.graphite.id,          // 3
-            Items.lead.id,              // 4
-            Items.metaglass.id,         // 5
-            Items.phaseFabric.id,       // 6
-            Items.plastanium.id,        // 7
-            Items.pyratite.id,          // 8
-            Items.sand.id,              // 9
-            Items.scrap.id,             // 10
-            Items.silicon.id,           // 11
-            Items.sporePod.id,          // 12
-            Items.surgeAlloy.id,        // 13
-            Items.thorium.id,           // 14
-            Items.titanium.id           // 15
-    };
-
-    /**
-     * Get the discord emoji tag corresponding to the given resource
-     * @param resourceID Resource in-game ID
-     * @param config Plugin config
-     * @return Discord emoji ID
-     */
-    public static String getResourceEmojiID(short resourceID, JSONObject config) {
-        JSONObject emojis = config.getJSONObject("discord").getJSONObject("emojis");
-
-        if (resourceID == resourcesID[0]) return emojis.getString(resourcesRawName[0]).isBlank() ? "" : emojis.getString(resourcesRawName[0]);
-        else if (resourceID == resourcesID[1]) return emojis.getString(resourcesRawName[1]).isBlank() ? "" : emojis.getString(resourcesRawName[1]);
-        else if (resourceID == resourcesID[2]) return emojis.getString(resourcesRawName[2]).isBlank() ? "" : emojis.getString(resourcesRawName[2]);
-        else if (resourceID == resourcesID[3]) return emojis.getString(resourcesRawName[3]).isBlank() ? "" : emojis.getString(resourcesRawName[3]);
-        else if (resourceID == resourcesID[4]) return emojis.getString(resourcesRawName[4]).isBlank() ? "" : emojis.getString(resourcesRawName[4]);
-        else if (resourceID == resourcesID[5]) return emojis.getString(resourcesRawName[5]).isBlank() ? "" : emojis.getString(resourcesRawName[5]);
-        else if (resourceID == resourcesID[6]) return emojis.getString(resourcesRawName[6]).isBlank() ? "" : emojis.getString(resourcesRawName[6]);
-        else if (resourceID == resourcesID[7]) return emojis.getString(resourcesRawName[7]).isBlank() ? "" : emojis.getString(resourcesRawName[7]);
-        else if (resourceID == resourcesID[8]) return emojis.getString(resourcesRawName[8]).isBlank() ? "" : emojis.getString(resourcesRawName[8]);
-        else if (resourceID == resourcesID[9]) return emojis.getString(resourcesRawName[9]).isBlank() ? "" : emojis.getString(resourcesRawName[9]);
-        else if (resourceID == resourcesID[10]) return emojis.getString(resourcesRawName[10]).isBlank() ? "" : emojis.getString(resourcesRawName[10]);
-        else if (resourceID == resourcesID[11]) return emojis.getString(resourcesRawName[11]).isBlank() ? "" : emojis.getString(resourcesRawName[11]);
-        else if (resourceID == resourcesID[12]) return emojis.getString(resourcesRawName[12]).isBlank() ? "" : emojis.getString(resourcesRawName[12]);
-        else if (resourceID == resourcesID[13]) return emojis.getString(resourcesRawName[13]).isBlank() ? "" : emojis.getString(resourcesRawName[13]);
-        else if (resourceID == resourcesID[14]) return emojis.getString(resourcesRawName[14]).isBlank() ? "" : emojis.getString(resourcesRawName[14]);
-        else if (resourceID == resourcesID[15]) return emojis.getString(resourcesRawName[15]).isBlank() ? "" : emojis.getString(resourcesRawName[15]);
-        else return "";
+    public static ObjectSet<Administration.PlayerInfo> searchPlayer(String str) {
+        return netServer.admins.searchNames(str);
     }
 }

@@ -28,9 +28,10 @@ public class MsgCreate implements MessageCreateListener {
             if (!channel.getIdAsString().equals(config.getJSONObject("discord").getString("channel_id")) ||
                     !event.getMessageAuthor().isRegularUser()) return;
 
-            new sendMsgToGame(bot, event, config);
-
-            if (!event.getMessageContent().startsWith(prefix)) return;
+            if (!event.getMessageContent().startsWith(prefix)) {
+                new sendMsgToGame(bot, event, config);
+                return;
+            }
 
             String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
 
