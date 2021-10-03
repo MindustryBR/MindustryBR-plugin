@@ -1,10 +1,11 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.*;
-import arc.util.Strings;
+import MindustryBR.internal.util.Util;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToGame;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.core.GameState;
-import mindustry.gen.Groups;
-import mindustry.gen.Player;
 import mindustry.net.Administration;
 import mindustry.server.ServerControl;
 import org.javacord.api.DiscordApi;
@@ -14,6 +15,8 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,7 +25,7 @@ import static mindustry.Vars.state;
 
 
 public class BanID {
-    public BanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public BanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException, GeoIp2Exception {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -59,72 +62,63 @@ public class BanID {
             return;
         }
 
+        boolean playerExists = false;
+        Administration.PlayerInfo player = null;
+
+        switch (args[1].toLowerCase()) {
+            case "name" -> {
+                if (netServer.admins.findByName(args[2]).size > 0) {
+                    playerExists = true;
+                    player = netServer.admins.findByName(args[2]).first();
+                    args[2] = player.lastName;
+                }
+            }
+            case "id" -> {
+                if (netServer.admins.getInfoOptional(args[2]) != null) {
+                    playerExists = true;
+                    player = netServer.admins.getInfoOptional(args[2]);
+                    args[2] = player.id;
+                }
+            }
+            case "ip" -> {
+                if (netServer.admins.findByIP(args[2]) != null) {
+                    playerExists = true;
+                    player = netServer.admins.findByIP(args[2]);
+                    args[2] = player.lastIP;
+                }
+            }
+            default -> {
+                new MessageBuilder()
+                        .append("Tipo invalido. Use: id, ip, name")
+                        .send(channel)
+                        .join();
+                return;
+            }
+        }
+
+        if (!playerExists) {
+            new MessageBuilder()
+                    .append("Nao achei nenhum jogador com esse nome ou ID")
+                    .send(channel)
+                    .join();
+            return;
+        }
+
         arc.Core.app.getListeners().each(lst -> {
             if (lst instanceof ServerControl) {
                 ServerControl scont = (ServerControl) lst;
-                scont.handler.handleMessage("ban " + args[1] + args[2]);
+                System.out.println("ban " + args[1] + " " + args[2]);
+                scont.handler.handleMessage("ban " + args[1] + " " + args[2]);
             }
         });
 
         new MessageBuilder()
-                .append("Banido")
+                .append("Jogador **" + player.lastName + "** (`" + player.id + "`) foi banido")
                 .send(channel)
                 .join();
 
-
-        /*
-        if(bannedInfo != null){
-            netServer.admins.banPlayer(bannedInfo.getInfo().id);
-            bannedInfo.kick(Packets.KickReason.banned);
-
-            new sendMsgToGame(bot, "[red][Server][]", bannedInfo.name() + " foi banido do servidor", config);
-            new sendMsgToDiscord(bot, config, "**" + bannedInfo.name() + "**" + bannedInfo.getInfo().id + ") foi banido do servidor");
-            new sendLogMsgToDiscord(bot, config, "**" + bannedInfo.name() + "**" + bannedInfo.getInfo().id + ") foi banido do servidor");
-
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor(event.getMessageAuthor().asUser().get())
-                    .setTitle(bannedInfo.name() + " foi banido")
-                    .setDescription("UUID: `" + bannedInfo.getInfo().id + "`\n" +
-                            "Nomes usados: `" + bannedInfo.getInfo().names.toString(", ") + "`\n" +
-                            "Entrou " + bannedInfo.getInfo().timesJoined + " vez(es)\n" +
-                            "Kickado " + bannedInfo.getInfo().timesKicked + " vez(es)\n")
-                    .setTimestampToNow();
-
-            new MessageBuilder()
-                    .setEmbed(embed)
-                    .send(c2)
-                    .join();
-        } else if (netServer.admins.banPlayer(args[1])) {
-            Seq<Administration.PlayerInfo> bans = netServer.admins.getBanned();
-            Administration.PlayerInfo bannedPlayer = null;
-
-            for(Administration.PlayerInfo banned : bans) {
-                if (banned.id.equals(args[1])) bannedPlayer = banned;
-            }
-
-            new sendMsgToGame(bot, "[red][Server][]", bannedPlayer.lastName + " foi banido do servidor", config);
-            new sendMsgToDiscord(bot, config, "**" + bannedPlayer.lastName + "** (" + bannedPlayer.id + ") foi banido do servidor");
-            new sendLogMsgToDiscord(bot, config, "**" + bannedPlayer.lastName + "** (" + bannedPlayer.id + ") foi banido do servidor");
-
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor(event.getMessageAuthor().asUser().get())
-                    .setTitle(bannedPlayer.lastName + " foi banido")
-                    .setDescription("UUID: " + bannedPlayer.id + "\n" +
-                            "Nomes usados: " + bannedPlayer.names.toString(", ") + "\n" +
-                            "Entrou " + bannedPlayer.timesJoined + " vez(es)\n" +
-                            "Kickado " + bannedPlayer.timesKicked + " vez(es)\n")
-                    .setTimestampToNow();
-
-            new MessageBuilder()
-                    .setEmbed(embed)
-                    .send(c2)
-                    .join();
-        } else {
-            new MessageBuilder()
-                    .append("Nao achei esse jogador")
-                    .send(channel)
-                    .join();
-        }
-        */
+        new sendMsgToGame(bot, "[red][Server][]", player.lastName + " foi banindo", config);
+        new sendMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") foi banido");
+        new sendLogMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") foi banido");
     }
 }

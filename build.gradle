@@ -18,6 +18,8 @@ dependencies {
 
     implementation "org.json:json:20210307"
     implementation "org.javacord:javacord:3.3.2"
+    implementation "com.maxmind.geoip2:geoip2:2.15.0"
+    //implementation 'com.google.cloud:google-cloud-translate:2.1.5'
 }
 
 jar{

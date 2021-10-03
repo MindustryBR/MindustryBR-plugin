@@ -4,39 +4,64 @@ import MindustryBR.Commands.client.dm;
 import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Events.*;
-import MindustryBR.internal.util.Util;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static JSONObject resources = new JSONObject();
     public static DiscordApi bot;
+    public static DatabaseReader dbReader = null;
 
-    public Main() {
-        // Events
-        Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
-        Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
-        Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
+    public Main() throws IOException {
+        // GeoLite2 database initializer
+        dbReader = new DatabaseReader.Builder(Core.settings.getDataDirectory().child("mods/MindustryBR/GeoLite2-Country.mmdb").file()).build();
+
+        // Game events
         Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
         Events.on(WaveEvent.class, e -> wave.run(bot, config, e));
-
-        // Testing events
         Events.on(WorldLoadEvent.class, e -> worldLoad.run(bot, config, e));
+
+        // Build events
+        Events.on(BlockBuildBeginEvent.class, e -> blockBuildBegin.run(bot, config, e));
         Events.on(BlockBuildEndEvent.class, e -> blockBuildEnd.run(bot, config, e));
         Events.on(BlockDestroyEvent.class, e -> blockDestroy.run(bot, config, e));
+
+        // Units events
         Events.on(UnitCreateEvent.class, e -> unitCreate.run(bot, config, e));
         Events.on(UnitDestroyEvent.class, e -> unitDestroy.run(bot, config, e));
         Events.on(UnitDrownEvent.class, e -> unitDrown.run(bot, config, e));
 
-        Events.on(BlockBuildBeginEvent.class, e -> blockBuildBegin.run(bot, config, e));
+        // Players event
+        Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
+        Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
+        Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
+        Events.on(PlayerBanEvent.class, e -> {
+            try {
+                playerBan.run(bot, config, e);
+            } catch (IOException | GeoIp2Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        Events.on(PlayerUnbanEvent.class, e -> {
+            try {
+                playerUnban.run(bot, config, e);
+            } catch (IOException | GeoIp2Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
     }
 
     // Called when the server initializes
@@ -55,8 +80,8 @@ public class Main extends Plugin {
     @Override
     public void registerServerCommands(CommandHandler handler){
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
-            this.loadConfig();
-            this.loadResources();
+            this.createConfig();
+            this.createResources();
         });
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));

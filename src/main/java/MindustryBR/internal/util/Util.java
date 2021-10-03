@@ -2,17 +2,13 @@ package MindustryBR.internal.util;
 
 import arc.Core;
 import arc.files.Fi;
-import arc.struct.ArrayMap;
-import arc.struct.ObjectSet;
 import arc.util.Log;
 import arc.util.Strings;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.Vars;
-import mindustry.content.Items;
 import mindustry.core.GameState;
-import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.io.SaveIO;
-import mindustry.net.Administration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,19 +17,25 @@ import javax.management.AttributeList;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.awt.*;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static mindustry.Vars.*;
+import static MindustryBR.Main.dbReader;
+import static mindustry.Vars.saveDirectory;
+import static mindustry.Vars.state;
 
 public class Util {
+
+
     /**
      * Get cpu usage percent
-     * @return
-     * @throws Exception
      */
     public static double getProcessCpuLoad() throws Exception {
         MBeanServer mbs    = ManagementFactory.getPlatformMBeanServer();
@@ -53,7 +55,6 @@ public class Util {
 
     /**
      * Get memory usage
-     * @return
      */
     public static String getMemoryUsage() {
         StringBuilder str = new StringBuilder();
@@ -94,23 +95,6 @@ public class Util {
         }
 
         return res.toString();
-    }
-
-    /**
-     * Check is string is a Long
-     * @param strNum String to check
-     * @return either or not it is a Long
-     */
-    public static boolean isLong(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            Long.parseLong(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -313,23 +297,13 @@ public class Util {
         });
     }
 
-    /**
-     * Get distance between two points
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
-     */
     public static double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
-    public static Player getPlayer(String str) {
-        return Groups.player.find(p -> Strings.stripColors(p.name()).equalsIgnoreCase(str) || (p.getInfo().names.find(n -> Strings.stripColors(n).equalsIgnoreCase(str)) != null) || p.getInfo().id.equals(str));
-    }
+    public static String ip2Country(String ip) throws IOException, GeoIp2Exception {
+        InetAddress ipAddress = InetAddress.getByName(ip);
 
-    public static ObjectSet<Administration.PlayerInfo> searchPlayer(String str) {
-        return netServer.admins.searchNames(str);
+        return dbReader.country(ipAddress).getCountry().getName();
     }
 }

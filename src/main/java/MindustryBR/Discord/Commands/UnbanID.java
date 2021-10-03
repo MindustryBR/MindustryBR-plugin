@@ -1,28 +1,25 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.util.*;
-import arc.struct.Seq;
-import arc.util.Strings;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.core.GameState;
-import mindustry.gen.Groups;
-import mindustry.gen.Player;
 import mindustry.net.Administration;
-import mindustry.net.Packets;
+import mindustry.server.ServerControl;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.util.Optional;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
 public class UnbanID {
-    public UnbanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public UnbanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException, GeoIp2Exception {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -59,41 +56,63 @@ public class UnbanID {
             return;
         }
 
-        Optional<ServerTextChannel> c1 = bot.getServerTextChannelById(config.getJSONObject("discord").getString("mod_channel_id"));
-        if (c1.isEmpty()) return;
-        ServerTextChannel c2 = c1.get();
 
-        Seq<Administration.PlayerInfo> bans = netServer.admins.getBanned();
-        Administration.PlayerInfo target = null;
+        AtomicBoolean playerExists = new AtomicBoolean(false);
+        AtomicReference<Administration.PlayerInfo> player = new AtomicReference<>();
 
-        for(Administration.PlayerInfo banned : bans) {
-            if (banned.id.equals(args[1])) target = banned;
+        switch (args[1].toLowerCase()) {
+            case "name" -> netServer.admins.getBanned().contains(b -> {
+                if (b.lastName.equals(args[2]) || b.names.contains(args[2])) {
+                    playerExists.set(true);
+                    player.set(b);
+                    args[2] = player.get().id;
+                }
+                return false;
+            });
+            case "id" -> netServer.admins.getBanned().contains(b -> {
+                if (b.id.equals(args[2])) {
+                    playerExists.set(true);
+                    player.set(b);
+                    args[2] = player.get().id;
+                }
+                return false;
+            });
+            case "ip" -> netServer.admins.getBanned().contains(b -> {
+                if (b.lastIP.equals(args[2])) {
+                    playerExists.set(true);
+                    player.set(b);
+                    args[2] = player.get().lastIP;
+                }
+                return false;
+            });
+            default -> {
+                new MessageBuilder()
+                        .append("Tipo invalido. Use: id, ip, name")
+                        .send(channel)
+                        .join();
+                return;
+            }
         }
 
-        if(netServer.admins.unbanPlayerID(args[1]) && target != null){
-            new sendMsgToGame(bot, "[red][Server][]", target.lastName + " foi desbanido do servidor", config);
-            new sendMsgToDiscord(bot, config, "**" + target.lastName + "** (" + target.id + ") foi desbanido do servidor");
-            new sendLogMsgToDiscord(bot, config, "**" + target.lastName + "** (" + target.id + ") foi desbanido do servidor");
-
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor(event.getMessageAuthor().asUser().get())
-                    .setTitle(target.lastName + " foi desbanido")
-                    .setDescription("UUID: `" + target.id + "`\n" +
-                            "Nomes usados: `" + target.names.toString(", ") + "`\n" +
-                            "Entrou " + target.timesJoined + " vez(es)\n" +
-                            "Kickado " + target.timesKicked + " vez(es)\n")
-                    .setTimestampToNow();
-
+        if (!playerExists.get()) {
             new MessageBuilder()
-                    .setEmbed(embed)
-                    .send(c2)
-                    .join();
-        } else {
-            new MessageBuilder()
-                    .append("Nao achei esse jogador")
+                    .append("Nao achei nenhum jogador com esse nome ou ID")
                     .send(channel)
                     .join();
+            return;
         }
+
+        arc.Core.app.getListeners().each(lst -> {
+            if (lst instanceof ServerControl) {
+                ServerControl scont = (ServerControl) lst;
+                System.out.println("unban " + args[2]);
+                scont.handler.handleMessage("unban " + args[2]);
+            }
+        });
+
+        new sendMsgToGame(bot, "[red][Server][]", player.get().lastName + " foi desbanindo", config);
+        new sendMsgToDiscord(bot, config, "**" + player.get().lastName + "** (" + player.get().id + ") foi desbanido");
+        new sendLogMsgToDiscord(bot, config, "**" + player.get().lastName + "** (" + player.get().id + ") foi desbanido");
     }
 }
 

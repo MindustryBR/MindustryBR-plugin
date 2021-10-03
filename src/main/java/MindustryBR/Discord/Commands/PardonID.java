@@ -5,6 +5,7 @@ import MindustryBR.internal.util.sendMsgToDiscord;
 import MindustryBR.internal.util.sendMsgToGame;
 import mindustry.core.GameState;
 import mindustry.net.Administration;
+import mindustry.server.ServerControl;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -54,19 +55,59 @@ public class PardonID {
             return;
         }
 
-        Administration.PlayerInfo info = netServer.admins.getInfoOptional(args[1]);
+        boolean playerExists = false;
+        Administration.PlayerInfo player = null;
 
-        if(info != null){
-            info.lastKicked = 0;
+        switch (args[1].toLowerCase()) {
+            case "name" -> {
+                if (netServer.admins.findByName(args[2]).size > 0) {
+                    playerExists = true;
+                    player = netServer.admins.findByName(args[2]).first();
+                    args[2] = player.id;
+                }
+            }
+            case "id" -> {
+                if (netServer.admins.getInfoOptional(args[2]) != null) {
+                    playerExists = true;
+                    player = netServer.admins.getInfoOptional(args[2]);
+                    args[2] = player.id;
+                }
+            }
+            case "ip" -> {
+                if (netServer.admins.findByIP(args[2]) != null) {
+                    playerExists = true;
+                    player = netServer.admins.findByIP(args[2]);
+                    args[2] = player.id;
+                }
+            }
+            default -> {
+                new MessageBuilder()
+                        .append("Tipo invalido. Use: id, ip, name")
+                        .send(channel)
+                        .join();
+                return;
+            }
+        }
 
-            new sendMsgToGame(bot, "[red][Server][]", info.lastName + " teve o kick perdoado", config);
-            new sendMsgToDiscord(bot, config, "**" + info.lastName + "** (" + info.id + ") teve o kick perdoado");
-            new sendLogMsgToDiscord(bot, config, "**" + info.lastName + "** (" + info.id + ") teve o kick perdoado");
-        } else {
+        if (!playerExists) {
             new MessageBuilder()
-                    .append("Nao achei ninguem com esse ID")
+                    .append("Nao achei nenhum jogador com esse nome ou ID")
                     .send(channel)
                     .join();
+            return;
         }
+
+        arc.Core.app.getListeners().each(lst -> {
+            if (lst instanceof ServerControl) {
+                ServerControl scont = (ServerControl) lst;
+                System.out.println("pardon " + args[2]);
+                scont.handler.handleMessage("pardon " + args[2]);
+            }
+        });
+
+        new sendMsgToGame(bot, "[red][Server][]", player.lastName + " teve o kick perdoado", config);
+        new sendMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
+        new sendLogMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
+
     }
 }

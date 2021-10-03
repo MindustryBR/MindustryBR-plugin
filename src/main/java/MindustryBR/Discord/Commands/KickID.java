@@ -1,11 +1,13 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.*;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToGame;
 import arc.util.Strings;
 import mindustry.core.GameState;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import mindustry.net.Packets;
+import mindustry.server.ServerControl;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -13,6 +15,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static mindustry.Vars.state;
 
@@ -54,19 +57,61 @@ public class KickID {
             return;
         }
 
-        Player target = Groups.player.find(p -> Strings.stripColors(p.name()).equalsIgnoreCase(args[1]));
+        AtomicBoolean playerExists = new AtomicBoolean(false);
+        AtomicReference<Player> player = new AtomicReference<>();
 
-        if(target != null){
-            target.kick("Você foi kickado do servidor", 60000 * target.getInfo().timesKicked);
+        switch (args[1].toLowerCase()) {
+            case "name" -> Groups.player.contains(p -> {
+                if (p.name.toLowerCase().contains(args[2]) || Strings.stripColors(p.name).contains(args[2])) {
+                    player.set(p);
+                    playerExists.set(true);
+                    return true;
+                }
+                return false;
+            });
+            case "id" -> Groups.player.contains(p -> {
+                if (p.getInfo().id.equals(args[2])) {
+                    player.set(p);
+                    playerExists.set(true);
+                    return true;
+                }
+                return false;
+            });
+            case "ip" -> Groups.player.contains(p -> {
+                if (p.getInfo().lastIP.equals(args[2])) {
+                    player.set(p);
+                    playerExists.set(true);
+                    return true;
+                }
+                return false;
+            });
+            default -> {
+                new MessageBuilder()
+                        .append("Tipo invalido. Use: id, ip, name")
+                        .send(channel)
+                        .join();
+                return;
+            }
+        }
 
-            new sendMsgToGame(bot, "[red][Server][]", target.name() + " foi kickado do servidor", config);
-            new sendMsgToDiscord(bot, config, "**" + target.name() + "** (" + target.getInfo().id + ") foi kickado do servidor");
-            new sendLogMsgToDiscord(bot, config, "**" + target.name() + "** (" + target.getInfo().id + ") foi kickado do servidor");
-        } else{
+        if (!playerExists.get()) {
             new MessageBuilder()
-                    .append("Nao achei ninguem com esse nome")
+                    .append("Nao achei nenhum jogador com esse nome ou ID")
                     .send(channel)
                     .join();
+            return;
         }
+
+        arc.Core.app.getListeners().each(lst -> {
+            if (lst instanceof ServerControl) {
+                ServerControl scont = (ServerControl) lst;
+                System.out.println("kick " + player.get().name);
+                scont.handler.handleMessage("kick " + player.get().name);
+            }
+        });
+
+        new sendMsgToGame(bot, "[red][Server][]", player.get().name + " foi kikado", config);
+        new sendMsgToDiscord(bot, config, "**" + player.get().name + "** (" + player.get().getInfo().id + ") foi kikado");
+        new sendLogMsgToDiscord(bot, config, "**" + player.get().name + "** (" + player.get().getInfo().id + ") foi kikado");
     }
 }
