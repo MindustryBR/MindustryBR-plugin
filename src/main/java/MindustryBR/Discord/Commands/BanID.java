@@ -1,31 +1,24 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.Util;
 import MindustryBR.internal.util.sendLogMsgToDiscord;
 import MindustryBR.internal.util.sendMsgToDiscord;
 import MindustryBR.internal.util.sendMsgToGame;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.core.GameState;
 import mindustry.net.Administration;
 import mindustry.server.ServerControl;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
-
 public class BanID {
-    public BanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException, GeoIp2Exception {
+    public BanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {

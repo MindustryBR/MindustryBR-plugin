@@ -2,7 +2,6 @@ package MindustryBR.Events;
 
 import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Groups;

@@ -2,6 +2,7 @@ package MindustryBR.internal.classes.history.entry;
 
 import mindustry.Vars;
 import mindustry.content.Blocks;
+import mindustry.entities.units.UnitCommand;
 import mindustry.game.EventType;
 import mindustry.gen.Player;
 import mindustry.world.Block;
@@ -38,33 +39,18 @@ public class ConfigEntry implements BaseEntry{
 
     public Player player;
     public Block block;
-    public int value;
+    public Object value;
     public boolean connect;
 
     public ConfigEntry(EventType.ConfigEvent e, boolean connect) {
         this.player = e.player;
         this.block = e.tile.block();
-        this.value = (int) e.value;
+        this.value = e.value;
         this.connect = connect;
     }
 
     @Override
     public String getMessage() {
-        if (block == Blocks.powerNode || block == Blocks.powerNodeLarge || block == Blocks.powerSource || block == Blocks.powerVoid || block == Blocks.surgeTower || block == Blocks.phaseConduit || block == Blocks.phaseConveyor || block == Blocks.bridgeConduit || block == Blocks.itemBridge || block == Blocks.massDriver) {
-            if (connect) {
-                if (value == -1) return "[orange]~ [white]" + player.name + " [red]disconnected[white] this " + block.name;
-                return "[orange]~ [white]" + player.name + " [green]connected[white] this " + block.name + " to [purple]" + value + "[white]";
-            } else {
-                return "[orange]~ [white]" + player.name + " [red]disconnected[white] this " + block.name + " from [purple]" + value + "[white]";
-            }
-        } else if (block == Blocks.commandCenter) {
-            return "[orange]~ [white]" + player.name + " commanded units to " + commands[value] + "[white]";
-        } else if (block == Blocks.liquidSource) {
-            if (value == -1) return "[orange]~ [white]" + player.name + " changed config back to default";
-            return "[orange]~ [white]" + player.name + " changed config to " + icons.get(Vars.content.liquid(value).name);
-        } else {
-            if (value == -1) return "[orange]~ [white]" + player.name + " changed config back to default";
-            return "[orange]~ [white]" + player.name + " changed config to " + icons.get(Vars.content.item(value).name);
-        }
+        return "";
     }
 }

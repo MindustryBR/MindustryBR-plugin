@@ -2,13 +2,11 @@ package MindustryBR.Discord.CustomListeners;
 
 import MindustryBR.Discord.Commands.*;
 import MindustryBR.internal.util.sendMsgToGame;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static MindustryBR.Main.config;
@@ -44,27 +42,9 @@ public class MsgCreate implements MessageCreateListener {
                 case "ip" -> new ip(bot, config, event, args);
                 case "kp", "kickplayer" -> new KickID(bot, config, event, args);
                 case "pp", "pardonplayer" -> new PardonID(bot, config, event, args);
-                case "bp", "banplayer" -> {
-                    try {
-                        new BanID(bot, config, event, args);
-                    } catch (IOException | GeoIp2Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                case "ubp", "unbanplayer" -> {
-                    try {
-                        new UnbanID(bot, config, event, args);
-                    } catch (IOException | GeoIp2Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                case "pi", "playerinfo" -> {
-                    try {
-                        new InfoPlayer(bot, config, event, args);
-                    } catch (IOException | GeoIp2Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                case "bp", "banplayer" -> new BanID(bot, config, event, args);
+                case "ubp", "unbanplayer" -> new UnbanID(bot, config, event, args);
+                case "pi", "playerinfo" -> new InfoPlayer(bot, config, event, args);
                 case "hs", "hoststatus", "status" -> {
                     try {
                         new HostStatus(bot, config, event, args);

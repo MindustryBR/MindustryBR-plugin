@@ -22,9 +22,8 @@ public class blockBuildBegin {
 
             for (CoreBlock.CoreBuild core : cores) {
                 double dis = Util.distanceBetweenPoints(e.tile.x, e.tile.y, core.tile.x, core.tile.y);
-                System.out.println("tile: " + e.tile.x + " " + e.tile.y + "  core: " + core.x + " " + core.y);
-                System.out.println(dis);
-                if (dis <= 20.0) {
+
+                if (dis <= 15) {
                     if (!temp) {
                         String msg = "[scarlet]ALERTA![]: **" + player.name + "** (" + player.getInfo().id + ") esta construindo um reator de torio em " + e.tile.x + ", " + e.tile.y + " a " + (int) dis + " tiles de distancia do nucleo";
                         new sendMsgToDiscord(bot, config, msg);

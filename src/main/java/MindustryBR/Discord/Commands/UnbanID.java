@@ -1,7 +1,8 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.*;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
+import MindustryBR.internal.util.sendLogMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.util.sendMsgToGame;
 import mindustry.core.GameState;
 import mindustry.net.Administration;
 import mindustry.server.ServerControl;
@@ -11,7 +12,6 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -19,7 +19,7 @@ import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
 public class UnbanID {
-    public UnbanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException, GeoIp2Exception {
+    public UnbanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {

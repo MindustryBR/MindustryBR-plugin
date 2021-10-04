@@ -4,7 +4,6 @@ import arc.Core;
 import arc.files.Fi;
 import arc.util.Log;
 import arc.util.Strings;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.Vars;
 import mindustry.core.GameState;
 import mindustry.gen.Player;
@@ -20,14 +19,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static MindustryBR.Main.dbReader;
 import static mindustry.Vars.saveDirectory;
 import static mindustry.Vars.state;
 
@@ -299,11 +296,5 @@ public class Util {
 
     public static double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    }
-
-    public static String ip2Country(String ip) throws IOException, GeoIp2Exception {
-        InetAddress ipAddress = InetAddress.getByName(ip);
-
-        return dbReader.country(ipAddress).getCountry().getName();
     }
 }

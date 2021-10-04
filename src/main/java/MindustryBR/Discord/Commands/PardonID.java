@@ -108,6 +108,5 @@ public class PardonID {
         new sendMsgToGame(bot, "[red][Server][]", player.lastName + " teve o kick perdoado", config);
         new sendMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
         new sendLogMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
-
     }
 }

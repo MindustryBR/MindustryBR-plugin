@@ -22,7 +22,7 @@ public class configEvent {
         if (!tileHistory.isEmpty() && tileHistory.getLast() instanceof ConfigEntry) {
             ConfigEntry lastConfigEntry = ((ConfigEntry) tileHistory.getLast());
 
-            connect = !(lastConfigEntry.value == (int) e.value && lastConfigEntry.connect);
+            connect = !(lastConfigEntry.value == e.value && lastConfigEntry.connect);
         }
 
         BaseEntry historyEntry = new ConfigEntry(e, connect);

@@ -2,7 +2,6 @@ package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.util.Util;
 import arc.struct.ObjectSet;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
@@ -11,12 +10,10 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import static mindustry.Vars.netServer;
 
 public class InfoPlayer {
-    public InfoPlayer(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException, GeoIp2Exception {
+    public InfoPlayer(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (netServer.admins.findByName(args[1]).size > 0 || netServer.admins.searchNames(args[1]).size > 0) {
@@ -35,7 +32,6 @@ public class InfoPlayer {
                 if (i < 20) {
                     embed.addInlineField((i + 1) + " - " + info.lastName, "UUID: `" + info.id + "`\n" +
                             "Nomes usados: `" + info.names.toString(", ") + "`\n" +
-                            "Pais: " + Util.ip2Country(info.lastIP) + "\n" +
                             "Entrou " + info.timesJoined + " vez(es)\n" +
                             "Kickado " + info.timesKicked + " vez(es)\n");
                 }

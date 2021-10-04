@@ -5,14 +5,13 @@ import MindustryBR.Commands.client.history;
 import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Events.*;
+import MindustryBR.Filters.ReactorFilter;
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
@@ -22,18 +21,16 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static mindustry.Vars.netServer;
+
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static JSONObject resources = new JSONObject();
     public static DiscordApi bot;
-    public static DatabaseReader dbReader = null;
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static ArrayList<Player> activeHistoryPlayers = new ArrayList<>();
 
     public Main() throws IOException {
-        // GeoLite2 database initializer
-        dbReader = new DatabaseReader.Builder(Core.settings.getDataDirectory().child("mods/MindustryBR/GeoLite2-Country.mmdb").file()).build();
-
         // Misc events
         Events.on(ConfigEvent.class, e -> configEvent.run(bot, config, e));
         Events.on(TapEvent.class, e -> tap.run(bot, config, e));
@@ -57,20 +54,8 @@ public class Main extends Plugin {
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
-        Events.on(PlayerBanEvent.class, e -> {
-            try {
-                playerBan.run(bot, config, e);
-            } catch (IOException | GeoIp2Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-        Events.on(PlayerUnbanEvent.class, e -> {
-            try {
-                playerUnban.run(bot, config, e);
-            } catch (IOException | GeoIp2Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        Events.on(PlayerBanEvent.class, e -> playerBan.run(bot, config, e));
+        Events.on(PlayerUnbanEvent.class, e -> playerUnban.run(bot, config, e));
 
     }
 
@@ -84,6 +69,8 @@ public class Main extends Plugin {
         if (!config.isEmpty() && !config.getJSONObject("discord").isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
             bot = Bot.run();
         }
+
+        netServer.admins.addActionFilter(ReactorFilter::exec);
     }
 
     // Register commands that run on the server
