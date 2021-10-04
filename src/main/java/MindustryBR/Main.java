@@ -1,9 +1,12 @@
 package MindustryBR;
 
 import MindustryBR.Commands.client.dm;
+import MindustryBR.Commands.client.history;
 import MindustryBR.Commands.server.say;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Events.*;
+import MindustryBR.internal.classes.history.LimitedQueue;
+import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
@@ -17,16 +20,23 @@ import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static JSONObject resources = new JSONObject();
     public static DiscordApi bot;
     public static DatabaseReader dbReader = null;
+    public static LimitedQueue<BaseEntry>[][] worldHistory;
+    public static ArrayList<Player> activeHistoryPlayers = new ArrayList<>();
 
     public Main() throws IOException {
         // GeoLite2 database initializer
         dbReader = new DatabaseReader.Builder(Core.settings.getDataDirectory().child("mods/MindustryBR/GeoLite2-Country.mmdb").file()).build();
+
+        // Misc events
+        Events.on(ConfigEvent.class, e -> configEvent.run(bot, config, e));
+        Events.on(TapEvent.class, e -> tap.run(bot, config, e));
 
         // Game events
         Events.on(GameOverEvent.class, e -> gameover.run(bot, config, e));
@@ -99,6 +109,8 @@ public class Main extends Plugin {
     @Override
     public void registerClientCommands(CommandHandler handler){
         handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot , config, args, player));
+
+        handler.<Player>register("history", "Ative o historico do bloco", (args, player) -> history.run(bot, config, args, player));
 
         // handler.<Player>register("name", "params", "description", (args, player) -> { /* code here */ });
     }

@@ -35,10 +35,11 @@ public class MsgCreate implements MessageCreateListener {
                 return;
             }
 
-            String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).distinct().toArray(String[]::new);
+            String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).toArray(String[]::new);
 
             switch (args[0].replaceFirst(prefix, "")) {
                 case "help" -> new Help(bot, config, event, args);
+                case "historico", "history" -> new historyDC(bot, config, event, args);
                 case "gameinfo" -> new GameInfo(bot, config, event, args);
                 case "ip" -> new ip(bot, config, event, args);
                 case "kp", "kickplayer" -> new KickID(bot, config, event, args);

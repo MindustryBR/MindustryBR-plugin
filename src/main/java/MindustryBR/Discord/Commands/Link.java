@@ -8,7 +8,5 @@ import org.json.JSONObject;
 public class Link {
     public Link(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
-
-
     }
 }
