@@ -9,13 +9,10 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 import static MindustryBR.Main.worldHistory;
 
 public class historyDC {
     public historyDC(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
-        /*
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         int x = -1, y = -1;
@@ -50,7 +47,5 @@ public class historyDC {
                 .append(message)
                 .send(channel)
                 .join();
-
-         */
     }
 }

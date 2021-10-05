@@ -109,7 +109,7 @@ public class Main extends Plugin {
             return;
         }
 
-        JSONObject defaultResources = new JSONObject("{\"blast-compound\": \"Composto de explosao\", \"coal\": \"Carvao\", \"copper\": \"Cobre\", \"graphite\": \"Grafite\", \"lead\": \"Chumbo\", \"metaglass\": \"Metavidro\", \"phase-fabric\": \"Tecido de fase\", \"plastanium\": \"Plastanio\", \"pyratite\": \"Piratita\", \"sand\": \"Areia\", \"scrap\": \"Sucata\", \"silicon\": \"Silicio\", \"spore-pod\": \"Capsula de esporos\", \"surge-alloy\": \"Liga de surto\", \"thorium\": \"Torio\", \"titanium\": \"Titanio\"}");
+        JSONObject defaultResources = new JSONObject("{\"blast-compound\": \"Composto de explosao\", \"coal\": \"Carvao\", \"copper\": \"Cobre\", \"graphite\": \"Grafite\", \"lead\": \"Chumbo\", \"metaglass\": \"Metavidro\", \"phase-fabric\": \"Tecido de fase\", \"plastanium\": \"Plastanio\", \"pyratite\": \"Piratita\", \"sand\": \"Areia\", \"scrap\": \"Sucata\", \"silicon\": \"Silicio\", \"spore-pod\": \"Capsula de esporos\", \"surge-alloy\": \"Liga de surto\", \"thorium\": \"Torio\", \"titanium\": \"Titanio\", \"water\": \"Agua\", \"oil\": \"Petroleo\", \"slag\": \"Escoria\", \"cryofluid\": \"Fluido Criogenico\"}");
 
         Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").writeString(defaultResources.toString(4));
         resources = defaultResources;
