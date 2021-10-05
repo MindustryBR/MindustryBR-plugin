@@ -110,9 +110,13 @@ public class UnbanID {
             }
         });
 
-        new sendMsgToGame(bot, "[red][Server][]", player.get().lastName + " foi desbanindo", config);
-        new sendMsgToDiscord(bot, config, "**" + player.get().lastName + "** (" + player.get().id + ") foi desbanido");
-        new sendLogMsgToDiscord(bot, config, "**" + player.get().lastName + "** (" + player.get().id + ") foi desbanido");
+        new MessageBuilder()
+                .append("Jogador **" + player.get().lastName + "** (`" + player.get().id + "`) foi desbanido")
+                .send(channel)
+                .join();
+
+        new sendMsgToGame(bot, "[red][Server][]", "Jogador " + player.get().lastName + " foi desbanindo", config);
+        new sendLogMsgToDiscord(bot, config, "Jogador **" + player.get().lastName + "** (`" + player.get().id + "`) foi banido");
     }
 }
 

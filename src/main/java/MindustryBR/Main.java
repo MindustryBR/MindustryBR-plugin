@@ -25,7 +25,7 @@ import static mindustry.Vars.netServer;
 
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
-    public static JSONObject resources = new JSONObject();
+    public static JSONObject contentBundle = new JSONObject();
     public static DiscordApi bot;
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static ArrayList<Player> activeHistoryPlayers = new ArrayList<>();
@@ -54,8 +54,20 @@ public class Main extends Plugin {
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
         Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
-        Events.on(PlayerBanEvent.class, e -> playerBan.run(bot, config, e));
-        Events.on(PlayerUnbanEvent.class, e -> playerUnban.run(bot, config, e));
+        Events.on(PlayerBanEvent.class, e -> {
+            try {
+                playerBan.run(bot, config, e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        Events.on(PlayerUnbanEvent.class, e -> {
+            try {
+                playerUnban.run(bot, config, e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
     }
 
@@ -63,7 +75,7 @@ public class Main extends Plugin {
     @Override
     public void init() {
         createConfig();
-        createResources();
+        createContentBundle();
 
         // Start the discord bot if token was provided
         if (!config.isEmpty() && !config.getJSONObject("discord").isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
@@ -78,7 +90,7 @@ public class Main extends Plugin {
     public void registerServerCommands(CommandHandler handler){
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
             this.createConfig();
-            this.createResources();
+            this.createContentBundle();
         });
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
@@ -98,26 +110,24 @@ public class Main extends Plugin {
         handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot , config, args, player));
 
         handler.<Player>register("history", "Ative o historico do bloco", (args, player) -> history.run(bot, config, args, player));
-
-        // handler.<Player>register("name", "params", "description", (args, player) -> { /* code here */ });
     }
 
-    private void createResources() {
+    private void createContentBundle() {
         // Load config file if it already exists
-        if (Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").exists()) {
-            loadResources();
+        if (Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").exists()) {
+            loadContentBundle();
             return;
         }
 
-        JSONObject defaultResources = new JSONObject("{\"blast-compound\": \"Composto de explosao\", \"coal\": \"Carvao\", \"copper\": \"Cobre\", \"graphite\": \"Grafite\", \"lead\": \"Chumbo\", \"metaglass\": \"Metavidro\", \"phase-fabric\": \"Tecido de fase\", \"plastanium\": \"Plastanio\", \"pyratite\": \"Piratita\", \"sand\": \"Areia\", \"scrap\": \"Sucata\", \"silicon\": \"Silicio\", \"spore-pod\": \"Capsula de esporos\", \"surge-alloy\": \"Liga de surto\", \"thorium\": \"Torio\", \"titanium\": \"Titanio\", \"water\": \"Agua\", \"oil\": \"Petroleo\", \"slag\": \"Escoria\", \"cryofluid\": \"Fluido Criogenico\"}");
+        JSONObject defaultContentBundle = new JSONObject("{\"blast-compound\": \"Composto de explosao\", \"coal\": \"Carvao\", \"copper\": \"Cobre\", \"graphite\": \"Grafite\", \"lead\": \"Chumbo\", \"metaglass\": \"Metavidro\", \"phase-fabric\": \"Tecido de fase\", \"plastanium\": \"Plastanio\", \"pyratite\": \"Piratita\", \"sand\": \"Areia\", \"scrap\": \"Sucata\", \"silicon\": \"Silicio\", \"spore-pod\": \"Capsula de esporos\", \"surge-alloy\": \"Liga de surto\", \"thorium\": \"Torio\", \"titanium\": \"Titanio\", \"water\": \"Agua\", \"oil\": \"Petroleo\", \"slag\": \"Escoria\", \"cryofluid\": \"Fluido Criogenico\"}");
 
-        Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").writeString(defaultResources.toString(4));
-        resources = defaultResources;
+        Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").writeString(defaultContentBundle.toString(4));
+        contentBundle = defaultContentBundle;
     }
 
-    private void loadResources() {
-        resources = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/resources.json").readString());
-        Log.info("[MindustryBR] Resources loaded");
+    private void loadContentBundle() {
+        contentBundle = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").readString());
+        Log.info("[MindustryBR] Content bundle loaded");
     }
 
     private void createConfig() {

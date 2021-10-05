@@ -1,6 +1,8 @@
 package MindustryBR.Events;
 
+import MindustryBR.internal.util.Util;
 import mindustry.game.EventType;
+import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -8,20 +10,28 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Optional;
 
+import static mindustry.Vars.netServer;
+
 public class playerBan {
-    public static void run (DiscordApi bot, JSONObject config, EventType.PlayerBanEvent e) {
+    public static void run (DiscordApi bot, JSONObject config, EventType.PlayerBanEvent e) throws IOException {
         Optional<ServerTextChannel> c1 = bot.getServerTextChannelById(config.getJSONObject("discord").getString("mod_channel_id"));
         if (c1.isEmpty()) return;
         ServerTextChannel c2 = c1.get();
 
+        Administration.PlayerInfo player = netServer.admins.getInfoOptional(e.uuid);
+
+        String country = Util.ip2country(player.lastIP);
+
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle(e.player.name() + " foi banido do servidor " + config.getString("name"))
-                .setDescription("UUID: `" + e.player.getInfo().id + "`\n" +
-                        "Nomes usados: `" + e.player.getInfo().names.toString(", ") + "`\n" +
-                        "Entrou " + e.player.getInfo().timesJoined + " vez(es)\n" +
-                        "Kickado " + e.player.getInfo().timesKicked + " vez(es)\n")
+                .setTitle(player.lastName + " foi banido do servidor " + config.getString("name"))
+                .setDescription("UUID: `" + player.id + "`\n" +
+                        "Nomes usados: `" + player.names.toString(", ") + "`\n" +
+                        "Pais: `" + country + "`\n" +
+                        "Entrou " + player.timesJoined + " vez(es)\n" +
+                        "Kickado " + player.timesKicked + " vez(es)\n")
                 .setFooter(config.getString("ip"))
                 .setColor(Color.red)
                 .setTimestampToNow();

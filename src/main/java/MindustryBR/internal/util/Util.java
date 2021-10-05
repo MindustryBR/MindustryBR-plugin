@@ -17,20 +17,23 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static MindustryBR.Main.contentBundle;
 import static mindustry.Vars.saveDirectory;
 import static mindustry.Vars.state;
 
 public class Util {
-
-
     /**
      * Get cpu usage percent
      */
@@ -296,5 +299,35 @@ public class Util {
 
     public static double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    }
+
+    public static String ip2country(String ip) throws IOException {
+        URL url = new URL("https://api.iplocation.net/?cmd=ip-country&ip=" + ip);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("accept", "application/json");
+        InputStream responseStream = connection.getInputStream();
+
+        Scanner s = new Scanner(responseStream).useDelimiter("\\A");
+        StringBuilder str = new StringBuilder();
+
+        while (s.hasNext()) {
+            str.append(s.next());
+        }
+
+        JSONObject responseObj = new JSONObject(str.toString());
+
+        String country = responseObj.getString("country_name");
+        if (country.isBlank()) country = "desconhecido";
+
+        return country;
+    }
+
+    public static String getLocalized(String internalName) {
+        String local = null;
+        try {
+            local = contentBundle.getString(internalName);
+        } catch (JSONException ignored) {}
+
+        return (local != null && !local.isBlank()) ? local + "[white]" : internalName;
     }
 }

@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import java.util.Optional;
 
-import static MindustryBR.Main.resources;
+import static MindustryBR.internal.util.Util.getLocalized;
 import static mindustry.Vars.state;
 
 public class GameInfo {
@@ -29,9 +29,7 @@ public class GameInfo {
         ServerTextChannel channel = event.getServerTextChannel().get();
         Server emojiBank = bot.getServerById(config.getJSONObject("discord").getString("emoji-bank")).get();
 
-        // Default player team
         Teams.TeamData data = Groups.player.size() > 0 ? Groups.player.first().team().data() : state.teams.get(Team.sharded);
-        // Items are shared between cores, so it doesnt matter which one we get
         CoreBlock.CoreBuild core = data.cores.first();
         ItemModule items = core.items;
 
@@ -43,7 +41,7 @@ public class GameInfo {
                     knownCustomEmoji -> res.append(knownCustomEmoji.getMentionTag()).append(" "),
                     () -> {});
 
-            res.append(resources.has(arg1.name) ? resources.getString(arg1.name) : arg1.localizedName)
+            res.append(getLocalized(arg1.name))
                     .append(": ")
                     .append(items.get(arg1.id))
                     .append("\n");

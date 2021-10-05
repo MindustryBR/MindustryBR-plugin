@@ -5,6 +5,8 @@ import mindustry.game.EventType;
 import mindustry.gen.Player;
 import mindustry.world.Block;
 
+import static MindustryBR.internal.util.Util.getLocalized;
+
 public class BlockEntry implements BaseEntry {
     public Player player;
     public Block block;
@@ -19,6 +21,6 @@ public class BlockEntry implements BaseEntry {
     @Override
     public String getMessage() {
         if (breaking) return "[red]- [white]" + player.name + " quebrou esse bloco";
-        else return "[green]+ [white]" + player.name + " construiu " + (block != null ? "[purple]" + block.name + "[white]": "esse bloco");
+        else return "[green]+ [white]" + player.name + " construiu " + (block != null ? "[purple]" + getLocalized(block.name) + "[white]": "esse bloco");
     }
 }

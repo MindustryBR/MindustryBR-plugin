@@ -110,8 +110,7 @@ public class BanID {
                 .send(channel)
                 .join();
 
-        new sendMsgToGame(bot, "[red][Server][]", player.lastName + " foi banindo", config);
-        new sendMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") foi banido");
-        new sendLogMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") foi banido");
+        new sendMsgToGame(bot, "[red][Server][]", "Jogador " + player.lastName + " foi banindo", config);
+        new sendLogMsgToDiscord(bot, config, "Jogador **" + player.lastName + "** (`" + player.id + "`) foi banido");
     }
 }

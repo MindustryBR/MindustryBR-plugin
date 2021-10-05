@@ -4,9 +4,10 @@ import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import MindustryBR.internal.classes.history.entry.ConfigEntry;
 import arc.struct.Seq;
+import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Building;
-import mindustry.type.Category;
+import mindustry.world.Tile;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
@@ -16,7 +17,7 @@ public class configEvent {
     public static void run (DiscordApi bot, JSONObject config, EventType.ConfigEvent e) {
         if (e.player == null) return;
         if (e.tile.tile.x > worldHistory.length || e.tile.tile.y > worldHistory[0].length) return;
-        //System.out.println(e.tile.tile.x + " " + e.tile.tile.y + " " + e.value + " " + e.value.getClass().getSimpleName());
+        System.out.println(e.tile.tile.x + " " + e.tile.tile.y + " " + e.value + " " + e.value.getClass().getSimpleName());
 
         LimitedQueue<BaseEntry> tileHistory = worldHistory[e.tile.tile.x][e.tile.tile.y];
         boolean connect = true;
@@ -27,18 +28,17 @@ public class configEvent {
             connect = !(lastConfigEntry.value == e.value && lastConfigEntry.connect);
         }
 
-        BaseEntry historyEntry = new ConfigEntry(e, connect);
+        Tile target = null;
+        if (e.value.getClass().getSimpleName().equals("Integer")) target = Vars.world.tile((int) e.value);
 
+        BaseEntry historyEntry = new ConfigEntry(e.player, e.tile, e.value, connect, target);
         Seq<Building> linkedTile = e.tile.getPowerConnections(new Seq<>());
 
-
-        if (linkedTile.size <= 0 && e.tile.tile.block().category != Category.power) {
-            worldHistory[e.tile.tile.x][e.tile.tile.y].add(historyEntry);
-            return;
-        }
+        worldHistory[e.tile.tile.x][e.tile.tile.y].add(historyEntry);
 
         for (Building tile : linkedTile) {
-            worldHistory[tile.tile.x][tile.tile.y].add(historyEntry);
+            BaseEntry historyEntry2 = new ConfigEntry(e.player, target.build, e.value, connect, e.tile.tile());
+            worldHistory[tile.tile.x][tile.tile.y].add(historyEntry2);
         }
     }
 }

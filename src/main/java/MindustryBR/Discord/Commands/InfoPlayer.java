@@ -10,10 +10,12 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import static mindustry.Vars.netServer;
 
 public class InfoPlayer {
-    public InfoPlayer(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public InfoPlayer(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (netServer.admins.findByName(args[1]).size > 0 || netServer.admins.searchNames(args[1]).size > 0) {
@@ -29,9 +31,12 @@ public class InfoPlayer {
 
             int i = 0;
             for (Administration.PlayerInfo info : players) {
-                if (i < 20) {
+                if (i < 21) {
+                    String country = Util.ip2country(info.lastIP);
+
                     embed.addInlineField((i + 1) + " - " + info.lastName, "UUID: `" + info.id + "`\n" +
                             "Nomes usados: `" + info.names.toString(", ") + "`\n" +
+                            "Pais: `" + country + "`\n" +
                             "Entrou " + info.timesJoined + " vez(es)\n" +
                             "Kickado " + info.timesKicked + " vez(es)\n");
                 }
