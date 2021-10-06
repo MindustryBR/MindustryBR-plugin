@@ -48,36 +48,39 @@ public class ConfigEntry implements BaseEntry{
 
         msg.append("[orange]~ [white]").append(player.name).append("[white]");
 
+        if (building == null) return "";
+
         // Wtf im doing ;-;
         if (building.block() == Blocks.powerNode || building.block() == Blocks.powerNodeLarge || building.block() == Blocks.powerSource || building.block() == Blocks.powerVoid || building.block() == Blocks.surgeTower || building.block() == Blocks.phaseConduit || building.block() == Blocks.phaseConveyor || building.block() == Blocks.bridgeConduit || building.block() == Blocks.itemBridge || building.block() == Blocks.massDriver) {
             if (connect) {
-                if ((int) value == -1) {
-                    msg.append(" [red]desconectou[white] esse bloco");
-                    return msg.toString();
-                }
-
-                msg.append(" [green]conectou[white] ").append("a ").append(getLocalized(target.block().name)).append(" (").append(target.x).append(",").append(target.y).append(")");
+                getConnect(msg);
             } else {
                 msg.append(" [red]desconectou[white] ").append("de ").append(getLocalized(target.block().name)).append(" (").append(target.x).append(",").append(target.y).append(")");
             }
+            return msg.toString();
         } else if (building.block() == Blocks.groundFactory || building.block() == Blocks.airFactory || building.block() == Blocks.navalFactory) {
             if ((int) value == -1) {
                 msg.append(" [red]desativou[white] [purple]").append(getLocalized(building.block().name)).append("[white]");
-                return msg.toString();
+            } else if (units.get(building.block().name).length > (int) value) {
+                msg.append(" mandou ").append(getLocalized(building.block().name)).append(" fabricar ").append(getLocalized(units.get(building.block().name)[(int) value]));
+            } else {
+                getConnect(msg);
             }
-            msg.append(" mandou ").append(getLocalized(building.block().name)).append(" fabricar ").append(getLocalized(units.get(building.block().name)[(int) value]));
+            return msg.toString();
         } else if (building.block() == Blocks.door || building.block() == Blocks.doorLarge) {
             if (!((boolean) value)) {
                 msg.append(" fechou a porta");
                 return msg.toString();
             }
             msg.append(" abriu a porta");
+            return msg.toString();
         } else if (building.block() == Blocks.commandCenter) {
             if (value == null) {
                 msg.append(" mudou as configuracoes para o padrao");
                 return msg.toString();
             }
             msg.append(" comandou as unidades para ").append(getLocalized(value.toString()));
+            return msg.toString();
         } else if (building.block() == Blocks.liquidSource) {
             if (value == null) {
                 msg.append(" mudou as configuracoes para o padrao");
@@ -90,7 +93,8 @@ public class ConfigEntry implements BaseEntry{
             } else {
                 msg.append("desconhecido");
             }
-        } else {
+            return msg.toString();
+        } else if (building.block() == Blocks.sorter || building.block() == Blocks.itemSource || building.block() == Blocks.invertedSorter || building.block() == Blocks.unloader) {
             if (value == null) {
                 msg.append(" mudou as configuracoes para o padrao");
                 return msg.toString();
@@ -102,8 +106,20 @@ public class ConfigEntry implements BaseEntry{
             } else {
                 msg.append("desconhecido");
             }
+            return msg.toString();
+        } else {
+            getConnect(msg);
         }
 
         return msg.toString();
+    }
+
+    public void getConnect(StringBuilder msg) {
+        if ((int) value == -1) {
+            msg.append(" [red]desconectou[white] esse bloco");
+            return;
+        }
+
+        msg.append(" [green]conectou[white] ").append("a ").append(getLocalized(target.block().name)).append(" (").append(target.x).append(",").append(target.y).append(")");
     }
 }
