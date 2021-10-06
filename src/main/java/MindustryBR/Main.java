@@ -119,7 +119,277 @@ public class Main extends Plugin {
             return;
         }
 
-        JSONObject defaultContentBundle = new JSONObject("{\"blast-compound\": \"Composto de explosao\", \"coal\": \"Carvao\", \"copper\": \"Cobre\", \"graphite\": \"Grafite\", \"lead\": \"Chumbo\", \"metaglass\": \"Metavidro\", \"phase-fabric\": \"Tecido de fase\", \"plastanium\": \"Plastanio\", \"pyratite\": \"Piratita\", \"sand\": \"Areia\", \"scrap\": \"Sucata\", \"silicon\": \"Silicio\", \"spore-pod\": \"Capsula de esporos\", \"surge-alloy\": \"Liga de surto\", \"thorium\": \"Torio\", \"titanium\": \"Titanio\", \"water\": \"Agua\", \"oil\": \"Petroleo\", \"slag\": \"Escoria\", \"cryofluid\": \"Fluido Criogenico\"}");
+        JSONObject defaultContentBundle = new JSONObject("{\n" +
+                "\"blast-compound\": \"[#FC7C5C]composto de explosao\",\n" +
+                "\"coal\": \"[#666666]carvao\",\n" +
+                "\"copper\": \"[#ECC4AC]cobre\",\n" +
+                " \"graphite\": \"[#94ACDC]grafite\",\n" +
+                "\"lead\": \"[#AC9CD4]chumbo\",\n" +
+                "\"metaglass\": \"[#ECECF4]metavidro\",\n" +
+                "\"phase-fabric\": \"[#FCD49C]tecido de fase\",\n" +
+                "\"plastanium\": \"[#CCDC7C]plastanio\",\n" +
+                "\"pyratite\": \"[#FCAC5C]piratita\",\n" +
+                "\"sand\": \"[#F4CCA4]areia\",\n" +
+                "\"scrap\": \"[#E4B48C]sucata\",\n" +
+                "\"silicon\": \"[#8C9494]silicio\",\n" +
+                "\"spore-pod\": \"[#9C7CDC]capsula de esporos\",\n" +
+                "\"surge-alloy\": \"[#F4EC7C]liga de surto\",\n" +
+                "\"thorium\": \"[#FCA4C4]torio\",\n" +
+                "\"titanium\": \"[#A4BCFC]titanio\",\n" +
+                "\"diversetech-hyper-alloy\": \"[#8C8C8C]hiper liga\",\n" +
+                "\"diversetech-nickel\": \"[#ABBCDE]niquel\",\n" +
+                "\"diversetech-nitinol\": \"[#8399E6]nitinol\",\n" +
+                "\"diversetech-steel-compound\": \"[#D4AC8C]composto de aco\",\n" +
+                "\"cryofluid\": \"[#84CCEC]fluido criogenico\",\n" +
+                "\"oil\": \"[#64645C]petroleo\",\n" +
+                "\"slag\": \"[#E48454]escoria\",\n" +
+                "\"water\": \"[#343C9C]agua\",\n" +
+                "\"dagger\": \"[orange]Dagger\",\n" +
+                "\"mace\": \"[orange]Mace\",\n" +
+                "\"fortress\": \"[orange]Fortress\",\n" +
+                "\"scepter\": \"[orange]Scepter\",\n" +
+                "\"reign\": \"[orange]Reign\",\n" +
+                "\"nova\": \"[green]Nova\",\n" +
+                "\"pulsar\": \"[green]Pulsar\",\n" +
+                "\"quasar\": \"[green]Quasar\",\n" +
+                "\"vela\": \"[green]Vela\",\n" +
+                "\"corvus\": \"[green]Corvus\",\n" +
+                "\"crawler\": \"[purple]Rastejador\",\n" +
+                "\"spiroct\": \"[purple]Spiroct\",\n" +
+                "\"arkyid\": \"[purple]Arkyid\",\n" +
+                "\"toxopid\": \"[purple]Toxopid\",\n" +
+                "\"flare\": \"[orange]Flare\",\n" +
+                "\"horizon\": \"[orange]Horizon\",\n" +
+                "\"zenith\": \"[orange]Zenith\",\n" +
+                "\"antumbra\": \"[orange]Antumbra\",\n" +
+                "\"eclipse\": \"[orange]Eclipse\",\n" +
+                "\"mono\": \"[green]Mono\",\n" +
+                "\"poly\": \"[green]Poly\",\n" +
+                "\"mega\": \"[green]Mega\",\n" +
+                "\"quad\": \"[green]Quad\",\n" +
+                "\"oct\": \"[green]Oct\",\n" +
+                "\"risso\": \"[orange]Risso\",\n" +
+                "\"minke\": \"[orange]Minke\",\n" +
+                "\"bryde\": \"[orange]Bryde\",\n" +
+                "\"sei\": \"[orange]Sei\",\n" +
+                "\"omura\": \"[orange]Omura\",\n" +
+                "\"alpha\": \"[orange]Alpha\",\n" +
+                "\"beta\": \"[orange]Beta\",\n" +
+                "\"gamma\": \"[orange]Gamma\",\n" +
+                "\"spawn\": \"Area inimiga\",\n" +
+                "\"cliff\": \"Relevo\",\n" +
+                "\"deep-water\": \"Agua profunda\",\n" +
+                "\"shallow-water\": \"Agua\",\n" +
+                "\"tainted-water\": \"Agua tinta\",\n" +
+                "\"darksand-tainted-water\": \"Agua tinta sobre areia escura\",\n" +
+                "\"sand-water\": \"Agua sobre areia\",\n" +
+                "\"darksand-water\": \"Agua sobre areia escura\",\n" +
+                "\"tar\": \"Piche\",\n" +
+                "\"molten-slag\": \"Escoria\",\n" +
+                "\"space\": \"Space\",\n" +
+                "\"stone\": \"Pedra\",\n" +
+                "\"crater-stone\": \"Crateras\",\n" +
+                "\"char\": \"Cinzas\",\n" +
+                "\"basalt\": \"Basalto\",\n" +
+                "\"hotrock\": \"Rocha quente\",\n" +
+                "\"magmarock\": \"Rocha de magma\",\n" +
+                "\"darksand\": \"Areia escura\",\n" +
+                "\"dirt\": \"Terra\",\n" +
+                "\"mud\": \"Lama\",\n" +
+                "\"dacite\": \"Dacito\",\n" +
+                "\"grass\": \"Grama\",\n" +
+                "\"salt\": \"Sal\",\n" +
+                "\"snow\": \"Neve\",\n" +
+                "\"ice\": \"Gelo\",\n" +
+                "\"ice-snow\": \"Gelo com Neve\",\n" +
+                "\"shale\": \"Folhelho\",\n" +
+                "\"stone-wall\": \"Parede de Pedra\",\n" +
+                "\"spore-wall\": \"Muro de Esporos\",\n" +
+                "\"dirt-wall\": \"Parede de Terra\",\n" +
+                "\"dacite-wall\": \"Parede de Dacito\",\n" +
+                "\"ice-wall\": \"Parede de Gelo\",\n" +
+                "\"snow-wall\": \"Parede de Neve\",\n" +
+                "\"dune-wall\": \"Duna\",\n" +
+                "\"sand-wall\": \"Muro de Areia\",\n" +
+                "\"salt-wall\": \"Parede de sal\",\n" +
+                "\"shrubs\": \"Arbusto\",\n" +
+                "\"shale-wall\": \"Parede de Folhelho\",\n" +
+                "\"spore-pine\": \"Pinheiro de esporo\",\n" +
+                "\"snow-pine\": \"Pinheiro com neve\",\n" +
+                "\"pine\": \"Pinheiro\",\n" +
+                "\"white-tree-dead\": \"Arvore branca morta\",\n" +
+                "\"white-tree\": \"Arvore branca\",\n" +
+                "\"spore-cluster\": \"Aglomerado de esporos\",\n" +
+                "\"boulder\": \"Rochedo\",\n" +
+                "\"snow-boulder\": \"Monte de neve\",\n" +
+                "\"shale-boulder\": \"Pedra de Folhelho\",\n" +
+                "\"sand-boulder\": \"Pedregulho de areia\",\n" +
+                "\"dacite-boulder\": \"Dacite Boulder\",\n" +
+                "\"moss\": \"Musgo\",\n" +
+                "\"spore-moss\": \"Musgo de Esporos\",\n" +
+                "\"metal-floor\": \"Chao de metal\",\n" +
+                "\"metal-floor-damaged\": \"Chao de metal danificado\",\n" +
+                "\"metal-floor-2\": \"Chao de metal 2\",\n" +
+                "\"metal-floor-3\": \"Chao de metal 3\",\n" +
+                "\"metal-floor-5\": \"Chao de metal 5\",\n" +
+                "\"dark-panel-1\": \"Painel escuro 1\",\n" +
+                "\"dark-panel-2\": \"Painel escuro 2\",\n" +
+                "\"dark-panel-3\": \"Painel escuro 3\",\n" +
+                "\"dark-panel-4\": \"Painel escuro 4\",\n" +
+                "\"dark-panel-5\": \"Painel escuro 5\",\n" +
+                "\"dark-panel-6\": \"Painel escuro 6\",\n" +
+                "\"dark-metal\": \"Metal escuro\",\n" +
+                "\"pebbles\": \"Pedrinhas\",\n" +
+                "\"tendrils\": \"Gavinhas\",\n" +
+                "\"graphite-press\": \"Prensa de grafite\",\n" +
+                "\"multi-press\": \"Multi-Prensa\",\n" +
+                "\"silicon-smelter\": \"Fundidora de silicio\",\n" +
+                "\"silicon-crucible\": \"Fornalha De Silicio\",\n" +
+                "\"kiln\": \"Forno\",\n" +
+                "\"plastanium-compressor\": \"Compressor de Plastanio\",\n" +
+                "\"phase-weaver\": \"Palheta de fase\",\n" +
+                "\"alloy-smelter\": \"Fundidora de liga\",\n" +
+                "\"cryofluid-mixer\": \"Misturador de Crio-Fluido\",\n" +
+                "\"pyratite-mixer\": \"Misturador de Piratita\",\n" +
+                "\"blast-mixer\": \"Misturador de Explosao\",\n" +
+                "\"melter\": \"Aparelho de fusao\",\n" +
+                "\"separator\": \"Separador\",\n" +
+                "\"disassembler\": \"Desmontador\",\n" +
+                "\"spore-press\": \"Prensa de Esporo\",\n" +
+                "\"pulverizer\": \"Pulverizador\",\n" +
+                "\"coal-centrifuge\": \"Centrifugador de Carvao\",\n" +
+                "\"incinerator\": \"Incinerador\",\n" +
+                "\"copper-wall\": \"Muro de Cobre\",\n" +
+                "\"copper-wall-large\": \"Muralha de Cobre\",\n" +
+                "\"titanium-wall\": \"Muro de Titanio\",\n" +
+                "\"titanium-wall-large\": \"Muralha de Titanio\",\n" +
+                "\"plastanium-wall\": \"Muro de Plastanio\",\n" +
+                "\"plastanium-wall-large\": \"Muralha de Plastanio\",\n" +
+                "\"thorium-wall\": \"Muro de Torio\",\n" +
+                "\"thorium-wall-large\": \"Muralha de Torio\",\n" +
+                "\"phase-wall\": \"Muro de Fase\",\n" +
+                "\"phase-wall-large\": \"Muralha de Fase\",\n" +
+                "\"surge-wall\": \"Muro de liga de surto\",\n" +
+                "\"surge-wall-large\": \"Muralha de liga de surto\",\n" +
+                "\"door\": \"Porta\",\n" +
+                "\"door-large\": \"Porta grande\",\n" +
+                "\"scrap-wall\": \"Muro de sucata\",\n" +
+                "\"scrap-wall-large\": \"Muro grande de sucata\",\n" +
+                "\"scrap-wall-huge\": \"Muro enorme de sucata\",\n" +
+                "\"scrap-wall-gigantic\": \"Muro gigante de sucata\",\n" +
+                "\"thruster\": \"Propulsor\",\n" +
+                "\"mender\": \"Reparador\",\n" +
+                "\"mend-projector\": \"Projetor de reparo\",\n" +
+                "\"overdrive-projector\": \"Projetor de sobrecarga\",\n" +
+                "\"overdrive-dome\": \"Domo de Sobrecarga\",\n" +
+                "\"force-projector\": \"Projetor de campo de forca\",\n" +
+                "\"shock-mine\": \"Mina de choque\",\n" +
+                "\"conveyor\": \"Esteira\",\n" +
+                "\"titanium-conveyor\": \"Esteira de titanio\",\n" +
+                "\"plastanium-conveyor\": \"Esteira de plastanio\",\n" +
+                "\"armored-conveyor\": \"Esteira blindada\",\n" +
+                "\"junction\": \"Juncao\",\n" +
+                "\"bridge-conveyor\": \"Esteira-Ponte\",\n" +
+                "\"phase-conveyor\": \"Esteira de Fase\",\n" +
+                "\"sorter\": \"Ordenador\",\n" +
+                "\"inverted-sorter\": \"Ordenador invertido\",\n" +
+                "\"router\": \"Roteador\",\n" +
+                "\"distributor\": \"Distribuidor\",\n" +
+                "\"overflow-gate\": \"Portao de Sobrecarga\",\n" +
+                "\"underflow-gate\": \"Portao de Sobrecarga Invertido\",\n" +
+                "\"mass-driver\": \"Catapulta eletromagnetica\",\n" +
+                "\"duct\": \"Duto\",\n" +
+                "\"duct-router\": \"Duto Roteador\",\n" +
+                "\"duct-bridge\": \"Duto-Ponte\",\n" +
+                "\"mechanical-pump\": \"Bomba Mecanica\",\n" +
+                "\"rotary-pump\": \"Bomba rotatoria\",\n" +
+                "\"thermal-pump\": \"Bomba termica\",\n" +
+                "\"conduit\": \"Cano\",\n" +
+                "\"pulse-conduit\": \"Cano de Pulso\",\n" +
+                "\"plated-conduit\": \"Cano Blindado\",\n" +
+                "\"liquid-router\": \"Roteador de Liquido\",\n" +
+                "\"liquid-tank\": \"Tanque de Liquido\",\n" +
+                "\"liquid-junction\": \"Juncao de Liquido\",\n" +
+                "\"bridge-conduit\": \"Cano Ponte\",\n" +
+                "\"phase-conduit\": \"Cano de Fase\",\n" +
+                "\"power-node\": \"Celula de energia\",\n" +
+                "\"power-node-large\": \"Celula de energia grande\",\n" +
+                "\"surge-tower\": \"Torre de surto\",\n" +
+                "\"diode\": \"Diodo\",\n" +
+                "\"battery\": \"Bateria\",\n" +
+                "\"battery-large\": \"Bateria grande\",\n" +
+                "\"combustion-generator\": \"Gerador a combustao\",\n" +
+                "\"thermal-generator\": \"Gerador termico\",\n" +
+                "\"steam-generator\": \"Gerador a vapor\",\n" +
+                "\"differential-generator\": \"Gerador diferencial\",\n" +
+                "\"rtg-generator\": \"Gerador GTR\",\n" +
+                "\"solar-panel\": \"Painel Solar\",\n" +
+                "\"solar-panel-large\": \"Painel Solar Grande\",\n" +
+                "\"thorium-reactor\": \"Reator nuclear\",\n" +
+                "\"impact-reactor\": \"Reator De impacto\",\n" +
+                "\"mechanical-drill\": \"Broca Mecanica\",\n" +
+                "\"pneumatic-drill\": \"Broca Pneumatica\",\n" +
+                "\"laser-drill\": \"Broca a Laser\",\n" +
+                "\"blast-drill\": \"Broca de impacto\",\n" +
+                "\"water-extractor\": \"Extrator de agua\",\n" +
+                "\"cultivator\": \"Cultivador\",\n" +
+                "\"oil-extractor\": \"Extrator de Petroleo\",\n" +
+                "\"core-shard\": \"Fragmento do nucleo\",\n" +
+                "\"core-foundation\": \"Fundacao do nucleo\",\n" +
+                "\"core-nucleus\": \"Centro do nucleo\",\n" +
+                "\"vault\": \"Cofre\",\n" +
+                "\"container\": \"Conteiner\",\n" +
+                "\"unloader\": \"Descarregador\",\n" +
+                "\"duo\": \"Duo\",\n" +
+                "\"scatter\": \"Dispersao\",\n" +
+                "\"scorch\": \"Lanca-chamas\",\n" +
+                "\"hail\": \"Artilharia\",\n" +
+                "\"wave\": \"Onda\",\n" +
+                "\"lancer\": \"Lanceiro\",\n" +
+                "\"arc\": \"Tesla\",\n" +
+                "\"parallax\": \"Paralaxe\",\n" +
+                "\"swarmer\": \"Enxame\",\n" +
+                "\"salvo\": \"Salvo\",\n" +
+                "\"segment\": \"Segmento\",\n" +
+                "\"tsunami\": \"Tsunami\",\n" +
+                "\"fuse\": \"Fusivel\",\n" +
+                "\"ripple\": \"Ondulacao\",\n" +
+                "\"cyclone\": \"Ciclone\",\n" +
+                "\"foreshadow\": \"Foreshadow\",\n" +
+                "\"spectre\": \"Espectro\",\n" +
+                "\"meltdown\": \"Fusao\",\n" +
+                "\"command-center\": \"Centro de Comando\",\n" +
+                "\"ground-factory\": \"Fabrica de unidades terrestres\",\n" +
+                "\"air-factory\": \"Fabrica de unidades aereas\",\n" +
+                "\"naval-factory\": \"Fabrica de unidades navais\",\n" +
+                "\"additive-reconstructor\": \"Reconstrutor Aditivo\",\n" +
+                "\"multiplicative-reconstructor\": \"Reconstrutor Multiplicativo\",\n" +
+                "\"exponential-reconstructor\": \"Reconstrutor Exponencial\",\n" +
+                "\"tetrative-reconstructor\": \"Reconstrutor Tetrativo\",\n" +
+                "\"repair-point\": \"Ponto de Reparo\",\n" +
+                "\"repair-turret\": \"Torre de Reparo\",\n" +
+                "\"payload-conveyor\": \"Esteira de Carga\",\n" +
+                "\"payload-router\": \"Roteador de Carga\",\n" +
+                "\"payload-propulsion-tower\": \"Torre de Propulsao De Cargas\",\n" +
+                "\"power-source\": \"Fonte de energia\",\n" +
+                "\"power-void\": \"Anulador de energia\",\n" +
+                "\"item-source\": \"Criador de itens\",\n" +
+                "\"item-void\": \"Destruidor de itens\",\n" +
+                "\"liquid-source\": \"Criador de liquidos\",\n" +
+                "\"liquid-void\": \"Destruidor de liquidos\",\n" +
+                "\"payload-source\": \"Criador de Cargas\",\n" +
+                "\"payload-void\": \"Destruidor de Cargas\",\n" +
+                "\"illuminator\": \"Iluminador\",\n" +
+                "\"launch-pad\": \"Plataforma de lancamento\",\n" +
+                "\"message\": \"Mensagem\",\n" +
+                "\"switch\": \"Alavanca\",\n" +
+                "\"micro-processor\": \"Micro Processador\",\n" +
+                "\"logic-processor\": \"Processador Logico\",\n" +
+                "\"hyper-processor\": \"Hiper Processador\",\n" +
+                "\"memory-cell\": \"Celula de Memoria\",\n" +
+                "\"memory-bank\": \"Banco de Memoria\",\n" +
+                "\"logic-display\": \"Monitor Logico\",\n" +
+                "\"large-logic-display\": \"Monitor logico grande\"\n}");
 
         Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").writeString(defaultContentBundle.toString(4));
         contentBundle = defaultContentBundle;
