@@ -1,6 +1,5 @@
 package MindustryBR.internal.classes.history.entry;
 
-import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.gen.Building;
@@ -8,7 +7,6 @@ import mindustry.gen.Player;
 import mindustry.type.Category;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
-import mindustry.world.Block;
 import mindustry.world.Tile;
 
 import java.nio.charset.StandardCharsets;
