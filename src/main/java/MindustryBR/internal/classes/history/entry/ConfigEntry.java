@@ -1,13 +1,17 @@
 package MindustryBR.internal.classes.history.entry;
 
+import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.gen.Building;
 import mindustry.gen.Player;
+import mindustry.type.Category;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
+import mindustry.world.Block;
 import mindustry.world.Tile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import static MindustryBR.internal.util.Util.getLocalized;
@@ -107,15 +111,34 @@ public class ConfigEntry implements BaseEntry{
                 msg.append("desconhecido");
             }
             return msg.toString();
+        } else if (building.block().category.equals(Category.logic)) {
+            if (value.getClass().getSimpleName().equals("byte[]")) {
+                msg.append(" mudou o codigo do ").append(getLocalized(building.block().name));
+                return msg.toString();
+            } else if (building.block() == Blocks.message) {
+                String str = (String) value;
+                String substr = str.length() > 20 ? "\"" + str.substring(0, 10) + "\"..." : str;
+                msg.append(" mudou a mensagem para ").append(substr);
+                return msg.toString();
+            } else if (value.getClass().getSimpleName().equals("Integer")) {
+                getConnect(msg);
+                return msg.toString();
+            }
+            msg.append(" mudou a configuracao do ").append(getLocalized(building.block().name)).append(" para ").append(value);
         } else {
-            getConnect(msg);
+            if (value.getClass().getSimpleName().equals("byte[]")) {
+                String strValue = new String((byte[]) value, StandardCharsets.UTF_8);
+                msg.append(" mudou as configuracoes para ").append(strValue);
+            } else {
+                msg.append(" mudou as configuracoes para ").append(value);
+            }
         }
 
         return msg.toString();
     }
 
     public void getConnect(StringBuilder msg) {
-        if ((int) value == -1) {
+        if (value.getClass().getSimpleName().equals("Integer") && (int) value == -1) {
             msg.append(" [red]desconectou[white] esse bloco");
             return;
         }

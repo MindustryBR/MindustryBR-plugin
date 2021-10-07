@@ -2,6 +2,7 @@ package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.util.Util;
+import arc.util.Strings;
 import mindustry.game.Team;
 import mindustry.game.Teams;
 import mindustry.gen.Groups;
@@ -41,7 +42,7 @@ public class GameInfo {
                     knownCustomEmoji -> res.append(knownCustomEmoji.getMentionTag()).append(" "),
                     () -> {});
 
-            res.append(getLocalized(arg1.name))
+            res.append(Strings.stripColors(getLocalized(arg1.name)))
                     .append(": ")
                     .append(items.get(arg1.id))
                     .append("\n");
