@@ -17,7 +17,7 @@ public class historyDC {
     public historyDC(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
-        int x = -1, y = -1;
+        int x, y;
         try {
             x = Integer.parseInt(args[1]);
             y = Integer.parseInt(args[2]);

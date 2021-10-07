@@ -38,7 +38,8 @@ public class MsgCreate implements MessageCreateListener {
 
             switch (args[0].replaceFirst(prefix, "")) {
                 case "help" -> new Help(bot, config, event, args);
-                case "historico", "history" -> new historyDC(bot, config, event, args);
+                case "historico", "historia", "history" -> new historyDC(bot, config, event, args);
+                case "logiccode", "code", "logic" -> new logicCode(bot, config, event, args);
                 case "gameinfo" -> new GameInfo(bot, config, event, args);
                 case "ip" -> new ip(bot, config, event, args);
                 case "kp", "kickplayer" -> new KickID(bot, config, event, args);
