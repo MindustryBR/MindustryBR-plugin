@@ -3,7 +3,6 @@ package MindustryBR.Events;
 import MindustryBR.internal.util.Util;
 import MindustryBR.internal.util.sendLogMsgToDiscord;
 import MindustryBR.internal.util.sendMsgToDiscord;
-import MindustryBR.internal.util.sendMsgToGame;
 import arc.struct.Seq;
 import mindustry.content.Blocks;
 import mindustry.game.EventType;

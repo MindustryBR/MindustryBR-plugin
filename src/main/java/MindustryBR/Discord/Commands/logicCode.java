@@ -55,6 +55,7 @@ public class logicCode {
                 embed.setDescription("Este " + getLocalized(build.block().name) + " nao tem codigo");
             }
         } else if (build instanceof LogicDisplay.LogicDisplayBuild) {
+            embed.setTitle("Imagem do " + getLocalized(build.block().name));
             LogicDisplay.LogicDisplayBuild logicDisplay = (LogicDisplay.LogicDisplayBuild) build;
             if (logicDisplay.buffer != null) {
                 byte[] bytes = logicDisplay.buffer.getTexture().getTextureData().getPixmap().getPixels().array();
@@ -75,7 +76,8 @@ public class logicCode {
             embed.setDescription("O bloco " + getLocalized(build.block().name) + " nao e valido");
         }
 
-        msg.setEmbed(embed);
-        msg.send(channel).join();
+        msg.setEmbed(embed)
+                .send(channel)
+                .join();
     }
 }

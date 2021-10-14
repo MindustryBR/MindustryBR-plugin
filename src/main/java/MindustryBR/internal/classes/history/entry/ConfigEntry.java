@@ -1,5 +1,6 @@
 package MindustryBR.internal.classes.history.entry;
 
+import arc.struct.ObjectMap;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.gen.Building;
@@ -10,12 +11,11 @@ import mindustry.type.Liquid;
 import mindustry.world.Tile;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 import static MindustryBR.internal.util.Util.getLocalized;
 
 public class ConfigEntry implements BaseEntry{
-    private static final HashMap<String, String[]> units = new HashMap<>() {{
+    private static final ObjectMap<String, String[]> units = new ObjectMap<>() {{
         put("ground-factory", new String[] {
                 "dagger",
                 "crawler",
@@ -48,7 +48,7 @@ public class ConfigEntry implements BaseEntry{
     public String getMessage() {
         StringBuilder msg = new StringBuilder();
 
-        msg.append("[orange]~ [white]").append(player.name).append("[white]");
+        msg.append("[orange]~ [white]").append(player.name).append("[white] ");
 
         if (building == null) return "";
 
@@ -57,38 +57,38 @@ public class ConfigEntry implements BaseEntry{
             if (connect) {
                 getConnect(msg);
             } else {
-                msg.append(" [red]desconectou[white] ").append("de ").append(getLocalized(target.block().name)).append(" (").append(target.x).append(",").append(target.y).append(")");
+                msg.append("[red]desconectou[white] ").append("de ").append(getLocalized(target.block().name)).append(" (").append(target.x).append(",").append(target.y).append(")");
             }
             return msg.toString();
         } else if (building.block() == Blocks.groundFactory || building.block() == Blocks.airFactory || building.block() == Blocks.navalFactory) {
             if ((int) value == -1) {
-                msg.append(" [red]desativou[white] [purple]").append(getLocalized(building.block().name)).append("[white]");
+                msg.append("[red]desativou[white] [purple]").append(getLocalized(building.block().name)).append("[white]");
             } else if (units.get(building.block().name).length > (int) value) {
-                msg.append(" mandou ").append(getLocalized(building.block().name)).append(" fabricar ").append(getLocalized(units.get(building.block().name)[(int) value]));
+                msg.append("mandou ").append(getLocalized(building.block().name)).append(" fabricar ").append(getLocalized(units.get(building.block().name)[(int) value]));
             } else {
                 getConnect(msg);
             }
             return msg.toString();
         } else if (building.block() == Blocks.door || building.block() == Blocks.doorLarge) {
             if (!((boolean) value)) {
-                msg.append(" fechou a porta");
+                msg.append("fechou a porta");
                 return msg.toString();
             }
-            msg.append(" abriu a porta");
+            msg.append("abriu a porta");
             return msg.toString();
         } else if (building.block() == Blocks.commandCenter) {
             if (value == null) {
-                msg.append(" mudou as configuracoes para o padrao");
+                msg.append("mudou as configuracoes para o padrao");
                 return msg.toString();
             }
-            msg.append(" comandou as unidades para ").append(getLocalized(value.toString()));
+            msg.append("comandou as unidades para ").append(getLocalized(value.toString()));
             return msg.toString();
         } else if (building.block() == Blocks.liquidSource) {
             if (value == null) {
-                msg.append(" mudou as configuracoes para o padrao");
+                msg.append("mudou as configuracoes para o padrao");
                 return msg.toString();
             }
-            msg.append(" mudou o liquido para ");
+            msg.append("mudou o liquido para ");
             if (Vars.content.liquids().contains((Liquid) value)) {
                 Liquid liquid = Vars.content.liquids().find(i -> i.equals(value));
                 msg.append(getLocalized(liquid.name));
@@ -98,10 +98,10 @@ public class ConfigEntry implements BaseEntry{
             return msg.toString();
         } else if (building.block() == Blocks.sorter || building.block() == Blocks.itemSource || building.block() == Blocks.invertedSorter || building.block() == Blocks.unloader) {
             if (value == null) {
-                msg.append(" mudou as configuracoes para o padrao");
+                msg.append("mudou as configuracoes para o padrao");
                 return msg.toString();
             }
-            msg.append(" mudou o item para ");
+            msg.append("mudou o item para ");
             if (Vars.content.items().contains((Item) value)) {
                 Item item = Vars.content.items().find(i -> i.equals(value));
                 msg.append(getLocalized(item.name));
@@ -111,24 +111,24 @@ public class ConfigEntry implements BaseEntry{
             return msg.toString();
         } else if (building.block().category.equals(Category.logic)) {
             if (value.getClass().getSimpleName().equals("byte[]")) {
-                msg.append(" mudou o codigo do ").append(getLocalized(building.block().name));
+                msg.append("mudou o codigo do ").append(getLocalized(building.block().name));
                 return msg.toString();
             } else if (building.block() == Blocks.message) {
                 String str = (String) value;
                 String substr = str.length() > 20 ? "\"" + str.substring(0, 10) + "\"..." : str;
-                msg.append(" mudou a mensagem para ").append(substr);
+                msg.append("mudou a mensagem para ").append(substr);
                 return msg.toString();
             } else if (value.getClass().getSimpleName().equals("Integer")) {
                 getConnect(msg);
                 return msg.toString();
             }
-            msg.append(" mudou a configuracao do ").append(getLocalized(building.block().name)).append(" para ").append(value);
+            msg.append("mudou a configuracao do ").append(getLocalized(building.block().name)).append(" para ").append(value);
         } else {
             if (value.getClass().getSimpleName().equals("byte[]")) {
                 String strValue = new String((byte[]) value, StandardCharsets.UTF_8);
-                msg.append(" mudou as configuracoes para ").append(strValue);
+                msg.append("mudou as configuracoes para ").append(strValue);
             } else {
-                msg.append(" mudou as configuracoes para ").append(value);
+                msg.append("mudou as configuracoes para ").append(value);
             }
         }
 
