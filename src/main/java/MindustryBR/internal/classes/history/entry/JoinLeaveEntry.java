@@ -1,20 +1,27 @@
 package MindustryBR.internal.classes.history.entry;
 
+import mindustry.gen.Player;
+
 public class JoinLeaveEntry implements BaseEntry {
     boolean join;
-    String name;
+    Player player;
 
-    JoinLeaveEntry(String name) {
-        this(name, true);
+    JoinLeaveEntry(Player player) {
+        this(player, true);
     }
 
-    JoinLeaveEntry(String name, boolean join) {
-        this.name = name;
+    JoinLeaveEntry(Player player, boolean join) {
+        this.player = player;
         this.join = join;
     }
 
     @Override
     public String getMessage() {
-        return join ? "+ [green]Conectou[white] usando o nome " + this.name + "[white]" : "- [red]Desconectou[white]";
+        return this.getMessage(true);
+    }
+
+    @Override
+    public String getMessage(boolean withName) {
+        return join ? "+ [green]Conectou[white] usando o nome " + this.player.name() + "[white]" : "- [red]Desconectou[white]";
     }
 }

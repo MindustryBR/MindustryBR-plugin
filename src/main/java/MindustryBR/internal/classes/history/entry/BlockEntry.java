@@ -1,26 +1,30 @@
 package MindustryBR.internal.classes.history.entry;
 
-
 import mindustry.game.EventType;
 import mindustry.gen.Player;
-import mindustry.world.Block;
+import mindustry.world.Tile;
 
 import static MindustryBR.internal.util.Util.getLocalized;
 
 public class BlockEntry implements BaseEntry {
     public Player player;
-    public Block block;
+    public Tile tile;
     public boolean breaking;
 
     public BlockEntry(EventType.BlockBuildEndEvent e) {
         this.player = e.unit.getPlayer();
-        this.block = e.tile.block();
+        this.tile = e.tile;
         this.breaking = e.breaking;
     }
 
     @Override
     public String getMessage() {
-        if (breaking) return "[red]- [white]" + player.name + " quebrou esse bloco";
-        else return "[green]+ [white]" + player.name + " construiu " + (block != null ? "[purple]" + getLocalized(block.name) + "[white]": "esse bloco");
+        return this.getMessage(true);
+    }
+
+    @Override
+    public String getMessage(boolean withName) {
+        if (breaking) return "[red]- [white]" + (withName ? player.name + " quebrou esse bloco" : "quebrou o bloco (" + tile.x + "," + tile.y + ")");
+        else return "[green]+ [white]" + (withName ? player.name + " " : "") + "construiu " + (tile.block() != null ? "[purple]" + getLocalized(tile.block().name) + "[white]": "esse bloco") + (withName ? " (" + tile.x + "," + tile.y + ")" : "");
     }
 }

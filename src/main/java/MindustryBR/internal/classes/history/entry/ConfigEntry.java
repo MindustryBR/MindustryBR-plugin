@@ -135,6 +135,11 @@ public class ConfigEntry implements BaseEntry{
         return msg.toString();
     }
 
+    @Override
+    public String getMessage(boolean withName) {
+        return null;
+    }
+
     public void getConnect(StringBuilder msg) {
         if (value.getClass().getSimpleName().equals("Integer") && (int) value == -1) {
             msg.append(" [red]desconectou[white] esse bloco");
