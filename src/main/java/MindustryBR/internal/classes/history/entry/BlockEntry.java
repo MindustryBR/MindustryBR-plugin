@@ -24,7 +24,7 @@ public class BlockEntry implements BaseEntry {
 
     @Override
     public String getMessage(boolean withName) {
-        if (breaking) return "[red]- [white]" + (withName ? player.name + " quebrou esse bloco" : "quebrou o bloco (" + tile.x + "," + tile.y + ")");
-        else return "[green]+ [white]" + (withName ? player.name + " " : "") + "construiu " + (tile.block() != null ? "[purple]" + getLocalized(tile.block().name) + "[white]": "esse bloco") + (withName ? "" : " (" + tile.x + "," + tile.y + ")");
+        if (breaking) return "[red]- [white]" + (withName ? player.name + " " : "(" + tile.x + "," + tile.y + ") ") + "quebrou esse bloco";
+        else return "[green]+ [white]" + (withName ? player.name + " " : "(" + tile.x + "," + tile.y + ") ") + "construiu " + (tile.block() != null ? "[purple]" + getLocalized(tile.block().name) + "[white]": "esse bloco");
     }
 }
