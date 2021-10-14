@@ -1,5 +1,8 @@
 package MindustryBR.Events;
 
+import MindustryBR.internal.classes.history.LimitedQueue;
+import MindustryBR.internal.classes.history.entry.BaseEntry;
+import MindustryBR.internal.classes.history.entry.JoinLeaveEntry;
 import MindustryBR.internal.util.Util;
 import MindustryBR.internal.util.sendLogMsgToDiscord;
 import MindustryBR.internal.util.sendMsgToDiscord;
@@ -10,12 +13,20 @@ import mindustry.gen.Groups;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
+import static MindustryBR.Main.playerHistory;
 import static mindustry.Vars.state;
 
 public class playerJoin {
     public static void run(DiscordApi bot, JSONObject config, PlayerJoin e) {
         // Check for non-admin players with admin in name
         e.player.name = Util.handleName(e.player, false);
+
+        if (playerHistory.get(e.player.getInfo().id) == null) playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
+
+        LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
+        JoinLeaveEntry historyEntry = new JoinLeaveEntry(e.player);
+        history.add(historyEntry);
+        playerHistory.put(e.player.getInfo().id, history);
 
         // Rename players to use the tag system
         JSONObject prefix = config.getJSONObject("prefix");

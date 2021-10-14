@@ -10,6 +10,8 @@ import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.Core;
 import arc.Events;
+import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.CommandHandler;
 import arc.util.Log;
 import mindustry.game.EventType.*;
@@ -19,7 +21,6 @@ import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static mindustry.Vars.netServer;
 
@@ -28,7 +29,8 @@ public class Main extends Plugin {
     public static JSONObject contentBundle = new JSONObject();
     public static DiscordApi bot;
     public static LimitedQueue<BaseEntry>[][] worldHistory;
-    public static ArrayList<Player> activeHistoryPlayers = new ArrayList<>();
+    public static Seq<Player> activeHistoryPlayers = new Seq<>();
+    public static ObjectMap<String, LimitedQueue<BaseEntry>> playerHistory = new ObjectMap<>();
 
     public Main() throws IOException {
         // Misc events

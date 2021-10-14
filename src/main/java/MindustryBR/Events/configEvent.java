@@ -12,6 +12,7 @@ import mindustry.world.Tile;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
+import static MindustryBR.Main.playerHistory;
 import static MindustryBR.Main.worldHistory;
 
 public class configEvent {
@@ -36,6 +37,9 @@ public class configEvent {
         Seq<Building> linkedTile = e.tile.getPowerConnections(new Seq<>());
 
         worldHistory[e.tile.tile.x][e.tile.tile.y].add(historyEntry);
+        LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
+        history.add(historyEntry);
+        playerHistory.put(e.player.getInfo().id, history);
 
         if (e.tile.block().category.equals(Category.units) || e.tile.block().category.equals(Category.distribution)) return;
 

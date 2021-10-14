@@ -2,6 +2,8 @@ package MindustryBR.Events;
 
 import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.classes.history.LimitedQueue;
+import MindustryBR.internal.classes.history.entry.BaseEntry;
+import arc.struct.ObjectMap;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Groups;
@@ -11,10 +13,11 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Optional;
 
 import static MindustryBR.Discord.Commands.GameInfo.stats;
+import static MindustryBR.Main.playerHistory;
 import static MindustryBR.Main.worldHistory;
 import static mindustry.Vars.state;
 
@@ -27,6 +30,7 @@ public class worldLoad {
         // Unpause the game if one or more player is connected
         if (Groups.player.size() >= 1 && state.serverPaused) state.serverPaused = false;
 
+        playerHistory = new ObjectMap<>();
         worldHistory = new LimitedQueue[Vars.world.width()][Vars.world.height()];
 
         for (int x = 0; x < Vars.world.width(); x++) {

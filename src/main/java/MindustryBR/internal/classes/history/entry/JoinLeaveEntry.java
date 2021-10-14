@@ -6,11 +6,11 @@ public class JoinLeaveEntry implements BaseEntry {
     boolean join;
     Player player;
 
-    JoinLeaveEntry(Player player) {
+    public JoinLeaveEntry(Player player) {
         this(player, true);
     }
 
-    JoinLeaveEntry(Player player, boolean join) {
+    public JoinLeaveEntry(Player player, boolean join) {
         this.player = player;
         this.join = join;
     }

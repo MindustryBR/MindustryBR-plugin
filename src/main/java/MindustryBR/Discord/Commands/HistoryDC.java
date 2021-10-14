@@ -13,8 +13,8 @@ import org.json.JSONObject;
 
 import static MindustryBR.Main.worldHistory;
 
-public class historyDC {
-    public historyDC(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+public class HistoryDC {
+    public HistoryDC(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         int x, y;

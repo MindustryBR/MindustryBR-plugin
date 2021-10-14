@@ -21,7 +21,7 @@ public class InfoPlayer {
         if (netServer.admins.findByName(args[1]).size > 0 || netServer.admins.searchNames(args[1]).size > 0) {
             ObjectSet<Administration.PlayerInfo> players = netServer.admins.findByName(args[1]);
 
-            if (players.size < 1) players = netServer.admins.searchNames(args[1]);
+            if (players.size <= 1) players = netServer.admins.searchNames(args[1]);
 
             EmbedBuilder embed = new EmbedBuilder()
                     .setTimestampToNow()
