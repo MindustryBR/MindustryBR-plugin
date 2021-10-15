@@ -55,11 +55,11 @@ public class ConfigEntry implements BaseEntry{
 
         msg.append("[orange]~ [white]");
         if (withName) {
-            msg.append(player.name);
+            msg.append(player.name).append(" ");
         } else {
             msg.append("(").append(building.tile().x).append(",").append(building.tile().y).append(")");
         }
-        msg.append("[white] ");
+        msg.append("[white]");
 
         if (building == null) return "";
 

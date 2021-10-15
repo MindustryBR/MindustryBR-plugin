@@ -25,14 +25,9 @@ public class PlayerHistoryDC {
         if (netServer.admins.findByName(args[1]).size > 0 || netServer.admins.searchNames(args[1]).size > 0) {
             players = netServer.admins.findByName(args[1]);
             if (players.size < 1) players = netServer.admins.searchNames(args[1]);
-        } else {
-            new MessageBuilder()
-                    .append("Nao achei nenhum jogador com essas informacoes")
-                    .send(channel)
-                    .join();
         }
 
-        if (players == null || playerHistory.get(players.first().id) == null) {
+        if (players == null || players.size < 1) {
             new MessageBuilder()
                     .append("Nao achei nenhum jogador com essas informacoes")
                     .send(channel)
@@ -44,9 +39,14 @@ public class PlayerHistoryDC {
 
         StringBuilder message = new StringBuilder();
 
-        if (history.isOverflown()) message.append("\n... historico muito grande");
-        for (BaseEntry historyEntry : history) message.append("\n").append(Strings.stripColors(historyEntry.getMessage(false)));
-        if (history.isEmpty()) message.append("\n~ sem historico");
+        if (history != null) {
+            if (history.isOverflown()) message.append("\n... historico muito grande");
+            for (BaseEntry historyEntry : history)
+                message.append("\n").append(Strings.stripColors(historyEntry.getMessage(false)));
+            if (history.isEmpty()) message.append("\n~ sem historico");
+        } else {
+            message.append("\n~ sem historico");
+        }
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Historico do jogador " + players.first().lastName)

@@ -28,6 +28,8 @@ public class playerLeave {
             new sendLogMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
         }
 
+        if (playerHistory.get(e.player.getInfo().id) == null) playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
+
         LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
         JoinLeaveEntry historyEntry = new JoinLeaveEntry(e.player, false);
         history.add(historyEntry);

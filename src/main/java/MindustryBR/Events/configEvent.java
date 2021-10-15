@@ -37,6 +37,9 @@ public class configEvent {
         Seq<Building> linkedTile = e.tile.getPowerConnections(new Seq<>());
 
         worldHistory[e.tile.tile.x][e.tile.tile.y].add(historyEntry);
+
+        if (playerHistory.get(e.player.getInfo().id) == null) playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
+
         LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
         history.add(historyEntry);
         playerHistory.put(e.player.getInfo().id, history);
