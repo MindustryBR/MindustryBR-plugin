@@ -30,6 +30,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static MindustryBR.Main.contentBundle;
+import static MindustryBR.Main.knownIPs;
 import static mindustry.Vars.saveDirectory;
 import static mindustry.Vars.state;
 
@@ -302,6 +303,8 @@ public class Util {
     }
 
     public static String ip2country(String ip) throws IOException {
+        if (knownIPs.get(ip) != null && !knownIPs.get(ip).isBlank()) return knownIPs.get(ip);
+
         URL url = new URL("https://api.iplocation.net/?cmd=ip-country&ip=" + ip);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("accept", "application/json");
@@ -318,6 +321,8 @@ public class Util {
 
         String country = responseObj.getString("country_name");
         if (country.isBlank()) country = "desconhecido";
+
+        knownIPs.put(ip, country);
 
         return country;
     }

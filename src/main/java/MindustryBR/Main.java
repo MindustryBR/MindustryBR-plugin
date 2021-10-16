@@ -12,6 +12,7 @@ import arc.Core;
 import arc.Events;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
+import arc.struct.StringMap;
 import arc.util.CommandHandler;
 import arc.util.Log;
 import mindustry.game.EventType.*;
@@ -31,6 +32,7 @@ public class Main extends Plugin {
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static Seq<Player> activeHistoryPlayers = new Seq<>();
     public static ObjectMap<String, LimitedQueue<BaseEntry>> playerHistory = new ObjectMap<>();
+    public static StringMap knownIPs = new StringMap();
 
     public Main() throws IOException {
         // Misc events
@@ -55,7 +57,13 @@ public class Main extends Plugin {
         // Players event
         Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
-        Events.on(PlayerChatEvent.class, e -> playerChat.run(bot, config, e));
+        Events.on(PlayerChatEvent.class, e -> {
+            try {
+                playerChat.run(bot, config, e);
+            } catch (IOException | InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        });
         Events.on(PlayerBanEvent.class, e -> {
             try {
                 playerBan.run(bot, config, e);
@@ -89,7 +97,7 @@ public class Main extends Plugin {
 
     // Register commands that run on the server
     @Override
-    public void registerServerCommands(CommandHandler handler){
+    public void registerServerCommands(CommandHandler handler) {
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
             this.createConfig();
             this.createContentBundle();
@@ -108,8 +116,8 @@ public class Main extends Plugin {
 
     // Register commands that player can invoke in-game
     @Override
-    public void registerClientCommands(CommandHandler handler){
-        handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot , config, args, player));
+    public void registerClientCommands(CommandHandler handler) {
+        handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot, config, args, player));
 
         handler.<Player>register("history", "Ative o historico do bloco", (args, player) -> history.run(bot, config, args, player));
     }

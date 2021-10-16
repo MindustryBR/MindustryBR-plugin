@@ -1,5 +1,6 @@
 package MindustryBR.internal.util;
 
+import MindustryBR.internal.Translate;
 import arc.util.Log;
 import arc.util.Strings;
 import mindustry.game.EventType.PlayerChatEvent;
@@ -7,12 +8,19 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Optional;
 
+import static MindustryBR.Main.knownIPs;
+
 public class sendMsgToDiscord {
-    public sendMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
+    public sendMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) throws IOException, InterruptedException {
         String msg = "**" + Util.handleName(e.player, true, true) + "**: " + e.message;
-        msg = Strings.stripColors(msg).replace("@everyone", "@.everyone").replace("@here", "@.here");
+        msg = Strings.stripColors(msg).replaceAll("@everyone", "@.everyone").replaceAll("@here", "@.here");
+
+        String msgTmp = Strings.stripColors(e.message).replaceAll("@everyone", "@.everyone").replaceAll("@here", "@.here");
+
+        if (Util.ip2country(e.player.ip()) != null && !Util.ip2country(e.player.ip()).equalsIgnoreCase("brazil") && !Translate.detect(msgTmp).equalsIgnoreCase("pt")) msg += "\n\n**Traduzido:**```\n" + new JSONObject(Translate.translate(msgTmp, "pt")).getJSONObject("translated").getString("text") + "\n```";
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
@@ -36,7 +44,7 @@ public class sendMsgToDiscord {
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
         String msg = "**" + Util.handleName(name, true, true) + "**: " + message;
-        msg = Strings.stripColors(msg).replace("@everyone", "@.everyone").replace("@here", "@.here");
+        msg = Strings.stripColors(msg).replaceAll("@everyone", "@.everyone").replaceAll("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
@@ -58,7 +66,7 @@ public class sendMsgToDiscord {
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String message) {
-        message = Strings.stripColors(message).replace("@everyone", "@.everyone").replace("@here", "@.here");
+        message = Strings.stripColors(message).replaceAll("@everyone", "@.everyone").replaceAll("@here", "@.here");
 
         JSONObject discordConfig = config.getJSONObject("discord");
 

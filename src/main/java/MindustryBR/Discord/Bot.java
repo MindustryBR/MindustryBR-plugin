@@ -17,7 +17,7 @@ public class Bot {
                 .login().join();
 
         bot.setAutomaticMessageCacheCleanupEnabled(true);
-        bot.setMessageCacheSize(10, 60);
+        bot.setMessageCacheSize(0, 0);
 
         // Add custom MessageCreateListener
         bot.addListener(new MsgCreate(bot));
