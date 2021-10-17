@@ -11,8 +11,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Optional;
 
-import static MindustryBR.Main.knownIPs;
-
 public class sendMsgToDiscord {
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) throws IOException, InterruptedException {
         String msg = "**" + Util.handleName(e.player, true, true) + "**: " + e.message;

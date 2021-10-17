@@ -3,7 +3,6 @@ package MindustryBR.internal.util;
 import arc.util.Log;
 import mindustry.gen.Call;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;

@@ -8,8 +8,6 @@ import mindustry.net.Administration;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
 
-import static mindustry.Vars.state;
-
 public class ReactorFilter {
     public static boolean exec(Administration.PlayerAction action) {
         if (action.type != Administration.ActionType.placeBlock) return true;

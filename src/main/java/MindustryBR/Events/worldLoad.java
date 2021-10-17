@@ -2,7 +2,6 @@ package MindustryBR.Events;
 
 import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.struct.ObjectMap;
 import mindustry.Vars;
 import mindustry.game.EventType;
@@ -13,7 +12,7 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Optional;
 
 import static MindustryBR.Discord.Commands.GameInfo.stats;

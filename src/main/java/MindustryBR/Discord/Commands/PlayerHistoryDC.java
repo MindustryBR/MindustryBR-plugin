@@ -14,7 +14,6 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.json.JSONObject;
 
 import static MindustryBR.Main.playerHistory;
-import static MindustryBR.Main.worldHistory;
 import static mindustry.Vars.netServer;
 
 public class PlayerHistoryDC {
