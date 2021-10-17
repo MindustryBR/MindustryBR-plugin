@@ -12,7 +12,7 @@ import mindustry.world.Tile;
 
 import java.nio.charset.StandardCharsets;
 
-import static MindustryBR.internal.util.Util.getLocalized;
+import static MindustryBR.internal.Util.getLocalized;
 
 public class ConfigEntry implements BaseEntry{
     private static final ObjectMap<String, String[]> units = new ObjectMap<>() {{

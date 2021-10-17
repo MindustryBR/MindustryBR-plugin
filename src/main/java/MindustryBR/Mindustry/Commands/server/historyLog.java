@@ -1,4 +1,4 @@
-package MindustryBR.Commands.server;
+package MindustryBR.Mindustry.Commands.server;
 
 import arc.util.Log;
 import org.javacord.api.DiscordApi;

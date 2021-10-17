@@ -1,12 +1,11 @@
 package MindustryBR.internal.classes.history.entry;
 
 import mindustry.game.EventType;
-import mindustry.gen.Building;
 import mindustry.gen.Player;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 
-import static MindustryBR.internal.util.Util.getLocalized;
+import static MindustryBR.internal.Util.getLocalized;
 
 public class BlockEntry implements BaseEntry {
     public Player player;

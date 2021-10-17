@@ -1,4 +1,4 @@
-package MindustryBR.Commands.client;
+package MindustryBR.Mindustry.Commands.client;
 
 import mindustry.gen.Groups;
 import mindustry.gen.Player;

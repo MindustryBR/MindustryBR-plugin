@@ -1,4 +1,4 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;

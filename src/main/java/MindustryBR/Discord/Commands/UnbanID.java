@@ -1,7 +1,7 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.sendLogMsgToDiscord;
-import MindustryBR.internal.util.sendMsgToGame;
+import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
+import MindustryBR.internal.dcRelay.sendMsgToGame;
 import mindustry.core.GameState;
 import mindustry.net.Administration;
 import mindustry.server.ServerControl;

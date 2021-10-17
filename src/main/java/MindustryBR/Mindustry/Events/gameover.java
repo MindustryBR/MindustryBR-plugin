@@ -1,6 +1,6 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import mindustry.game.EventType.GameOverEvent;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;

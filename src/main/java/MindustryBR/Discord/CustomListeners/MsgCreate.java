@@ -1,7 +1,7 @@
 package MindustryBR.Discord.CustomListeners;
 
 import MindustryBR.Discord.Commands.*;
-import MindustryBR.internal.util.sendMsgToGame;
+import MindustryBR.internal.dcRelay.sendMsgToGame;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;

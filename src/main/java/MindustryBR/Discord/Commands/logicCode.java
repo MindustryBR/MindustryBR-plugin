@@ -1,6 +1,6 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import arc.struct.LongQueue;
 import mindustry.Vars;
 import mindustry.gen.Building;
@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 
-import static MindustryBR.internal.util.Util.getLocalized;
+import static MindustryBR.internal.Util.getLocalized;
 
 public class logicCode {
     public logicCode(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {

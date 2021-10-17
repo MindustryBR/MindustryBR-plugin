@@ -1,8 +1,8 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.util.Util;
-import MindustryBR.internal.util.sendLogMsgToDiscord;
-import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.Util;
+import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
+import MindustryBR.internal.dcRelay.sendMsgToDiscord;
 import arc.struct.Seq;
 import mindustry.content.Blocks;
 import mindustry.game.EventType;

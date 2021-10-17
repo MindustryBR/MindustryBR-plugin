@@ -1,7 +1,7 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.util.sendLogMsgToDiscord;
-import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
+import MindustryBR.internal.dcRelay.sendMsgToDiscord;
 import mindustry.game.EventType.PlayerChatEvent;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;

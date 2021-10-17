@@ -1,7 +1,7 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.classes.Stats;
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import arc.util.Strings;
 import mindustry.game.Team;
 import mindustry.game.Teams;
@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.Optional;
 
-import static MindustryBR.internal.util.Util.getLocalized;
+import static MindustryBR.internal.Util.getLocalized;
 import static mindustry.Vars.state;
 
 public class GameInfo {

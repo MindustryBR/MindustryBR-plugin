@@ -1,6 +1,6 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import arc.struct.ObjectSet;
 import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;

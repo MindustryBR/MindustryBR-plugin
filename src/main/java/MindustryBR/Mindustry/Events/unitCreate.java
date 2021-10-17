@@ -1,4 +1,4 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
 import mindustry.game.EventType;
 import org.javacord.api.DiscordApi;

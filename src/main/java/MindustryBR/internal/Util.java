@@ -1,4 +1,4 @@
-package MindustryBR.internal.util;
+package MindustryBR.internal;
 
 import arc.Core;
 import arc.files.Fi;

@@ -1,6 +1,6 @@
-package MindustryBR.Filters;
+package MindustryBR.Mindustry.Filters;
 
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import arc.struct.Seq;
 import mindustry.content.Blocks;
 import mindustry.gen.Player;

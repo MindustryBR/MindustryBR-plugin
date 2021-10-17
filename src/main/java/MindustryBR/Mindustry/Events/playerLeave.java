@@ -1,11 +1,11 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import MindustryBR.internal.classes.history.entry.JoinLeaveEntry;
-import MindustryBR.internal.util.Util;
-import MindustryBR.internal.util.sendLogMsgToDiscord;
-import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.Util;
+import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
+import MindustryBR.internal.dcRelay.sendMsgToDiscord;
 import arc.util.Log;
 import mindustry.game.EventType.PlayerLeave;
 import mindustry.gen.Call;

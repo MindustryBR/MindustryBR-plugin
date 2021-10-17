@@ -1,11 +1,11 @@
 package MindustryBR;
 
-import MindustryBR.Commands.client.dm;
-import MindustryBR.Commands.client.history;
-import MindustryBR.Commands.server.*;
+import MindustryBR.Mindustry.Commands.client.dm;
+import MindustryBR.Mindustry.Commands.client.history;
+import MindustryBR.Mindustry.Commands.server.*;
 import MindustryBR.Discord.Bot;
-import MindustryBR.Events.*;
-import MindustryBR.Filters.ReactorFilter;
+import MindustryBR.Mindustry.Events.*;
+import MindustryBR.Mindustry.Filters.ReactorFilter;
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.Core;

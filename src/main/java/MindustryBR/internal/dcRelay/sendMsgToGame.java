@@ -1,5 +1,6 @@
-package MindustryBR.internal.util;
+package MindustryBR.internal.dcRelay;
 
+import MindustryBR.internal.Util;
 import arc.util.Log;
 import mindustry.gen.Call;
 import org.javacord.api.DiscordApi;

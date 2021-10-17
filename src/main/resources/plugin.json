@@ -2,6 +2,6 @@
   "name": "MindustryBR",
   "author": "King-BR",
   "main": "MindustryBR.Main",
-  "description": "Plugin made for the MindustryBR server",
-  "version": 0.6
+  "description": "Plugin made for the MindustryBR servers",
+  "version": 0.7
 }

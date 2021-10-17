@@ -1,4 +1,4 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import static MindustryBR.Discord.Commands.GameInfo.stats;
 import static MindustryBR.Main.*;
-import static MindustryBR.internal.util.Util.getLocalized;
+import static MindustryBR.internal.Util.getLocalized;
 
 public class blockBuildEnd {
     public static void run (DiscordApi bot, JSONObject config, EventType.BlockBuildEndEvent e) {

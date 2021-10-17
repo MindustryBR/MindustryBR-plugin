@@ -1,6 +1,6 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;

@@ -1,4 +1,4 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
@@ -14,7 +14,7 @@ import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 import static MindustryBR.Main.*;
-import static MindustryBR.internal.util.Util.getLocalized;
+import static MindustryBR.internal.Util.getLocalized;
 
 public class configEvent {
     public static void run (DiscordApi bot, JSONObject config, EventType.ConfigEvent e) {

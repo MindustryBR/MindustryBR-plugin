@@ -1,6 +1,6 @@
-package MindustryBR.Commands.server;
+package MindustryBR.Mindustry.Commands.server;
 
-import MindustryBR.internal.util.sendMsgToDiscord;
+import MindustryBR.internal.dcRelay.sendMsgToDiscord;
 import arc.util.Log;
 import arc.util.Strings;
 import mindustry.gen.Call;

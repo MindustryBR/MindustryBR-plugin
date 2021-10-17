@@ -1,4 +1,4 @@
-package MindustryBR.internal.util;
+package MindustryBR.internal.dcRelay;
 
 import arc.util.Log;
 import arc.util.Strings;

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import java.awt.*;
 
-import static MindustryBR.Events.worldLoad.started;
+import static MindustryBR.Mindustry.Events.worldLoad.started;
 
 public class ip {
     public ip(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {

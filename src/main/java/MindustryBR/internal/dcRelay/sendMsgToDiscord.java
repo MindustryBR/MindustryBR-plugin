@@ -1,6 +1,7 @@
-package MindustryBR.internal.util;
+package MindustryBR.internal.dcRelay;
 
 import MindustryBR.internal.Translate;
+import MindustryBR.internal.Util;
 import arc.util.Log;
 import arc.util.Strings;
 import mindustry.game.EventType.PlayerChatEvent;

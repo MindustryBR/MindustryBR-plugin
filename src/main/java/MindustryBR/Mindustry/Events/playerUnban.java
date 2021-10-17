@@ -1,6 +1,6 @@
-package MindustryBR.Events;
+package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.util.Util;
+import MindustryBR.internal.Util;
 import mindustry.game.EventType;
 import mindustry.net.Administration;
 import org.javacord.api.DiscordApi;
@@ -15,8 +15,8 @@ import java.util.Optional;
 
 import static mindustry.Vars.netServer;
 
-public class playerBan {
-    public static void run (DiscordApi bot, JSONObject config, EventType.PlayerBanEvent e) throws IOException {
+public class playerUnban {
+    public static void run (DiscordApi bot, JSONObject config, EventType.PlayerUnbanEvent e) throws IOException {
         Optional<ServerTextChannel> c1 = bot.getServerTextChannelById(config.getJSONObject("discord").getString("mod_channel_id"));
         if (c1.isEmpty()) return;
         ServerTextChannel c2 = c1.get();
@@ -26,7 +26,7 @@ public class playerBan {
         String country = Util.ip2country(player.lastIP);
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle(player.lastName + " foi banido do servidor " + config.getString("name"))
+                .setTitle(player.lastName + " foi desbanido do servidor " + config.getString("name"))
                 .setDescription("UUID: `" + player.id + "`\n" +
                         "Nomes usados: `" + player.names.toString(", ") + "`\n" +
                         "Pais: `" + country + "`\n" +
