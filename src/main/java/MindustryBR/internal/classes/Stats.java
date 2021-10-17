@@ -7,7 +7,7 @@ public class Stats {
 
     // Buildings data
     public int buildingsConstructed = 0;
-    public int buildingsDesconstructed = 0;
+    public int buildingsDeconstructed = 0;
     public int buildingsDestroyed = 0;
 
     public Stats() {}

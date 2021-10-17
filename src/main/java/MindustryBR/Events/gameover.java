@@ -38,7 +38,7 @@ public class gameover {
         String statsStr = "Unidades construidas: " + stats.unitsBuilt +
                 "\nUnidades destruidas: " + stats.unitsDestroyed +
                 "\nConstrucoes construidas: " + stats.buildingsConstructed +
-                "\nConstrucoes descontruidas: " + stats.buildingsDesconstructed +
+                "\nConstrucoes descontruidas: " + stats.buildingsDeconstructed +
                 "\nConstrucoes destruidas: " + stats.buildingsDestroyed;
 
         String map = "Nome: " + state.map.name() +
