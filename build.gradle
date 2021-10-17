@@ -3,7 +3,7 @@ plugins {
 }
 
 group "MindustryBR"
-version 0.5
+version 0.6
 
 repositories {
     mavenCentral()
@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    def version = "132"
+    def version = "133"
     compileOnly "com.github.Anuken.Arc:arc-core:$version"
     compileOnly "com.github.Anuken.Mindustry:core:$version"
     compileOnly "com.github.Anuken.Mindustry:server:$version"
