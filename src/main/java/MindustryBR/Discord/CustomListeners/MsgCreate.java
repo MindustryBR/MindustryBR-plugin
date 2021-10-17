@@ -61,6 +61,17 @@ public class MsgCreate implements MessageCreateListener {
                         e.printStackTrace();
                     }
                 }
+                case "link" -> {
+                    channel.sendMessage( event.getMessageAuthor().asUser().get().getMentionTag() + ", esse comando só pode ser usado no DM");
+                    event.getMessage().delete();
+                }
+            }
+        } else if (event.isPrivateMessage()) {
+            String[] args = Stream.of(event.getMessageContent().split(" ")).filter(str -> !str.isBlank()).toArray(String[]::new);
+
+            switch (args[0].replaceFirst(prefix, "")) {
+                case "help" -> new Help(bot, config, event, args);
+                case "link" -> new Link(bot, config, event, args);
             }
         }
     }

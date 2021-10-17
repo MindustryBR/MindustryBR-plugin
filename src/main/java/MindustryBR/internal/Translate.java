@@ -51,7 +51,6 @@ public class Translate {
             if (query.size > 0) {
                 urlStr.append("?");
                 ObjectMap.Keys<String> keys = query.keys();
-
                 for (String key : keys) {
                     urlStr.append(key)
                         .append("=")
@@ -65,10 +64,7 @@ public class Translate {
                     .uri(URI.create(urlStr.toString()))
                     .setHeader("User-Agent", "King-BR/MindustryBR-plugin")
                     .build();
-
-
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
             return response.body();
         }
     }

@@ -13,8 +13,8 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.Optional;
 
-import static mindustry.Vars.state;
 import static MindustryBR.Discord.Commands.GameInfo.stats;
+import static mindustry.Vars.state;
 
 public class gameover {
     public static void run(DiscordApi bot, JSONObject config, GameOverEvent e) {

@@ -1,9 +1,10 @@
 package MindustryBR;
 
+import MindustryBR.Discord.Bot;
 import MindustryBR.Mindustry.Commands.client.dm;
 import MindustryBR.Mindustry.Commands.client.history;
-import MindustryBR.Mindustry.Commands.server.*;
-import MindustryBR.Discord.Bot;
+import MindustryBR.Mindustry.Commands.server.historyLog;
+import MindustryBR.Mindustry.Commands.server.say;
 import MindustryBR.Mindustry.Events.*;
 import MindustryBR.Mindustry.Filters.ReactorFilter;
 import MindustryBR.internal.classes.history.LimitedQueue;
@@ -28,6 +29,7 @@ import static mindustry.Vars.netServer;
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static JSONObject contentBundle = new JSONObject();
+    public static JSONObject linkDB = new JSONObject();
     public static DiscordApi bot;
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static Seq<Player> activeHistoryPlayers = new Seq<>();
@@ -87,6 +89,7 @@ public class Main extends Plugin {
     public void init() {
         createConfig();
         createContentBundle();
+        createLinkDB();
 
         // Start the discord bot if token was provided
         if (!config.isEmpty() && !config.getJSONObject("discord").isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
@@ -100,8 +103,9 @@ public class Main extends Plugin {
     @Override
     public void registerServerCommands(CommandHandler handler) {
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
-            this.createConfig();
-            this.createContentBundle();
+            createConfig();
+            createContentBundle();
+            createLinkDB();
         });
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
@@ -187,11 +191,30 @@ public class Main extends Plugin {
 
         // Create config file
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
-        config = defaultConfig;
+        linkDB = defaultConfig;
     }
 
     private void loadConfig() {
         config = new JSONObject(this.getConfig().readString());
         Log.info("[MindustryBR] Config loaded");
+    }
+
+    private void createLinkDB() {
+        // Load config file if it already exists
+        if (Core.settings.getDataDirectory().child("mods/MindustryBR/linkDB.json").exists()) {
+            loadLinkDB();
+            return;
+        }
+
+        JSONObject defaultConfig = new JSONObject();
+
+        // Create config file
+        Core.settings.getDataDirectory().child("mods/MindustryBR/linkDB.json").writeString(defaultConfig.toString(4));
+        config = defaultConfig;
+    }
+
+    private void loadLinkDB() {
+        linkDB = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/linkDB.json").readString());
+        Log.info("[MindustryBR] Linked accounts DB loaded");
     }
 }

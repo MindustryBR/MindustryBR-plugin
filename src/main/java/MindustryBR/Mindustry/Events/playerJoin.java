@@ -1,9 +1,9 @@
 package MindustryBR.Mindustry.Events;
 
+import MindustryBR.internal.Util;
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import MindustryBR.internal.classes.history.entry.JoinLeaveEntry;
-import MindustryBR.internal.Util;
 import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
 import MindustryBR.internal.dcRelay.sendMsgToDiscord;
 import arc.util.Log;

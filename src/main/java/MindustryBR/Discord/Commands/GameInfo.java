@@ -1,7 +1,7 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.classes.Stats;
 import MindustryBR.internal.Util;
+import MindustryBR.internal.classes.Stats;
 import arc.util.Strings;
 import mindustry.game.Team;
 import mindustry.game.Teams;

@@ -19,7 +19,13 @@ public class sendMsgToDiscord {
 
         String msgTmp = Strings.stripColors(e.message).replaceAll("@everyone", "@.everyone").replaceAll("@here", "@.here");
 
-        if (Util.ip2country(e.player.ip()) != null && !Util.ip2country(e.player.ip()).equalsIgnoreCase("brazil") && !Translate.detect(msgTmp).equalsIgnoreCase("pt")) msg += "\n\n**Traduzido:**```\n" + new JSONObject(Translate.translate(msgTmp, "pt")).getJSONObject("translated").getString("text") + "\n```";
+        if (Util.ip2country(e.player.ip()) != null && !Util.ip2country(e.player.ip()).equalsIgnoreCase("brazil") && !Translate.detect(msgTmp).equalsIgnoreCase("pt")) {
+            JSONObject res = new JSONObject(Translate.translate(msgTmp, "pt"));
+            if (res.has("translated") && res.getJSONObject("translated").has("text")) {
+                String translated = res.getJSONObject("translated").getString("text");
+                msg += "\n\n**Traduzido:**```\n" + translated + "\n```";
+            }
+        }
 
         JSONObject discordConfig = config.getJSONObject("discord");
 
