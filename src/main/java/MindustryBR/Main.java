@@ -3,6 +3,7 @@ package MindustryBR;
 import MindustryBR.Discord.Bot;
 import MindustryBR.Mindustry.Commands.client.dm;
 import MindustryBR.Mindustry.Commands.client.history;
+import MindustryBR.Mindustry.Commands.client.linkDC;
 import MindustryBR.Mindustry.Commands.server.historyLog;
 import MindustryBR.Mindustry.Commands.server.say;
 import MindustryBR.Mindustry.Events.*;
@@ -20,6 +21,7 @@ import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
 import org.javacord.api.DiscordApi;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,13 +31,14 @@ import static mindustry.Vars.netServer;
 public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static JSONObject contentBundle = new JSONObject();
-    public static JSONObject linkDB = new JSONObject();
+    public static JSONObject playersDB = new JSONObject();
     public static DiscordApi bot;
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static Seq<Player> activeHistoryPlayers = new Seq<>();
     public static ObjectMap<String, LimitedQueue<BaseEntry>> playerHistory = new ObjectMap<>();
     public static StringMap knownIPs = new StringMap();
     public static boolean logHistory = false;
+    public static StringMap linkCodes = new StringMap();
 
     public Main() throws IOException {
         // Misc events
@@ -89,7 +92,7 @@ public class Main extends Plugin {
     public void init() {
         createConfig();
         createContentBundle();
-        createLinkDB();
+        createPlayersDB();
 
         // Start the discord bot if token was provided
         if (!config.isEmpty() && !config.getJSONObject("discord").isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
@@ -105,7 +108,7 @@ public class Main extends Plugin {
         handler.register("reloadconfig", "[MindustryBR] Reload plugin config", args -> {
             createConfig();
             createContentBundle();
-            createLinkDB();
+            createPlayersDB();
         });
 
         handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
@@ -125,8 +128,8 @@ public class Main extends Plugin {
     @Override
     public void registerClientCommands(CommandHandler handler) {
         handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot, config, args, player));
-
         handler.<Player>register("history", "Ative o historico do bloco", (args, player) -> history.run(bot, config, args, player));
+        handler.<Player>register("link", "Link sua conta do mindusty com o discord", (args, player) -> linkDC.run(bot, config, args, player));
     }
 
     private void createContentBundle() {
@@ -140,6 +143,7 @@ public class Main extends Plugin {
 
         Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").writeString(defaultContentBundle.toString(4));
         contentBundle = defaultContentBundle;
+        Log.info("[MindustryBR] Content bundle created");
     }
 
     private void loadContentBundle() {
@@ -191,7 +195,8 @@ public class Main extends Plugin {
 
         // Create config file
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
-        linkDB = defaultConfig;
+        playersDB = defaultConfig;
+        Log.info("[MindustryBR] Config created");
     }
 
     private void loadConfig() {
@@ -199,22 +204,38 @@ public class Main extends Plugin {
         Log.info("[MindustryBR] Config loaded");
     }
 
-    private void createLinkDB() {
+    private void createPlayersDB() {
         // Load config file if it already exists
-        if (Core.settings.getDataDirectory().child("mods/MindustryBR/linkDB.json").exists()) {
-            loadLinkDB();
+        if (Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").exists()) {
+            loadPlayersDB();
             return;
         }
 
         JSONObject defaultConfig = new JSONObject();
 
         // Create config file
-        Core.settings.getDataDirectory().child("mods/MindustryBR/linkDB.json").writeString(defaultConfig.toString(4));
-        config = defaultConfig;
+        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(defaultConfig.toString(4));
+        playersDB = defaultConfig;
+        Log.info("[MindustryBR] Players DB created");
     }
 
-    private void loadLinkDB() {
-        linkDB = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/linkDB.json").readString());
-        Log.info("[MindustryBR] Linked accounts DB loaded");
+    private void loadPlayersDB() {
+        playersDB = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").readString());
+        Log.info("[MindustryBR] Players DB loaded");
+    }
+
+    public static void addPlayerAccount(String discordID, String uuid) {
+        JSONArray IDs = new JSONArray();
+        JSONObject linkedAccount = new JSONObject();
+
+        if (playersDB.has(discordID)) linkedAccount = playersDB.getJSONObject(discordID);
+        if (linkedAccount.has("accounts")) IDs = linkedAccount.getJSONArray("accounts");
+        IDs.put(uuid);
+
+        linkedAccount.put("accounts", IDs);
+        linkedAccount.put("vip", 0);
+
+        playersDB.put(discordID, linkedAccount);
+        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(playersDB.toString(4));
     }
 }

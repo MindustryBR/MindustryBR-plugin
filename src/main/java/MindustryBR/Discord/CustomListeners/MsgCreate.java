@@ -71,7 +71,7 @@ public class MsgCreate implements MessageCreateListener {
 
             switch (args[0].replaceFirst(prefix, "")) {
                 case "help" -> new Help(bot, config, event, args);
-                case "link" -> new Link(bot, config, event, args);
+                case "link" -> new LinkAccount(bot, config, event, args);
             }
         }
     }
