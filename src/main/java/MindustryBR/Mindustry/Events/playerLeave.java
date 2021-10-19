@@ -19,7 +19,7 @@ import static mindustry.Vars.state;
 public class playerLeave {
     public static void run(DiscordApi bot, JSONObject config, PlayerLeave e) {
         // Pause the game if no one is connected
-        if (Groups.player.size()-1 < 1) {
+        if (Groups.player.size() - 1 < 1) {
             state.serverPaused = true;
             Log.info("auto-pause: nenhum jogador conectado -> Jogo pausado...");
             Call.sendMessage("[scarlet][Server][]: Jogo pausado...");
@@ -28,7 +28,8 @@ public class playerLeave {
             new sendLogMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
         }
 
-        if (playerHistory.get(e.player.getInfo().id) == null) playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
+        if (playerHistory.get(e.player.getInfo().id) == null)
+            playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
 
         LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
         JoinLeaveEntry historyEntry = new JoinLeaveEntry(e.player, false);

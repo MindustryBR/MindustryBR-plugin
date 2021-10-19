@@ -17,10 +17,11 @@ import static MindustryBR.Main.*;
 import static MindustryBR.internal.Util.getLocalized;
 
 public class configEvent {
-    public static void run (DiscordApi bot, JSONObject config, EventType.ConfigEvent e) {
+    public static void run(DiscordApi bot, JSONObject config, EventType.ConfigEvent e) {
         if (e.player == null) return;
         if (e.tile.tile.x > worldHistory.length || e.tile.tile.y > worldHistory[0].length) return;
-        if (logHistory) Log.info("Config changed by " + e.player.name() + " (" + e.tile.tile.x + "," + e.tile.tile.y + ") " + e.value + " " + getLocalized(e.tile.block().name));
+        if (logHistory)
+            Log.info("Config changed by " + e.player.name() + " (" + e.tile.tile.x + "," + e.tile.tile.y + ") " + e.value + " " + getLocalized(e.tile.block().name));
 
         LimitedQueue<BaseEntry> tileHistory = worldHistory[e.tile.tile.x][e.tile.tile.y];
         boolean connect = true;
@@ -31,13 +32,15 @@ public class configEvent {
         }
 
         Tile target = null;
-        if (e.value != null && e.value.getClass().getSimpleName().equals("Integer")) target = Vars.world.tile((int) e.value);
+        if (e.value != null && e.value.getClass().getSimpleName().equals("Integer"))
+            target = Vars.world.tile((int) e.value);
 
         BaseEntry historyEntry = new ConfigEntry(e.player, e.tile, e.value, connect, target);
         Seq<Building> powerConnections = e.tile.getPowerConnections(new Seq<>());
         worldHistory[e.tile.tile.x][e.tile.tile.y].add(historyEntry);
 
-        if (playerHistory.get(e.player.getInfo().id) == null) playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
+        if (playerHistory.get(e.player.getInfo().id) == null)
+            playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
 
         LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
         history.add(historyEntry);

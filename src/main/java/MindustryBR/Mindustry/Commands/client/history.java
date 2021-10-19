@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import static MindustryBR.Main.activeHistoryPlayers;
 
 public class history {
-    public static void run (DiscordApi bot, JSONObject config, String[] args, Player player) {
+    public static void run(DiscordApi bot, JSONObject config, String[] args, Player player) {
         if (activeHistoryPlayers.contains(player)) {
             activeHistoryPlayers.remove(player);
             player.sendMessage("[yellow]Historico [red]desativado[yellow].");

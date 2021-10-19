@@ -6,7 +6,8 @@ public class LimitedQueue<E> extends LinkedList<E> {
     private int limit = 15;
     private boolean overflown = false;
 
-    public LimitedQueue() {}
+    public LimitedQueue() {
+    }
 
     public LimitedQueue(int limit) {
         this.limit = limit;

@@ -8,6 +8,8 @@ import MindustryBR.Mindustry.Commands.server.historyLog;
 import MindustryBR.Mindustry.Commands.server.say;
 import MindustryBR.Mindustry.Events.*;
 import MindustryBR.Mindustry.Filters.ReactorFilter;
+import MindustryBR.Mindustry.Timers.SaveGame;
+import MindustryBR.Mindustry.Timers.clearUnits;
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.Core;
@@ -17,6 +19,7 @@ import arc.struct.Seq;
 import arc.struct.StringMap;
 import arc.util.CommandHandler;
 import arc.util.Log;
+import arc.util.Timer;
 import mindustry.game.EventType.*;
 import mindustry.gen.Player;
 import mindustry.mod.Plugin;
@@ -84,7 +87,25 @@ public class Main extends Plugin {
                 ex.printStackTrace();
             }
         });
+    }
 
+    public static void addPlayerAccount(String discordID, String uuid) {
+        JSONArray IDs = new JSONArray();
+        JSONObject linkedAccount = new JSONObject();
+        JSONObject vip = new JSONObject()
+                .put("level", 0)
+                .put("ends", 0);
+
+        if (playersDB.has(discordID)) linkedAccount = playersDB.getJSONObject(discordID);
+        if (linkedAccount.has("accounts")) IDs = linkedAccount.getJSONArray("accounts");
+        if (linkedAccount.has("vip")) vip = linkedAccount.getJSONObject("vip");
+        IDs.put(uuid);
+
+        linkedAccount.put("accounts", IDs);
+        linkedAccount.put("vip", vip);
+
+        playersDB.put(discordID, linkedAccount);
+        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(playersDB.toString(4));
     }
 
     // Called when the server initializes
@@ -99,7 +120,14 @@ public class Main extends Plugin {
             bot = Bot.run();
         }
 
+        JSONObject options = config.getJSONObject("options");
+
+        // Action filters
         netServer.admins.addActionFilter(ReactorFilter::exec);
+
+        // Timers
+        Timer.schedule(() -> clearUnits.run(bot, config), options.getFloat("clearUnitsTime"), options.getFloat("clearUnitsTime"));
+        Timer.schedule(() -> SaveGame.run(bot, config), options.getFloat("autosaveTime"), options.getFloat("autosaveTime"));
     }
 
     // Register commands that run on the server
@@ -161,15 +189,12 @@ public class Main extends Plugin {
         // Make default config
         JSONObject defaultConfig = new JSONObject();
         JSONObject defaultPrefix = new JSONObject();
-        JSONObject defaultDiscordConfig = new JSONObject();
+        JSONObject defaultDiscord = new JSONObject();
+        JSONObject defaultOptions = new JSONObject();
 
-        defaultConfig.put("owner_id", "");
-        defaultConfig.put("version", 1);
-        defaultConfig.put("ip", "");
-
-        defaultPrefix.put("owner_prefix", "[sky][Dono][] %1");
-        defaultPrefix.put("admin_prefix", "[blue][Admin][] %1");
-        defaultPrefix.put("user_prefix", "%1");
+        defaultPrefix.put("owner_prefix", "[sky][Dono][] %1")
+                .put("admin_prefix", "[blue][Admin][] %1")
+                .put("user_prefix", "%1");
 
         String[] discordStrings = {
                 "token",
@@ -183,15 +208,24 @@ public class Main extends Plugin {
                 "emoji-bank"
         };
 
+        defaultDiscord.put("prefix", "!");
         for (String ds : discordStrings) {
-            defaultDiscordConfig.put(ds, "");
+            defaultDiscord.put(ds, "");
         }
 
-        defaultDiscordConfig.put("prefix", "!");
+        defaultOptions.put("clearUnits", false)
+                .put("clearUnitsAmount", 50)
+                .put("clearUnitsTime", 600)
+                .put("autosaveAmount", 10)
+                .put("autosaveTime", 300);
 
-        defaultConfig.put("discord", defaultDiscordConfig);
-        defaultConfig.put("prefix", defaultPrefix);
-        defaultConfig.put("name", "Survival");
+        defaultConfig.put("discord", defaultDiscord)
+                .put("prefix", defaultPrefix)
+                .put("options", defaultOptions)
+                .put("name", "Survival")
+                .put("owner_id", "")
+                .put("version", 0.7)
+                .put("ip", "");
 
         // Create config file
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
@@ -222,20 +256,5 @@ public class Main extends Plugin {
     private void loadPlayersDB() {
         playersDB = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").readString());
         Log.info("[MindustryBR] Players DB loaded");
-    }
-
-    public static void addPlayerAccount(String discordID, String uuid) {
-        JSONArray IDs = new JSONArray();
-        JSONObject linkedAccount = new JSONObject();
-
-        if (playersDB.has(discordID)) linkedAccount = playersDB.getJSONObject(discordID);
-        if (linkedAccount.has("accounts")) IDs = linkedAccount.getJSONArray("accounts");
-        IDs.put(uuid);
-
-        linkedAccount.put("accounts", IDs);
-        linkedAccount.put("vip", 0);
-
-        playersDB.put(discordID, linkedAccount);
-        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(playersDB.toString(4));
     }
 }

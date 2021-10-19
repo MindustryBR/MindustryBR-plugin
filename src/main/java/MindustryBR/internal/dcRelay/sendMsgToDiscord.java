@@ -41,10 +41,9 @@ public class sendMsgToDiscord {
     }
 
     /**
-     *
-     * @param bot Discord bot
-     * @param config Plugin config
-     * @param name Player name
+     * @param bot     Discord bot
+     * @param config  Plugin config
+     * @param name    Player name
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
@@ -65,9 +64,8 @@ public class sendMsgToDiscord {
     }
 
     /**
-     *
-     * @param bot Discord bot
-     * @param config Plugin config
+     * @param bot     Discord bot
+     * @param config  Plugin config
      * @param message Message
      */
     public sendMsgToDiscord(DiscordApi bot, JSONObject config, String message) {

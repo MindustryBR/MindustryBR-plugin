@@ -23,7 +23,7 @@ import static mindustry.Vars.state;
 public class worldLoad {
     public static boolean started = false;
 
-    public static void run (DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
+    public static void run(DiscordApi bot, JSONObject config, EventType.WorldLoadEvent e) {
         stats = new Stats();
 
         // Unpause the game if one or more player is connected
@@ -38,7 +38,7 @@ public class worldLoad {
             }
         }
 
-        if(started) return;
+        if (started) return;
         started = true;
 
         Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
@@ -48,7 +48,7 @@ public class worldLoad {
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Servidor online!")
                 .setColor(Color.green)
-                .setDescription("**IP:** `"+ config.getString("ip") + "`");
+                .setDescription("**IP:** `" + config.getString("ip") + "`");
 
         new MessageBuilder()
                 .setEmbed(embed)

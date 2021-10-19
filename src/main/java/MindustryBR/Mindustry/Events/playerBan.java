@@ -16,7 +16,7 @@ import java.util.Optional;
 import static mindustry.Vars.netServer;
 
 public class playerBan {
-    public static void run (DiscordApi bot, JSONObject config, EventType.PlayerBanEvent e) throws IOException {
+    public static void run(DiscordApi bot, JSONObject config, EventType.PlayerBanEvent e) throws IOException {
         Optional<ServerTextChannel> c1 = bot.getServerTextChannelById(config.getJSONObject("discord").getString("mod_channel_id"));
         if (c1.isEmpty()) return;
         ServerTextChannel c2 = c1.get();

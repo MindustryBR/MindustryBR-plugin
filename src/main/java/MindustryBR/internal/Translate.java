@@ -34,14 +34,14 @@ public class Translate {
     }
 
     public static class Request {
-        private Request() {
-            super();
-        }
-
         // one instance, reuse
         private static final HttpClient httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .build();
+
+        private Request() {
+            super();
+        }
 
         public static String get(String route, StringMap query) throws IOException, InterruptedException {
             StringBuilder urlStr = new StringBuilder()
@@ -53,9 +53,9 @@ public class Translate {
                 ObjectMap.Keys<String> keys = query.keys();
                 for (String key : keys) {
                     urlStr.append(key)
-                        .append("=")
-                        .append(URLEncoder.encode(query.get(key), StandardCharsets.UTF_8))
-                        .append("&");
+                            .append("=")
+                            .append(URLEncoder.encode(query.get(key), StandardCharsets.UTF_8))
+                            .append("&");
                 }
             }
 

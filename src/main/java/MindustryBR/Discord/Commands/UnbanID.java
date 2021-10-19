@@ -36,7 +36,8 @@ public class UnbanID {
         AtomicBoolean tem = new AtomicBoolean(false);
 
         event.getMessageAuthor().asUser().get().getRoles(event.getServer().get()).forEach(r -> {
-            if (r.getIdAsString().equalsIgnoreCase(mod_role) || r.getIdAsString().equalsIgnoreCase(adm_role) || r.getIdAsString().equalsIgnoreCase(owner_role)) tem.set(true);
+            if (r.getIdAsString().equalsIgnoreCase(mod_role) || r.getIdAsString().equalsIgnoreCase(adm_role) || r.getIdAsString().equalsIgnoreCase(owner_role))
+                tem.set(true);
         });
 
         if (!tem.get()) {
@@ -47,7 +48,7 @@ public class UnbanID {
             return;
         }
 
-        if(!state.is(GameState.State.playing)) {
+        if (!state.is(GameState.State.playing)) {
             new MessageBuilder()
                     .append("Server nem ta aberto ainda precoce fdp")
                     .send(channel)

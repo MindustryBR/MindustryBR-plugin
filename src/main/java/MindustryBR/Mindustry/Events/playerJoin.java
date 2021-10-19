@@ -21,7 +21,8 @@ public class playerJoin {
         // Check for non-admin players with admin in name
         e.player.name = Util.handleName(e.player, false);
 
-        if (playerHistory.get(e.player.getInfo().id) == null) playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
+        if (playerHistory.get(e.player.getInfo().id) == null)
+            playerHistory.put(e.player.getInfo().id, new LimitedQueue<>(20));
 
         LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
         JoinLeaveEntry historyEntry = new JoinLeaveEntry(e.player);

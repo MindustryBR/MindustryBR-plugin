@@ -10,5 +10,6 @@ public class Stats {
     public int buildingsDeconstructed = 0;
     public int buildingsDestroyed = 0;
 
-    public Stats() {}
+    public Stats() {
+    }
 }

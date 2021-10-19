@@ -40,7 +40,8 @@ public class GameInfo {
 
             emoji.ifPresentOrElse(
                     knownCustomEmoji -> res.append(knownCustomEmoji.getMentionTag()).append(" "),
-                    () -> {});
+                    () -> {
+                    });
 
             res.append(Strings.stripColors(getLocalized(arg1.name)))
                     .append(": ")

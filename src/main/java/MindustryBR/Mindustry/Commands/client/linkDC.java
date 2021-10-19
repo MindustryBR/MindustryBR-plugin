@@ -11,7 +11,7 @@ import static MindustryBR.Main.linkCodes;
 import static MindustryBR.Main.playersDB;
 
 public class linkDC {
-    public static void run (DiscordApi bot, JSONObject config, String[] args, Player player) {
+    public static void run(DiscordApi bot, JSONObject config, String[] args, Player player) {
         for (String id : linkCodes.values()) {
             if (id.equals(player.getInfo().id)) {
                 for (String key : linkCodes.keys()) {
@@ -33,7 +33,7 @@ public class linkDC {
                 }
             }
         }
-        
+
         String code = Util.randomCode(8);
         linkCodes.put(code, player.getInfo().id);
         player.sendMessage("Seu codigo: " + code + "\nUse o comando !link <codigo> na DM do ReactorBot no nosso servidor do [blue]discord[]: [sky]https://discord.gg/Rt5HjqW[] para linkar sua conta");

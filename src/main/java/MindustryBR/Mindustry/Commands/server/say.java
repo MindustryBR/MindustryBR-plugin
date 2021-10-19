@@ -8,7 +8,7 @@ import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 public class say {
-    public static void run (DiscordApi bot, JSONObject config, String[] args) {
+    public static void run(DiscordApi bot, JSONObject config, String[] args) {
         StringBuilder msgBuilder = new StringBuilder();
 
         for (String s : args) {

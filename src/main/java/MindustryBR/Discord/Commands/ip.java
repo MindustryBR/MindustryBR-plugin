@@ -19,11 +19,11 @@ public class ip {
 
         if (started) {
             embed.setTitle("IP do servidor")
-                .setDescription("```\n" + config.getString("ip") + "\n```")
-                .setColor(Color.green);
+                    .setDescription("```\n" + config.getString("ip") + "\n```")
+                    .setColor(Color.green);
         } else {
             embed.setDescription("**Servidor fechado**")
-                .setColor(Color.red);
+                    .setColor(Color.red);
         }
 
 

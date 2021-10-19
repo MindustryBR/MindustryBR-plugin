@@ -5,7 +5,6 @@ import arc.files.Fi;
 import arc.util.Log;
 import arc.util.Strings;
 import mindustry.Vars;
-import mindustry.core.GameState;
 import mindustry.gen.Player;
 import mindustry.io.SaveIO;
 import org.json.JSONException;
@@ -29,8 +28,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import static MindustryBR.Main.contentBundle;
-import static MindustryBR.Main.knownIPs;
+import static MindustryBR.Main.*;
 import static mindustry.Vars.saveDirectory;
 import static mindustry.Vars.state;
 
@@ -39,19 +37,19 @@ public class Util {
      * Get cpu usage percent
      */
     public static double getProcessCpuLoad() throws Exception {
-        MBeanServer mbs    = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name    = ObjectName.getInstance("java.lang:type=OperatingSystem");
-        AttributeList list = mbs.getAttributes(name, new String[]{ "ProcessCpuLoad" });
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        ObjectName name = ObjectName.getInstance("java.lang:type=OperatingSystem");
+        AttributeList list = mbs.getAttributes(name, new String[]{"ProcessCpuLoad"});
 
-        if (list.isEmpty())     return Double.NaN;
+        if (list.isEmpty()) return Double.NaN;
 
-        Attribute att = (Attribute)list.get(0);
-        Double value  = (Double)att.getValue();
+        Attribute att = (Attribute) list.get(0);
+        Double value = (Double) att.getValue();
 
         // usually takes a couple of seconds before we get real values
-        if (value == -1.0)      return Double.NaN;
+        if (value == -1.0) return Double.NaN;
         // returns a percentage value with 1 decimal point precision
-        return ((int)(value * 1000) / 10.0);
+        return ((int) (value * 1000) / 10.0);
     }
 
     /**
@@ -62,14 +60,13 @@ public class Util {
 
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 
-        str.append(String.format("%.2f", (double)memoryMXBean.getHeapMemoryUsage().getUsed() /1073741824))
-            .append(String.format("/%.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getMax() /1073741824));
+        str.append(String.format("%.2f", (double) memoryMXBean.getHeapMemoryUsage().getUsed() / 1073741824))
+                .append(String.format("/%.2f GB", (double) memoryMXBean.getHeapMemoryUsage().getMax() / 1073741824));
 
         return str.toString();
     }
 
     /**
-     *
      * @return A random color
      */
     public static Color randomColor() {
@@ -101,12 +98,12 @@ public class Util {
     /**
      * Convert a millisecond duration to a string format
      *
-     * @param millis A duration to convert to a string form
+     * @param millis    A duration to convert to a string form
      * @param shortTime if true, return only minutes and seconds
      * @return A string of the form "X Hours Y Minutes Z Seconds".
      */
     public static String msToDuration(long millis, boolean shortTime) {
-        if(millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
+        if (millis < 0) throw new IllegalArgumentException("Duration must be greater than zero!");
 
         if (!shortTime) {
             long hours = TimeUnit.MILLISECONDS.toHours(millis);
@@ -115,20 +112,20 @@ public class Util {
             millis -= TimeUnit.MINUTES.toMillis(minutes);
             long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-            return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+            return (hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
         } else {
             long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
             millis -= TimeUnit.MINUTES.toMillis(minutes);
             long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-            return(minutes + " Minutos " + seconds + " Segundos");
+            return (minutes + " Minutos " + seconds + " Segundos");
         }
     }
 
     /**
      * Convert a millisecond duration to a string format
      *
-     * @param millis A duration to convert to a string form
+     * @param millis    A duration to convert to a string form
      * @param shortTime if true, return only minutes and seconds
      * @return A string of the form "X Hours Y Minutes Z Seconds".
      */
@@ -142,13 +139,13 @@ public class Util {
             millis -= TimeUnit.MINUTES.toMillis(minutes);
             long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millis);
 
-            return(hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
+            return (hours + " Horas " + minutes + " Minutos " + seconds + " Segundos");
         } else {
             long minutes = TimeUnit.MILLISECONDS.toMinutes((long) millis);
             millis -= TimeUnit.MINUTES.toMillis(minutes);
             long seconds = TimeUnit.MILLISECONDS.toSeconds((long) millis);
 
-            return(minutes + " Minutos " + seconds + " Segundos");
+            return (minutes + " Minutos " + seconds + " Segundos");
         }
     }
 
@@ -159,7 +156,7 @@ public class Util {
      * @return the merged object (target).
      */
     public static JSONObject mergeJson(JSONObject source, JSONObject target) throws JSONException {
-        for (String key: JSONObject.getNames(source)) {
+        for (String key : JSONObject.getNames(source)) {
             Object value = source.get(key);
             // existing value for "key" - recursively deep merge:
             // new value for "key":
@@ -185,7 +182,7 @@ public class Util {
     /**
      * Handle discord markdown
      *
-     * @param str String to handle
+     * @param str    String to handle
      * @param remove if true, remove all markdown notations. If false, escape it
      * @return Handled string
      */
@@ -202,7 +199,7 @@ public class Util {
     /**
      * Handle player name
      *
-     * @param name Player name
+     * @param name        Player name
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
      */
@@ -218,9 +215,9 @@ public class Util {
     /**
      * Handle player name
      *
-     * @param name Player name
+     * @param name        Player name
      * @param removeColor Whether or not to remove color tags
-     * @param discord Whether or not to handle discord markdown
+     * @param discord     Whether or not to handle discord markdown
      * @return Handled name
      */
     public static String handleName(String name, boolean removeColor, boolean discord) {
@@ -234,7 +231,7 @@ public class Util {
     /**
      * Handle player name
      *
-     * @param player Player to handle
+     * @param player      Player to handle
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
      */
@@ -253,7 +250,7 @@ public class Util {
     /**
      * Handle player name
      *
-     * @param player Player to handle
+     * @param player      Player to handle
      * @param removeColor Whether or not to remove color tags
      * @return Handled name
      */
@@ -268,15 +265,16 @@ public class Util {
     /**
      * Save game if the server is open and its not paused
      */
-    public static void saveGame(){
-        if(!Vars.state.is(GameState.State.playing) || Vars.state.serverPaused) return;
+    public static void saveGame() {
+        if (!Vars.state.isPlaying() || Vars.state.serverPaused) return;
 
         Date dNow = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat ("_yyyy-MM-dd-hh-mm");
+        SimpleDateFormat ft = new SimpleDateFormat("_yyyy-MM-dd-hh-mm");
         String fname = "rollback_";
         Fi file = saveDirectory.child(fname + Strings.stripColors(state.map.name().replaceAll(" ", "-")) + "_" + state.wave + ft.format(dNow) + ".msav");
         Fi latest = saveDirectory.child("latest.msav");
         Fi[] files = saveDirectory.list((dir, name) -> name.startsWith(fname));
+
         Arrays.sort(files, (f1, f2) -> {
             long diff = f1.lastModified() - f2.lastModified();
             if (diff > 0)
@@ -286,11 +284,13 @@ public class Util {
             else
                 return 1;
         });
-        if(files.length >= 10){
-            for(int index = 9; index < files.length; index++){
+
+        if (files.length >= config.getJSONObject("options").getInt("autosaveAmount")) {
+            for (int index = 9; index < files.length; index++) {
                 files[index].delete();
             }
         }
+
         Core.app.post(() -> {
             SaveIO.save(file);
             SaveIO.save(latest);
@@ -331,7 +331,8 @@ public class Util {
         String local = null;
         try {
             local = contentBundle.getString(internalName);
-        } catch (JSONException ignored) {}
+        } catch (JSONException ignored) {
+        }
 
         return (local != null && !local.isBlank()) ? local + "[white]" : internalName;
     }

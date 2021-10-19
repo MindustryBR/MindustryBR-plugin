@@ -42,7 +42,8 @@ public class HistoryDC {
         StringBuilder message = new StringBuilder();
 
         if (tileHistory.isOverflown()) message.append("\n... historico muito grande");
-        for (BaseEntry historyEntry : tileHistory) message.append("\n").append(Strings.stripColors(historyEntry.getMessage()));
+        for (BaseEntry historyEntry : tileHistory)
+            message.append("\n").append(Strings.stripColors(historyEntry.getMessage()));
         if (tileHistory.isEmpty()) message.append("\n~ sem historico");
 
         EmbedBuilder embed = new EmbedBuilder()

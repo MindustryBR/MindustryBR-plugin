@@ -14,18 +14,18 @@ import java.nio.charset.StandardCharsets;
 
 import static MindustryBR.internal.Util.getLocalized;
 
-public class ConfigEntry implements BaseEntry{
+public class ConfigEntry implements BaseEntry {
     private static final ObjectMap<String, String[]> units = new ObjectMap<>() {{
-        put("ground-factory", new String[] {
+        put("ground-factory", new String[]{
                 "dagger",
                 "crawler",
                 "nova"
         });
-        put("air-factory", new String[] {
+        put("air-factory", new String[]{
                 "flare",
                 "mono"
         });
-        put("naval-factory", new String[] {
+        put("naval-factory", new String[]{
                 "risso"
         });
     }};

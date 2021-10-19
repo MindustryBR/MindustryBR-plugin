@@ -10,7 +10,7 @@ import static MindustryBR.Main.activeHistoryPlayers;
 import static MindustryBR.Main.worldHistory;
 
 public class tap {
-    public static void run (DiscordApi bot, JSONObject config, EventType.TapEvent e) {
+    public static void run(DiscordApi bot, JSONObject config, EventType.TapEvent e) {
         if (activeHistoryPlayers.contains(e.player)) {
             LimitedQueue<BaseEntry> tileHistory = worldHistory[e.tile.x][e.tile.y];
 

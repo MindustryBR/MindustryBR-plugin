@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import static MindustryBR.Main.logHistory;
 
 public class historyLog {
-    public static void run (DiscordApi bot, JSONObject config, String[] args) {
+    public static void run(DiscordApi bot, JSONObject config, String[] args) {
         logHistory = !logHistory;
         if (logHistory) {
             Log.info("[MindustryBR] History will now be logged in console");

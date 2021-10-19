@@ -62,7 +62,7 @@ public class MsgCreate implements MessageCreateListener {
                     }
                 }
                 case "link" -> {
-                    channel.sendMessage( event.getMessageAuthor().asUser().get().getMentionTag() + ", esse comando só pode ser usado no DM");
+                    channel.sendMessage(event.getMessageAuthor().asUser().get().getMentionTag() + ", esse comando só pode ser usado no DM");
                     event.getMessage().delete();
                 }
             }

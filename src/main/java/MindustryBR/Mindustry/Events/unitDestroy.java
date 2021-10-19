@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import static MindustryBR.Discord.Commands.GameInfo.stats;
 
 public class unitDestroy {
-    public static void run (DiscordApi bot, JSONObject config, EventType.UnitDestroyEvent e) {
+    public static void run(DiscordApi bot, JSONObject config, EventType.UnitDestroyEvent e) {
         stats.unitsDestroyed++;
     }
 }

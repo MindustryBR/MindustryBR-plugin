@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class blockBuildBegin {
     public static void run(DiscordApi bot, JSONObject config, EventType.BlockBuildBeginEvent e) {
-        if(!e.breaking && e.unit.getPlayer() != null && e.unit.buildPlan() != null && e.unit.buildPlan().block == Blocks.thoriumReactor && e.unit.isPlayer()){
+        if (!e.breaking && e.unit.getPlayer() != null && e.unit.buildPlan() != null && e.unit.buildPlan().block == Blocks.thoriumReactor && e.unit.isPlayer()) {
             Player player = e.unit.getPlayer();
             Seq<CoreBlock.CoreBuild> cores = player.team().cores();
             boolean temp = false;

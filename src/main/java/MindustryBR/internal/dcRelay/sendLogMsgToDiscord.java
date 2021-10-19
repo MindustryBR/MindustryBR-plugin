@@ -12,10 +12,9 @@ import java.util.Optional;
 
 public class sendLogMsgToDiscord {
     /**
-     *
-     * @param bot Discord bot
+     * @param bot    Discord bot
      * @param config Plugin config
-     * @param e Event
+     * @param e      Event
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, PlayerChatEvent e) {
         String msg = "(" + e.player.getInfo().id + ") **" + e.player.name.replace("@everyone", "@.everyone").replace("@here", "@.here") + "**: " + e.message;
@@ -35,10 +34,9 @@ public class sendLogMsgToDiscord {
     }
 
     /**
-     *
-     * @param bot Discord bot
-     * @param config Plugin config
-     * @param name Player name
+     * @param bot     Discord bot
+     * @param config  Plugin config
+     * @param name    Player name
      * @param message Message
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, String name, String message) {
@@ -59,9 +57,8 @@ public class sendLogMsgToDiscord {
     }
 
     /**
-     *
-     * @param bot Discord bot
-     * @param config Plugin config
+     * @param bot     Discord bot
+     * @param config  Plugin config
      * @param message Message
      */
     public sendLogMsgToDiscord(DiscordApi bot, JSONObject config, String message) {

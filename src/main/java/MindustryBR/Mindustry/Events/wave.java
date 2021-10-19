@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import static mindustry.Vars.state;
 
 public class wave {
-    public static void run (DiscordApi bot, JSONObject config, WaveEvent e) {
+    public static void run(DiscordApi bot, JSONObject config, WaveEvent e) {
         if (Groups.player.size() < 1) state.serverPaused = true;
 
         Util.saveGame();

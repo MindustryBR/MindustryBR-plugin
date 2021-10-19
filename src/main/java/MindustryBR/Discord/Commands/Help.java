@@ -13,7 +13,7 @@ public class Help {
         ServerTextChannel channel = event.getServerTextChannel().get();
         String prefix = config.getJSONObject("discord").getString("prefix");
 
-        EmbedBuilder embed= new EmbedBuilder()
+        EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Comandos")
                 .setDescription(prefix + "help - Tu ja ta olhando ele\n" +
                         prefix + "playerhistory <nome> - Mostra o historico do jogador\n" +

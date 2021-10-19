@@ -16,16 +16,18 @@ import static MindustryBR.Main.*;
 import static MindustryBR.internal.Util.getLocalized;
 
 public class blockBuildEnd {
-    public static void run (DiscordApi bot, JSONObject config, EventType.BlockBuildEndEvent e) {
+    public static void run(DiscordApi bot, JSONObject config, EventType.BlockBuildEndEvent e) {
         if (e.breaking) {
             stats.buildingsDeconstructed++;
         } else stats.buildingsConstructed++;
 
         if (e.unit.getPlayer() == null) return;
-        if (logHistory) Log.info((e.breaking ? "Block deconstructed" : "Block constructed") + " by " + e.unit.getPlayer().name() + " (" + e.tile.x + "," + e.tile.y + ") " + getLocalized(e.tile.block().name));
+        if (logHistory)
+            Log.info((e.breaking ? "Block deconstructed" : "Block constructed") + " by " + e.unit.getPlayer().name() + " (" + e.tile.x + "," + e.tile.y + ") " + getLocalized(e.tile.block().name));
 
         Player player = e.unit.getPlayer();
-        if (playerHistory.get(player.getInfo().id) == null) playerHistory.put(player.getInfo().id, new LimitedQueue<>(20));
+        if (playerHistory.get(player.getInfo().id) == null)
+            playerHistory.put(player.getInfo().id, new LimitedQueue<>(20));
 
         BaseEntry historyEntry = new BlockEntry(e);
         LimitedQueue<BaseEntry> history = playerHistory.get(player.getInfo().id);
