@@ -1,18 +1,17 @@
 package MindustryBR.Discord.Commands;
 
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.awt.*;
 
+import static MindustryBR.Main.config;
 import static MindustryBR.Mindustry.Events.worldLoad.started;
 
 public class ip {
-    public ip(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public ip(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
         EmbedBuilder embed = new EmbedBuilder()
                 .setTimestampToNow();

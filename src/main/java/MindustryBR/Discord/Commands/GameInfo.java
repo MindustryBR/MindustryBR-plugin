@@ -9,24 +9,24 @@ import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.modules.ItemModule;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.util.Optional;
 
+import static MindustryBR.Main.bot;
+import static MindustryBR.Main.config;
 import static MindustryBR.internal.Util.getLocalized;
 import static mindustry.Vars.state;
 
 public class GameInfo {
     public static Stats stats = new Stats();
 
-    public GameInfo(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public GameInfo(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
         Server emojiBank = bot.getServerById(config.getJSONObject("discord").getString("emoji-bank")).get();
 

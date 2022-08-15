@@ -6,20 +6,26 @@ import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.struct.ObjectSet;
 import arc.util.Strings;
 import mindustry.net.Administration;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import static MindustryBR.Main.playerHistory;
 import static mindustry.Vars.netServer;
 
 public class PlayerHistoryDC {
-    public PlayerHistoryDC(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public PlayerHistoryDC(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
         ObjectSet<Administration.PlayerInfo> players = null;
+
+        if (args.length == 0) {
+            new MessageBuilder()
+                    .append("Você nao informou o nome ou ID do jogador")
+                    .send(channel)
+                    .join();
+            return;
+        }
 
         if (netServer.admins.findByName(args[1]).size > 0 || netServer.admins.searchNames(args[1]).size > 0) {
             players = netServer.admins.findByName(args[1]);
@@ -44,7 +50,7 @@ public class PlayerHistoryDC {
                 message.append("\n").append(Strings.stripColors(historyEntry.getMessage(false)));
             if (history.isEmpty()) message.append("\n~ sem historico");
         } else {
-            message.append("\n~ sem historico");
+            message.append("~ sem historico");
         }
 
         EmbedBuilder embed = new EmbedBuilder()

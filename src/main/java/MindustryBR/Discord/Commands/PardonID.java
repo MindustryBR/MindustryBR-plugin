@@ -1,24 +1,21 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToGame;
+import MindustryBR.internal.DiscordRelay;
 import mindustry.core.GameState;
 import mindustry.net.Administration;
 import mindustry.server.ServerControl;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static MindustryBR.Main.config;
 import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
 public class PardonID {
-    public PardonID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public PardonID(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -106,8 +103,8 @@ public class PardonID {
             }
         });
 
-        new sendMsgToGame(bot, "[red][Server][]", player.lastName + " teve o kick perdoado", config);
-        new sendMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
-        new sendLogMsgToDiscord(bot, config, "**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
+        DiscordRelay.sendMsgToGame("[red][Server][]", player.lastName + " teve o kick perdoado");
+        DiscordRelay.sendMsgToDiscord("**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
+        DiscordRelay.sendLogMsgToDiscord("**" + player.lastName + "** (" + player.id + ") teve o kick perdoado");
     }
 }

@@ -1,14 +1,19 @@
 package MindustryBR.Mindustry.Commands.server;
 
-import MindustryBR.internal.dcRelay.sendMsgToDiscord;
+import MindustryBR.internal.DiscordRelay;
+import MindustryBR.internal.classes.commands.ServerCommand;
 import arc.util.Log;
+import arc.util.Nullable;
 import arc.util.Strings;
 import mindustry.gen.Call;
-import org.javacord.api.DiscordApi;
-import org.json.JSONObject;
 
-public class say {
-    public static void run(DiscordApi bot, JSONObject config, String[] args) {
+public class say implements ServerCommand {
+    @Nullable
+    public static final String params = "<message...>";
+    @Nullable
+    public static final String desc = "[MindustryBR] Send message as Server";
+
+    public static void run(String[] args) {
         StringBuilder msgBuilder = new StringBuilder();
 
         for (String s : args) {
@@ -19,6 +24,6 @@ public class say {
 
         Call.sendMessage(name + ": " + msg);
         Log.info(Strings.stripColors(name + ": " + msg));
-        new sendMsgToDiscord(bot, config, name, msg);
+        DiscordRelay.sendMsgToDiscord(name, msg);
     }
 }

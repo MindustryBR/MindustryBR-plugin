@@ -1,12 +1,14 @@
 # MindustryBR-plugin
 Plugin made for the MindustryBR server
 
-Server IP: `mindustryptbr.ddns.net:25579` <br>
 Discord: https://discord.gg/Rt5HjqW
+Servers IPs:
+```markdown
+Survival V6 - mindustryptbr.ddns.net:6591
+```
 
 ## License
-
-```
+```txt
                               MIT License
 
                        Copyright (c) 2021 King-BR

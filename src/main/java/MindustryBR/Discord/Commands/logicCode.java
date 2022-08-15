@@ -6,19 +6,17 @@ import mindustry.Vars;
 import mindustry.gen.Building;
 import mindustry.world.blocks.logic.LogicBlock;
 import mindustry.world.blocks.logic.LogicDisplay;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 
 import static MindustryBR.internal.Util.getLocalized;
 
 public class logicCode {
-    public logicCode(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public logicCode(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         int x, y;

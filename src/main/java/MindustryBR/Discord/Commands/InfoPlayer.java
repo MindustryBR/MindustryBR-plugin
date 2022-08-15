@@ -3,20 +3,25 @@ package MindustryBR.Discord.Commands;
 import MindustryBR.internal.Util;
 import arc.struct.ObjectSet;
 import mindustry.net.Administration;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
 import static mindustry.Vars.netServer;
 
 public class InfoPlayer {
-    public InfoPlayer(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) throws IOException {
+    public InfoPlayer(MessageCreateEvent event, String[] args) throws IOException {
         ServerTextChannel channel = event.getServerTextChannel().get();
+
+        if (args.length == 0) {
+            new MessageBuilder()
+                    .append("Você nao informou o nome ou o ID do jogador")
+                    .send(channel)
+                    .join();
+        }
 
         if (netServer.admins.findByName(args[1]).size > 0 || netServer.admins.searchNames(args[1]).size > 0) {
             ObjectSet<Administration.PlayerInfo> players = netServer.admins.findByName(args[1]);

@@ -1,15 +1,15 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.Util;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
+
+import static MindustryBR.Main.config;
 
 public class Help {
-    public Help(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public Help(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
         String prefix = config.getJSONObject("discord").getString("prefix");
 

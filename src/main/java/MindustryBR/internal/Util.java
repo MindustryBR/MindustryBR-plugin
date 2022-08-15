@@ -151,7 +151,7 @@ public class Util {
 
     /**
      * Merge "source" into "target". If fields have equal name, merge them recursively.
-     * adapted from https://stackoverflow.com/a/15070484
+     * <br>Adapted from <a href="https://stackoverflow.com/a/15070484">StackOverflow</a>
      *
      * @return the merged object (target).
      */
@@ -197,6 +197,13 @@ public class Util {
     }
 
     /**
+     * Handle discord mention
+     */
+    public static String handleDiscordMention(String str) {
+        return str.replaceAll("@", "@.");
+    }
+
+    /**
      * Handle player name
      *
      * @param name        Player name
@@ -238,9 +245,12 @@ public class Util {
     public static String handleName(Player player, boolean removeColor) {
         String name = player.name;
 
-        if (!player.admin) if (player.name.toLowerCase().contains("admin") || player.name.toLowerCase().contains("adm"))
-            player.name = "retardado";
-        else if (player.name.toLowerCase().contains("dono")) player.name = "retardado²";
+        if (!player.admin) {
+            if (player.name.toLowerCase().contains("admin") || player.name.toLowerCase().contains("adm"))
+                player.name = "retardado";
+            else if (player.name.toLowerCase().contains("dono") && !config.getString("owner_id").equals(player.getInfo().id))
+                player.name = "retardado²";
+        }
 
         if (removeColor) name = Strings.stripColors(name);
 
@@ -252,6 +262,7 @@ public class Util {
      *
      * @param player      Player to handle
      * @param removeColor Whether or not to remove color tags
+     * @param discord     Whether or not to remove Discord Markdown
      * @return Handled name
      */
     public static String handleName(Player player, boolean removeColor, boolean discord) {
@@ -335,5 +346,9 @@ public class Util {
         }
 
         return (local != null && !local.isBlank()) ? local + "[white]" : internalName;
+    }
+
+    public static boolean isVIP(String _uuid) {
+        return playersDB.has(_uuid) && playersDB.getJSONObject(_uuid).getJSONObject("vip").getInt("ends") > 0;
     }
 }

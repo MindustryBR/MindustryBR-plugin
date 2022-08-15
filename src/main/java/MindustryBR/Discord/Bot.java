@@ -20,7 +20,7 @@ public class Bot {
         bot.setMessageCacheSize(0, 0);
 
         // Add custom MessageCreateListener
-        bot.addListener(new MsgCreate(bot));
+        bot.addListener(new MsgCreate());
 
         // Print logged account
         Log.info("Bot logged in as " + bot.getYourself().getDiscriminatedName());

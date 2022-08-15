@@ -1,23 +1,21 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToGame;
+import MindustryBR.internal.DiscordRelay;
 import mindustry.core.GameState;
 import mindustry.net.Administration;
 import mindustry.server.ServerControl;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static MindustryBR.Main.config;
 import static mindustry.Vars.netServer;
 import static mindustry.Vars.state;
 
 public class BanID {
-    public BanID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public BanID(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -110,7 +108,7 @@ public class BanID {
                 .send(channel)
                 .join();
 
-        new sendMsgToGame(bot, "[red][Server][]", "Jogador " + player.lastName + " foi banindo", config);
-        new sendLogMsgToDiscord(bot, config, "Jogador **" + player.lastName + "** (`" + player.id + "`) foi banido");
+        DiscordRelay.sendMsgToGame("[red][Server][]", "Jogador " + player.lastName + " foi banindo");
+        DiscordRelay.sendLogMsgToDiscord("Jogador **" + player.lastName + "** (`" + player.id + "`) foi banido");
     }
 }

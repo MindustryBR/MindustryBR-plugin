@@ -1,7 +1,6 @@
 package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToDiscord;
+import MindustryBR.internal.DiscordRelay;
 import mindustry.game.EventType.PlayerChatEvent;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
@@ -13,8 +12,8 @@ public class playerChat {
         // Send message to discord
         if (!config.getJSONObject("discord").getString("token").isBlank()) {
             if (e.message.startsWith("/")) {
-                new sendLogMsgToDiscord(bot, config, e);
-            } else new sendMsgToDiscord(bot, config, e);
+                DiscordRelay.sendLogMsgToDiscord(e);
+            } else DiscordRelay.sendMsgToDiscord(e);
         }
     }
 }

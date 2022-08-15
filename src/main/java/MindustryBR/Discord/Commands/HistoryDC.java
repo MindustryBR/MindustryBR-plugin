@@ -4,17 +4,15 @@ import MindustryBR.internal.Util;
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import arc.util.Strings;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import static MindustryBR.Main.worldHistory;
 
 public class HistoryDC {
-    public HistoryDC(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public HistoryDC(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         int x, y;

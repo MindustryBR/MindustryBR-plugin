@@ -1,12 +1,18 @@
 package MindustryBR.Mindustry.Commands.client;
 
+import MindustryBR.internal.classes.commands.ClientCommand;
+import arc.util.Nullable;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import org.javacord.api.DiscordApi;
-import org.json.JSONObject;
 
-public class dm {
-    public static void run(DiscordApi bot, JSONObject config, String[] args, Player player) {
+public class dm implements ClientCommand {
+    public static final boolean adminOnly = false;
+    @Nullable
+    public static final String params = "<player> <message...>";
+    @Nullable
+    public static final String desc = "Mande uma mensagem privada para um jogador.";
+
+    public static void run(String[] args, Player player) {
         // Find player by name
         Player other = Groups.player.find(p -> p.name.toLowerCase().contains(args[0].toLowerCase()));
 

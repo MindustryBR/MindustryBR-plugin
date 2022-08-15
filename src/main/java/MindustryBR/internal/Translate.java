@@ -11,6 +11,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
+import static MindustryBR.Main.config;
+
 public class Translate {
     public static String API = "https://translate-api.ml";
 
@@ -62,7 +64,7 @@ public class Translate {
             HttpRequest request = HttpRequest.newBuilder()
                     .GET()
                     .uri(URI.create(urlStr.toString()))
-                    .setHeader("User-Agent", "King-BR/MindustryBR-plugin")
+                    .setHeader("User-Agent", "King-BR/MindustryBR-plugin used in " + (config.getString("ip") != null ? config.getString("ip") : "unknow server"))
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();

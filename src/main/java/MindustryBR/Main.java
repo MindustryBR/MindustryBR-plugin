@@ -4,8 +4,10 @@ import MindustryBR.Discord.Bot;
 import MindustryBR.Mindustry.Commands.client.dm;
 import MindustryBR.Mindustry.Commands.client.history;
 import MindustryBR.Mindustry.Commands.client.linkDC;
+import MindustryBR.Mindustry.Commands.server.exit;
 import MindustryBR.Mindustry.Commands.server.historyLog;
 import MindustryBR.Mindustry.Commands.server.say;
+import MindustryBR.Mindustry.Commands.server.startBot;
 import MindustryBR.Mindustry.Events.*;
 import MindustryBR.Mindustry.Filters.ReactorFilter;
 import MindustryBR.Mindustry.Timers.SaveGame;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import static MindustryBR.internal.API.APIService.startWebServer;
 import static mindustry.Vars.netServer;
 
 public class Main extends Plugin {
@@ -64,8 +67,14 @@ public class Main extends Plugin {
         Events.on(UnitDrownEvent.class, e -> unitDrown.run(bot, config, e));
 
         // Players event
-        Events.on(PlayerJoin.class, e -> playerJoin.run(bot, config, e));
         Events.on(PlayerLeave.class, e -> playerLeave.run(bot, config, e));
+        Events.on(PlayerJoin.class, e -> {
+            try {
+                playerJoin.run(bot, config, e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         Events.on(PlayerChatEvent.class, e -> {
             try {
                 playerChat.run(bot, config, e);
@@ -89,23 +98,46 @@ public class Main extends Plugin {
         });
     }
 
-    public static void addPlayerAccount(String discordID, String uuid) {
-        JSONArray IDs = new JSONArray();
+    public static JSONObject addPlayerAccount(String uuid, String discordID) {
         JSONObject linkedAccount = new JSONObject();
         JSONObject vip = new JSONObject()
                 .put("level", 0)
                 .put("ends", 0);
 
-        if (playersDB.has(discordID)) linkedAccount = playersDB.getJSONObject(discordID);
-        if (linkedAccount.has("accounts")) IDs = linkedAccount.getJSONArray("accounts");
+        if (playersDB.has(uuid)) linkedAccount = playersDB.getJSONObject(uuid);
         if (linkedAccount.has("vip")) vip = linkedAccount.getJSONObject("vip");
-        IDs.put(uuid);
 
-        linkedAccount.put("accounts", IDs);
         linkedAccount.put("vip", vip);
+        linkedAccount.put("discord", discordID);
 
-        playersDB.put(discordID, linkedAccount);
+        playersDB.put(uuid, linkedAccount);
         Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(playersDB.toString(4));
+        return linkedAccount;
+    }
+
+    private static void loadContentBundle() {
+        contentBundle = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").readString());
+        Log.info("[MindustryBR] Content bundle loaded");
+    }
+
+    private static void loadConfig() {
+        // Load config file if it already exists
+        if (Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
+            config = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").readString());
+        }
+
+        Log.info("[MindustryBR] Config loaded");
+    }
+
+    private static void loadPlayersDB() {
+        playersDB = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").readString());
+        Log.info("[MindustryBR] Players DB loaded");
+    }
+
+    public static void reloadConfig() {
+        loadConfig();
+        loadPlayersDB();
+        loadContentBundle();
     }
 
     // Called when the server initializes
@@ -119,6 +151,8 @@ public class Main extends Plugin {
         if (!config.isEmpty() && !config.getJSONObject("discord").isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) {
             bot = Bot.run();
         }
+
+        startWebServer();
 
         JSONObject options = config.getJSONObject("options");
 
@@ -139,25 +173,18 @@ public class Main extends Plugin {
             createPlayersDB();
         });
 
-        handler.register("saydc", "<message...>", "[MindustryBR] Send message as Server", args -> say.run(bot, config, args));
-
-        handler.register("history", "[MindustryBR] Toggle history log in console", args -> historyLog.run(bot, config, args));
-
-        handler.register("startbot", "[force]", "[MindustryBR] Start the discord bot if it isn't already online", args -> {
-            // Start the discord bot if token was provided and the bot isn't online
-            if (((!config.isEmpty() && !config.getJSONObject("discord").getString("token").isBlank()) || args.length > 0) && !Bot.logged) {
-                if (args.length > 0) Log.info("force starting bot");
-                bot = Bot.run();
-            }
-        });
+        handler.register("saydc", say.params, say.desc, say::run);
+        handler.register("historylog", historyLog.desc, historyLog::run);
+        handler.register("startbot", startBot.params, startBot.desc, startBot::run);
+        handler.register("exit", exit.params, exit.desc, exit::run);
     }
 
     // Register commands that player can invoke in-game
     @Override
     public void registerClientCommands(CommandHandler handler) {
-        handler.<Player>register("dm", "<player> <message...>", "Mande uma mensagem privada para um jogador.", (args, player) -> dm.run(bot, config, args, player));
-        handler.<Player>register("history", "Ative o historico do bloco", (args, player) -> history.run(bot, config, args, player));
-        handler.<Player>register("link", "Link sua conta do mindusty com o discord", (args, player) -> linkDC.run(bot, config, args, player));
+        handler.register("dm", dm.params, dm.desc, dm::run);
+        handler.register("history", history.desc, history::run);
+        handler.register("link", linkDC.desc, linkDC::run);
     }
 
     private void createContentBundle() {
@@ -174,11 +201,6 @@ public class Main extends Plugin {
         Log.info("[MindustryBR] Content bundle created");
     }
 
-    private void loadContentBundle() {
-        contentBundle = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/contentBundle.json").readString());
-        Log.info("[MindustryBR] Content bundle loaded");
-    }
-
     private void createConfig() {
         // Load config file if it already exists
         if (Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").exists()) {
@@ -191,6 +213,8 @@ public class Main extends Plugin {
         JSONObject defaultPrefix = new JSONObject();
         JSONObject defaultDiscord = new JSONObject();
         JSONObject defaultOptions = new JSONObject();
+        JSONObject defaultAPI = new JSONObject();
+        JSONArray ownersIDs = new JSONArray().put("placeholder");
 
         defaultPrefix.put("owner_prefix", "[sky][Dono][] %1")
                 .put("admin_prefix", "[blue][Admin][] %1")
@@ -219,23 +243,26 @@ public class Main extends Plugin {
                 .put("autosaveAmount", 10)
                 .put("autosaveTime", 300);
 
+        defaultAPI.put("port", 8080)
+                .put("log", true)
+                .put("auth", "placeholder");
+
         defaultConfig.put("discord", defaultDiscord)
                 .put("prefix", defaultPrefix)
                 .put("options", defaultOptions)
-                .put("name", "Survival")
-                .put("owner_id", "")
-                .put("version", 0.7)
+                .put("API", defaultAPI)
+                .put("name", "Survival V6")
+                .put("internal_name", "survival-v6")
+                .put("owner_id", ownersIDs)
+                .put("version", 0.6)
                 .put("ip", "");
+
+
 
         // Create config file
         Core.settings.getDataDirectory().child("mods/MindustryBR/config.json").writeString(defaultConfig.toString(4));
         playersDB = defaultConfig;
         Log.info("[MindustryBR] Config created");
-    }
-
-    private void loadConfig() {
-        config = new JSONObject(this.getConfig().readString());
-        Log.info("[MindustryBR] Config loaded");
     }
 
     private void createPlayersDB() {
@@ -251,10 +278,5 @@ public class Main extends Plugin {
         Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(defaultConfig.toString(4));
         playersDB = defaultConfig;
         Log.info("[MindustryBR] Players DB created");
-    }
-
-    private void loadPlayersDB() {
-        playersDB = new JSONObject(Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").readString());
-        Log.info("[MindustryBR] Players DB loaded");
     }
 }

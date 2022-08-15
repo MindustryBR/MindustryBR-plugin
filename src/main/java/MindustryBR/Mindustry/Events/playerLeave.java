@@ -1,11 +1,10 @@
 package MindustryBR.Mindustry.Events;
 
+import MindustryBR.internal.DiscordRelay;
 import MindustryBR.internal.Util;
 import MindustryBR.internal.classes.history.LimitedQueue;
 import MindustryBR.internal.classes.history.entry.BaseEntry;
 import MindustryBR.internal.classes.history.entry.JoinLeaveEntry;
-import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToDiscord;
 import arc.util.Log;
 import mindustry.game.EventType.PlayerLeave;
 import mindustry.gen.Call;
@@ -24,8 +23,8 @@ public class playerLeave {
             Log.info("auto-pause: nenhum jogador conectado -> Jogo pausado...");
             Call.sendMessage("[scarlet][Server][]: Jogo pausado...");
 
-            new sendMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
-            new sendLogMsgToDiscord(bot, config, "**[Server]:** Jogo pausado...");
+            DiscordRelay.sendMsgToDiscord("**[Server]:** Jogo pausado...");
+            DiscordRelay.sendLogMsgToDiscord("**[Server]:** Jogo pausado...");
         }
 
         if (playerHistory.get(e.player.getInfo().id) == null)
@@ -38,9 +37,9 @@ public class playerLeave {
 
         // Send disconnect message to discord
         String msg = ":outbox_tray: **" + Util.handleName(e.player, true) + "** desconectou";
-        new sendMsgToDiscord(bot, config, msg);
+        DiscordRelay.sendMsgToDiscord(msg);
 
         String logMsg = ":outbox_tray: **" + Util.handleName(e.player, true) + "** (" + e.player.getInfo().id + ") desconectou";
-        new sendLogMsgToDiscord(bot, config, logMsg);
+        DiscordRelay.sendLogMsgToDiscord(logMsg);
     }
 }

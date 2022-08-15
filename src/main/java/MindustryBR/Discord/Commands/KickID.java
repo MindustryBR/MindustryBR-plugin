@@ -1,26 +1,23 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.dcRelay.sendLogMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToDiscord;
-import MindustryBR.internal.dcRelay.sendMsgToGame;
+import MindustryBR.internal.DiscordRelay;
 import arc.util.Strings;
 import mindustry.core.GameState;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.server.ServerControl;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static MindustryBR.Main.config;
 import static mindustry.Vars.state;
 
 public class KickID {
-    public KickID(DiscordApi bot, JSONObject config, MessageCreateEvent event, String[] args) {
+    public KickID(MessageCreateEvent event, String[] args) {
         ServerTextChannel channel = event.getServerTextChannel().get();
 
         if (args.length < 2) {
@@ -111,8 +108,8 @@ public class KickID {
             }
         });
 
-        new sendMsgToGame(bot, "[red][Server][]", player.get().name + " foi kikado", config);
-        new sendMsgToDiscord(bot, config, "**" + player.get().name + "** (" + player.get().getInfo().id + ") foi kikado");
-        new sendLogMsgToDiscord(bot, config, "**" + player.get().name + "** (" + player.get().getInfo().id + ") foi kikado");
+        DiscordRelay.sendMsgToGame("[red][Server][]", player.get().name + " foi kikado");
+        DiscordRelay.sendMsgToDiscord("**" + player.get().name + "** (" + player.get().getInfo().id + ") foi kikado");
+        DiscordRelay.sendLogMsgToDiscord("**" + player.get().name + "** (" + player.get().getInfo().id + ") foi kikado");
     }
 }
