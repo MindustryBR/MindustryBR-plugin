@@ -104,7 +104,7 @@ public class APIService {
                     tmpPlayer.put("id", p.uuid())
                             .put("name", p.name)
                             .put("previousNames", new JSONArray(p.getInfo().names.toArray()))
-                            .put("country", knownIPs.get(p.ip()))
+                            .put("country", knownIPtoCountry.get(p.ip()))
                             .put("vip", (playersDB.has(p.uuid()) ? playersDB.getJSONObject(p.uuid()) : addPlayerAccount(p.uuid(), null)).getJSONObject("vip"))
                             .put("history", historyArray);
                 });
@@ -137,7 +137,7 @@ public class APIService {
 
                     resObj.put("name", playerInfo.lastName)
                             .put("uuid", playerInfo.id)
-                            .put("country", knownIPs.get(playerInfo.lastIP))
+                            .put("country", knownIPtoCountry.get(playerInfo.lastIP))
                             .put("vip", (playersDB.has(playerInfo.id) ? playersDB.getJSONObject(playerInfo.id) : addPlayerAccount(playerInfo.id, null)).getJSONObject("vip"));
 
                     res.status(200);

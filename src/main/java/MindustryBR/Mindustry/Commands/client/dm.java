@@ -6,7 +6,6 @@ import mindustry.gen.Groups;
 import mindustry.gen.Player;
 
 public class dm implements ClientCommand {
-    public static final boolean adminOnly = false;
     @Nullable
     public static final String params = "<player> <message...>";
     @Nullable

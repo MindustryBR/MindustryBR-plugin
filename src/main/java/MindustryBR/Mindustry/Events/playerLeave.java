@@ -9,10 +9,13 @@ import arc.util.Log;
 import mindustry.game.EventType.PlayerLeave;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;
+import mindustry.gen.Player;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 
 import static MindustryBR.Main.playerHistory;
+import static MindustryBR.Mindustry.Commands.client.RTV.ratio;
+import static MindustryBR.Mindustry.Commands.client.RTV.votes;
 import static mindustry.Vars.state;
 
 public class playerLeave {
@@ -41,5 +44,14 @@ public class playerLeave {
 
         String logMsg = ":outbox_tray: **" + Util.handleName(e.player, true) + "** (" + e.player.getInfo().id + ") desconectou";
         DiscordRelay.sendLogMsgToDiscord(logMsg);
+
+
+        Player player = e.player;
+        int cur = votes.size();
+        int req = (int) Math.ceil(ratio * Groups.player.size());
+        if(votes.contains(player.uuid())) {
+            votes.remove(player.uuid());
+            Call.sendMessage("RTV: [accent]" + player.name + "[] saiu, [green]" + cur + "[] votos, [green]" + req + "[] necessarios");
+        }
     }
 }

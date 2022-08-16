@@ -239,7 +239,7 @@ public class Util {
      * Handle player name
      *
      * @param player      Player to handle
-     * @param removeColor Whether or not to remove color tags
+     * @param removeColor Whether to remove color tags
      * @return Handled name
      */
     public static String handleName(Player player, boolean removeColor) {
@@ -314,7 +314,7 @@ public class Util {
     }
 
     public static String ip2country(String ip) throws IOException {
-        if (knownIPs.get(ip) != null && !knownIPs.get(ip).isBlank()) return knownIPs.get(ip);
+        if (knownIPtoCountry.get(ip) != null && !knownIPtoCountry.get(ip).isBlank()) return knownIPtoCountry.get(ip);
 
         URL url = new URL("https://api.iplocation.net/?cmd=ip-country&ip=" + ip);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -333,7 +333,7 @@ public class Util {
         String country = responseObj.getString("country_name");
         if (country.isBlank()) country = "desconhecido";
 
-        knownIPs.put(ip, country);
+        knownIPtoCountry.put(ip, country);
 
         return country;
     }

@@ -7,11 +7,10 @@ import mindustry.gen.Player;
 import static MindustryBR.Main.activeHistoryPlayers;
 
 public class history implements ClientCommand {
-    public static final boolean adminOnly = false;
     @Nullable
     public static final String params = null;
     @Nullable
-    public static final String desc = "Ative o historico do bloco";
+    public static final String desc = "Ativa o historico do bloco.";
 
     public static void run(String[] args, Player player) {
         if (activeHistoryPlayers.contains(player)) {

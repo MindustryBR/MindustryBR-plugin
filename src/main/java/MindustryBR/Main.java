@@ -1,13 +1,8 @@
 package MindustryBR;
 
 import MindustryBR.Discord.Bot;
-import MindustryBR.Mindustry.Commands.client.dm;
-import MindustryBR.Mindustry.Commands.client.history;
-import MindustryBR.Mindustry.Commands.client.linkDC;
-import MindustryBR.Mindustry.Commands.server.exit;
-import MindustryBR.Mindustry.Commands.server.historyLog;
-import MindustryBR.Mindustry.Commands.server.say;
-import MindustryBR.Mindustry.Commands.server.startBot;
+import MindustryBR.Mindustry.Commands.client.*;
+import MindustryBR.Mindustry.Commands.server.*;
 import MindustryBR.Mindustry.Events.*;
 import MindustryBR.Mindustry.Filters.ReactorFilter;
 import MindustryBR.Mindustry.Timers.SaveGame;
@@ -42,7 +37,7 @@ public class Main extends Plugin {
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static Seq<Player> activeHistoryPlayers = new Seq<>();
     public static ObjectMap<String, LimitedQueue<BaseEntry>> playerHistory = new ObjectMap<>();
-    public static StringMap knownIPs = new StringMap();
+    public static StringMap knownIPtoCountry = new StringMap();
     public static boolean logHistory = false;
     public static StringMap linkCodes = new StringMap();
 
@@ -176,7 +171,9 @@ public class Main extends Plugin {
         handler.register("saydc", say.params, say.desc, say::run);
         handler.register("historylog", historyLog.desc, historyLog::run);
         handler.register("startbot", startBot.params, startBot.desc, startBot::run);
+        handler.register("rtv", RTVServer.desc, RTVServer::run);
         handler.register("exit", exit.params, exit.desc, exit::run);
+        handler.register("gameover", gameoverServer.params, gameoverServer::run);
     }
 
     // Register commands that player can invoke in-game
@@ -185,6 +182,8 @@ public class Main extends Plugin {
         handler.register("dm", dm.params, dm.desc, dm::run);
         handler.register("history", history.desc, history::run);
         handler.register("link", linkDC.desc, linkDC::run);
+        handler.register("maps", listMaps.desc, listMaps::run);
+        handler.register("rtv", RTV.desc, RTV::run);
     }
 
     private void createContentBundle() {

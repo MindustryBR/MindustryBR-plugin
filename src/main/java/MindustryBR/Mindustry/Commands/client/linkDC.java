@@ -11,11 +11,10 @@ import static MindustryBR.Main.linkCodes;
 import static MindustryBR.Main.playersDB;
 
 public class linkDC implements ClientCommand {
-    public static final boolean adminOnly = false;
     @Nullable
     public static final String params = null;
     @Nullable
-    public static final String desc = "Link sua conta do Mindusty com o iscord";
+    public static final String desc = "Linka sua conta do Mindusty com o discord.";
 
     public static void run(String[] args, Player player) {
         for (String id : linkCodes.values()) {
