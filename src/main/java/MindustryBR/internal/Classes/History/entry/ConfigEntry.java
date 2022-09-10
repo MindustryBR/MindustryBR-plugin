@@ -1,4 +1,4 @@
-package MindustryBR.internal.classes.history.entry;
+package MindustryBR.internal.Classes.History.entry;
 
 import arc.struct.ObjectMap;
 import mindustry.Vars;
@@ -84,13 +84,13 @@ public class ConfigEntry implements BaseEntry {
             } else {
                 msg.append("abriu a porta");
             }
-        } else if (building.block() == Blocks.commandCenter) {
+        } /*else if (building.block() == Blocks.commandCenter) {
             if (value == null) {
                 msg.append("mudou as configuracoes para o padrao");
             } else {
                 msg.append("comandou as unidades para ").append(getLocalized(value.toString()));
             }
-        } else if (building.block() == Blocks.liquidSource) {
+        }*/ else if (building.block() == Blocks.liquidSource) {
             if (value == null) {
                 msg.append("mudou as configuracoes para o padrao");
             } else {

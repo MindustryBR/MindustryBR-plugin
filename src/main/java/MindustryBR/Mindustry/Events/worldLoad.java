@@ -1,7 +1,8 @@
 package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.classes.Stats;
-import MindustryBR.internal.classes.history.LimitedQueue;
+import MindustryBR.Discord.Bot;
+import MindustryBR.internal.Classes.Stats;
+import MindustryBR.internal.Classes.History.LimitedQueue;
 import arc.struct.ObjectMap;
 import mindustry.Vars;
 import mindustry.game.EventType;
@@ -41,6 +42,7 @@ public class worldLoad {
         if (started) return;
         started = true;
 
+        if (bot == null || !Bot.logged) return;
         Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
         if (optionalChannel.isEmpty()) return;
         ServerTextChannel channel = optionalChannel.get();

@@ -2,7 +2,8 @@
 Plugin made for the MindustryBR server
 
 Discord: https://discord.gg/Rt5HjqW
-Servers IPs:
+
+### Servers IPs:
 ```markdown
 Survival V6 - mindustryptbr.ddns.net:6591
 ```
@@ -11,7 +12,7 @@ Survival V6 - mindustryptbr.ddns.net:6591
 ```txt
                               MIT License
 
-                       Copyright (c) 2021 King-BR
+                       Copyright (c) 2022 King-BR
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

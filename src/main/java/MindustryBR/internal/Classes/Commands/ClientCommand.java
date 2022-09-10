@@ -1,4 +1,4 @@
-package MindustryBR.internal.classes.commands;
+package MindustryBR.internal.Classes.Commands;
 
 import arc.util.Nullable;
 import mindustry.gen.Player;

@@ -1,8 +1,8 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.Util;
-import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
+import MindustryBR.internal.Classes.History.LimitedQueue;
+import MindustryBR.internal.Classes.History.entry.BaseEntry;
 import arc.util.Strings;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageBuilder;

@@ -1,6 +1,5 @@
 package MindustryBR.Discord.Commands;
 
-import MindustryBR.internal.DiscordRelay;
 import arc.util.Log;
 import mindustry.gen.Call;
 import org.javacord.api.entity.channel.ServerTextChannel;

@@ -1,7 +1,7 @@
 package MindustryBR.Mindustry.Commands.server;
 
 import MindustryBR.Discord.Bot;
-import MindustryBR.internal.classes.commands.ServerCommand;
+import MindustryBR.internal.Classes.Commands.ServerCommand;
 import arc.util.Log;
 import arc.util.Nullable;
 

@@ -1,5 +1,6 @@
 package MindustryBR.Mindustry.Events;
 
+import MindustryBR.Discord.Bot;
 import MindustryBR.internal.Util;
 import arc.Core;
 import arc.util.Log;
@@ -7,6 +8,7 @@ import arc.util.Timer;
 import mindustry.Vars;
 import mindustry.game.EventType.GameOverEvent;
 import mindustry.game.Gamemode;
+import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.maps.MapException;
@@ -49,10 +51,9 @@ public class gameover {
                         Log.err(var2.map.name() + ": " + var2.getMessage(), new Object[0]);
                         Vars.net.closeServer();
                     }
-
                 }
             };
-            Timer.schedule(lastTask, 12.0F);
+            Timer.schedule(lastTask, 12);
         } else {
             r.run();
         }
@@ -63,10 +64,20 @@ public class gameover {
 
         lastMode = Gamemode.valueOf(Core.settings.getString("lastServerMode", "survival"));
         nextMap = nextMap != null ? nextMap : maps.getNextMap(lastMode, state.map);;
+
+        Call.infoMessage((state.rules.pvp
+                ? "[accent]The " + e.winner.name + " team is victorious![]\n" : "[scarlet]Game over![]\n")
+                + "\nNext selected map:[accent] " + nextMap.name() + "[]"
+                + (nextMap.tags.containsKey("author") && !nextMap.tags.get("author").trim().isEmpty() ? " by[accent] " + nextMap.author() + "[white]" : "") + "." +
+                "\nNew game begins in 12 seconds.");
+
+        state.gameOver = true;
+        Call.updateGameOver(e.winner);
         play(true, () -> world.loadMap(nextMap, nextMap.applyRules(lastMode)));
         votes.clear();
         nextMap = null;
 
+        if (bot == null || !Bot.logged) return;
         Optional<ServerTextChannel> optionalChannel = bot.getServerTextChannelById(config.getJSONObject("discord").getString("channel_id"));
 
         if (optionalChannel.isEmpty()) return;
@@ -103,6 +114,7 @@ public class gameover {
         } else players.append("Nenhum jogador");
 
         EmbedBuilder embed = new EmbedBuilder()
+                .setTimestampToNow()
                 .setTitle(title)
                 .setColor(cor)
                 .setDescription(wave)

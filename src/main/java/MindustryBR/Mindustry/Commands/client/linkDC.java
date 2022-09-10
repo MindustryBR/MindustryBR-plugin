@@ -1,20 +1,19 @@
 package MindustryBR.Mindustry.Commands.client;
 
 import MindustryBR.internal.Util;
-import MindustryBR.internal.classes.commands.ClientCommand;
+import MindustryBR.internal.Classes.Commands.ClientCommand;
 import arc.util.Nullable;
 import mindustry.gen.Player;
 
 import java.util.Iterator;
 
-import static MindustryBR.Main.linkCodes;
-import static MindustryBR.Main.playersDB;
+import static MindustryBR.Main.*;
 
 public class linkDC implements ClientCommand {
     @Nullable
     public static final String params = null;
     @Nullable
-    public static final String desc = "Linka sua conta do Mindusty com o discord.";
+    public static final String desc = "Linka sua conta do Mindusty com o Discord.";
 
     public static void run(String[] args, Player player) {
         for (String id : linkCodes.values()) {
@@ -41,6 +40,6 @@ public class linkDC implements ClientCommand {
 
         String code = Util.randomCode(8);
         linkCodes.put(code, player.uuid());
-        player.sendMessage("Seu codigo: " + code + "\nUse o comando !link <codigo> na DM do ReactorBot no nosso servidor do [blue]discord[]: [sky]https://discord.gg/Rt5HjqW[] para linkar sua conta");
+        player.sendMessage("Seu codigo: " + code + "\nUse o comando !link <codigo> na DM do bot no nosso servidor do [blue]discord[]: [sky]" + config.getJSONObject("discord").getString("invite") + "[] para linkar sua conta");
     }
 }

@@ -1,10 +1,9 @@
 package MindustryBR.Mindustry.Commands.client;
 
-import MindustryBR.internal.classes.commands.ClientCommand;
+import MindustryBR.internal.Classes.Commands.ClientCommand;
 import arc.Events;
 import arc.util.Nullable;
 import mindustry.game.EventType;
-import mindustry.game.Gamemode;
 import mindustry.game.Team;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;

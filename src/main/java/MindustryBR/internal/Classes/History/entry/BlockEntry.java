@@ -1,4 +1,4 @@
-package MindustryBR.internal.classes.history.entry;
+package MindustryBR.internal.Classes.History.entry;
 
 import mindustry.game.EventType;
 import mindustry.gen.Player;
@@ -28,8 +28,8 @@ public class BlockEntry implements BaseEntry {
     @Override
     public String getMessage(boolean withName) {
         if (breaking)
-            return "[red]- [white]" + (withName ? player.name + " " : "(" + tile.x + "," + tile.y + ") ") + "quebrou esse bloco";
+            return "[red]- [white]" + (withName ? player.name : "(" + tile.x + "," + tile.y + ")") + " quebrou esse bloco";
         else
-            return "[green]+ [white]" + (withName ? player.name + " " : "(" + tile.x + "," + tile.y + ") ") + "construiu " + (block != null ? "[purple]" + getLocalized(block.name) + "[white]" : "esse bloco");
+            return "[green]+ [white]" + (withName ? player.name: "(" + tile.x + "," + tile.y + ")") + " construiu " + (block != null ? "[purple]" + getLocalized(block.name) + "[white]" : "esse bloco");
     }
 }

@@ -7,8 +7,8 @@ import MindustryBR.Mindustry.Events.*;
 import MindustryBR.Mindustry.Filters.ReactorFilter;
 import MindustryBR.Mindustry.Timers.SaveGame;
 import MindustryBR.Mindustry.Timers.clearUnits;
-import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
+import MindustryBR.internal.Classes.History.LimitedQueue;
+import MindustryBR.internal.Classes.History.entry.BaseEntry;
 import arc.Core;
 import arc.Events;
 import arc.struct.ObjectMap;
@@ -16,6 +16,7 @@ import arc.struct.Seq;
 import arc.struct.StringMap;
 import arc.util.CommandHandler;
 import arc.util.Log;
+import arc.util.Nullable;
 import arc.util.Timer;
 import mindustry.game.EventType.*;
 import mindustry.gen.Player;
@@ -33,7 +34,8 @@ public class Main extends Plugin {
     public static JSONObject config = new JSONObject();
     public static JSONObject contentBundle = new JSONObject();
     public static JSONObject playersDB = new JSONObject();
-    public static DiscordApi bot;
+    @Nullable
+    public static DiscordApi bot = null;
     public static LimitedQueue<BaseEntry>[][] worldHistory;
     public static Seq<Player> activeHistoryPlayers = new Seq<>();
     public static ObjectMap<String, LimitedQueue<BaseEntry>> playerHistory = new ObjectMap<>();
@@ -91,23 +93,6 @@ public class Main extends Plugin {
                 ex.printStackTrace();
             }
         });
-    }
-
-    public static JSONObject addPlayerAccount(String uuid, String discordID) {
-        JSONObject linkedAccount = new JSONObject();
-        JSONObject vip = new JSONObject()
-                .put("level", 0)
-                .put("ends", 0);
-
-        if (playersDB.has(uuid)) linkedAccount = playersDB.getJSONObject(uuid);
-        if (linkedAccount.has("vip")) vip = linkedAccount.getJSONObject("vip");
-
-        linkedAccount.put("vip", vip);
-        linkedAccount.put("discord", discordID);
-
-        playersDB.put(uuid, linkedAccount);
-        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(playersDB.toString(4));
-        return linkedAccount;
     }
 
     private static void loadContentBundle() {
@@ -215,9 +200,10 @@ public class Main extends Plugin {
         JSONObject defaultAPI = new JSONObject();
         JSONArray ownersIDs = new JSONArray().put("placeholder");
 
-        defaultPrefix.put("owner_prefix", "[sky][Dono][] %1")
-                .put("admin_prefix", "[blue][Admin][] %1")
-                .put("user_prefix", "%1");
+        defaultPrefix.put("owner_prefix", "[sky](Dono)[] %1")
+                .put("admin_prefix", "[blue](Admin)[] %1")
+                .put("user_prefix", "%1")
+                .put("vip_prefix", "");
 
         String[] discordStrings = {
                 "token",
@@ -231,7 +217,8 @@ public class Main extends Plugin {
                 "emoji-bank"
         };
 
-        defaultDiscord.put("prefix", "!");
+        defaultDiscord.put("prefix", "!")
+                .put("invite", "https://discord.gg/Rt5HjqW");
         for (String ds : discordStrings) {
             defaultDiscord.put(ds, "");
         }
@@ -242,7 +229,7 @@ public class Main extends Plugin {
                 .put("autosaveAmount", 10)
                 .put("autosaveTime", 300);
 
-        defaultAPI.put("port", 8080)
+        defaultAPI.put("port", -1)
                 .put("log", true)
                 .put("auth", "placeholder");
 
@@ -271,11 +258,8 @@ public class Main extends Plugin {
             return;
         }
 
-        JSONObject defaultConfig = new JSONObject();
-
         // Create config file
-        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(defaultConfig.toString(4));
-        playersDB = defaultConfig;
+        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString("{}");
         Log.info("[MindustryBR] Players DB created");
     }
 }

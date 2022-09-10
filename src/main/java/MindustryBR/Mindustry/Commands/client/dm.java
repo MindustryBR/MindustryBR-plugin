@@ -1,6 +1,6 @@
 package MindustryBR.Mindustry.Commands.client;
 
-import MindustryBR.internal.classes.commands.ClientCommand;
+import MindustryBR.internal.Classes.Commands.ClientCommand;
 import arc.util.Nullable;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;

@@ -1,4 +1,4 @@
-package MindustryBR.internal.classes.history.entry;
+package MindustryBR.internal.Classes.History.entry;
 
 import mindustry.gen.Player;
 

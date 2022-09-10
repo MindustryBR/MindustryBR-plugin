@@ -1,8 +1,8 @@
 package MindustryBR.Discord.Commands;
 
 import MindustryBR.internal.Util;
-import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
+import MindustryBR.internal.Classes.History.LimitedQueue;
+import MindustryBR.internal.Classes.History.entry.BaseEntry;
 import arc.struct.ObjectSet;
 import arc.util.Strings;
 import mindustry.net.Administration;

@@ -6,7 +6,7 @@ import mindustry.net.Administration;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 
-import static MindustryBR.Main.addPlayerAccount;
+import static MindustryBR.internal.Util.addPlayerAccount;
 import static MindustryBR.Main.linkCodes;
 import static mindustry.Vars.netServer;
 

@@ -1,5 +1,6 @@
 package MindustryBR.internal;
 
+import MindustryBR.Discord.Bot;
 import arc.util.Log;
 import arc.util.Strings;
 import mindustry.game.EventType.PlayerChatEvent;
@@ -18,6 +19,7 @@ import static MindustryBR.Main.config;
 public class DiscordRelay {
     // Send message to game server chat
     public static void sendMsgToGame(MessageCreateEvent event) {
+        if (!Bot.logged) return;
         if (event.getServerTextChannel().isPresent()) {
             String name = Util.handleName(event.getMessageAuthor().getDisplayName(), false, true);
             String msg = event.getMessage().getReadableContent().replace("\n", " ");
@@ -29,6 +31,7 @@ public class DiscordRelay {
     }
 
     public static void sendMsgToGame(String author, String msg) {
+        if (!Bot.logged) return;
         String name = Util.handleName(author, false, true);
         name = Util.handleDiscordMD(name, true);
         msg = Util.handleDiscordMD(msg, true);
@@ -43,6 +46,7 @@ public class DiscordRelay {
      * @param message Message
      */
     public static void sendMsgToDiscord(String message) {
+        if (!Bot.logged) return;
         message = Util.handleDiscordMention(Strings.stripColors(message));
 
         JSONObject discordConfig = config.getJSONObject("discord");
@@ -62,6 +66,7 @@ public class DiscordRelay {
      * @param playerChatEvent Player chat event
      */
     public static void sendMsgToDiscord(PlayerChatEvent playerChatEvent) throws IOException, InterruptedException {
+        if (!Bot.logged) return;
         String msg = "**" + Util.handleName(playerChatEvent.player, true, true) + "**: " + playerChatEvent.message;
         msg = Strings.stripColors(msg);
 
@@ -82,6 +87,7 @@ public class DiscordRelay {
      * @param message Message
      */
     public static void sendMsgToDiscord(String name, String message) {
+        if (!Bot.logged) return;
         String msg = "**" + Util.handleName(name, true, true) + "**: " + message;
         sendMsgToDiscord(msg);
     }
@@ -92,6 +98,7 @@ public class DiscordRelay {
      * @param message Message
      */
     public static void sendLogMsgToDiscord(String message) {
+        if (!Bot.logged) return;
         message = Util.handleDiscordMention(Strings.stripColors(message));
 
         JSONObject discordConfig = config.getJSONObject("discord");
@@ -111,6 +118,7 @@ public class DiscordRelay {
      * @param e Event
      */
     public static void sendLogMsgToDiscord(PlayerChatEvent e) {
+        if (!Bot.logged) return;
         String msg = "(" + e.player.getInfo().id + ") **" + e.player.name + "**: " + e.message;
         sendLogMsgToDiscord(msg);
     }

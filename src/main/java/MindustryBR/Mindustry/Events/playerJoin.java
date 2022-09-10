@@ -1,10 +1,11 @@
 package MindustryBR.Mindustry.Events;
 
+import MindustryBR.Discord.Bot;
 import MindustryBR.internal.DiscordRelay;
 import MindustryBR.internal.Util;
-import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
-import MindustryBR.internal.classes.history.entry.JoinLeaveEntry;
+import MindustryBR.internal.Classes.History.LimitedQueue;
+import MindustryBR.internal.Classes.History.entry.BaseEntry;
+import MindustryBR.internal.Classes.History.entry.JoinLeaveEntry;
 import arc.util.Log;
 import mindustry.game.EventType.PlayerJoin;
 import mindustry.gen.Call;
@@ -25,8 +26,8 @@ public class playerJoin {
         if (playerHistory.get(e.player.uuid()) == null)
             playerHistory.put(e.player.uuid(), new LimitedQueue<>(20));
 
-        if (playersDB.has(e.player.uuid()))
-            addPlayerAccount(e.player.uuid(), null);
+        if (!playersDB.has(e.player.uuid()))
+            Util.addPlayerAccount(e.player.uuid(), null);
 
         LimitedQueue<BaseEntry> history = playerHistory.get(e.player.getInfo().id);
         JoinLeaveEntry historyEntry = new JoinLeaveEntry(e.player);
@@ -52,10 +53,14 @@ public class playerJoin {
             Log.info("auto-pause: " + Groups.player.size() + " jogador conectado -> Jogo despausado...");
             Call.sendMessage("[scarlet][Server][]: Jogo despausado...");
 
-            DiscordRelay.sendMsgToDiscord("**[Server]:** Jogo despausado...");
-            DiscordRelay.sendLogMsgToDiscord("**[Server]:** Jogo despausado...");
+            if (bot != null && Bot.logged) {
+                DiscordRelay.sendMsgToDiscord("**[Server]:** Jogo despausado...");
+                DiscordRelay.sendLogMsgToDiscord("**[Server]:** Jogo despausado...");
+            }
         }
 
+
+        if (bot == null || !Bot.logged) return;
         // Send connect message to discord
         String msg = ":inbox_tray: **" + Util.handleName(e.player, true) + "** conectou";
         DiscordRelay.sendMsgToDiscord(msg);

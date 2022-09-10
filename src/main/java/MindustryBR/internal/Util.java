@@ -207,7 +207,7 @@ public class Util {
      * Handle player name
      *
      * @param name        Player name
-     * @param removeColor Whether or not to remove color tags
+     * @param removeColor Whether to remove color tags
      * @return Handled name
      */
     public static String handleName(String name, boolean removeColor) {
@@ -223,8 +223,8 @@ public class Util {
      * Handle player name
      *
      * @param name        Player name
-     * @param removeColor Whether or not to remove color tags
-     * @param discord     Whether or not to handle discord markdown
+     * @param removeColor Whether to remove color tags
+     * @param discord     Whether to handle discord markdown
      * @return Handled name
      */
     public static String handleName(String name, boolean removeColor, boolean discord) {
@@ -261,8 +261,8 @@ public class Util {
      * Handle player name
      *
      * @param player      Player to handle
-     * @param removeColor Whether or not to remove color tags
-     * @param discord     Whether or not to remove Discord Markdown
+     * @param removeColor Whether to remove color tags
+     * @param discord     Whether to remove Discord Markdown
      * @return Handled name
      */
     public static String handleName(Player player, boolean removeColor, boolean discord) {
@@ -274,7 +274,7 @@ public class Util {
     }
 
     /**
-     * Save game if the server is open and its not paused
+     * Save game if the server is open, and it's not paused
      */
     public static void saveGame() {
         if (!Vars.state.isPlaying() || Vars.state.serverPaused) return;
@@ -349,6 +349,23 @@ public class Util {
     }
 
     public static boolean isVIP(String _uuid) {
-        return playersDB.has(_uuid) && playersDB.getJSONObject(_uuid).getJSONObject("vip").getInt("ends") > 0;
+        return playersDB.has(_uuid) && playersDB.getJSONObject(_uuid).getJSONObject("vip").getLong("ends") > new Date().getTime();
+    }
+
+    public static JSONObject addPlayerAccount(String uuid, String discordID) {
+        JSONObject linkedAccount = new JSONObject();
+        JSONObject vip = new JSONObject()
+                .put("level", 0)
+                .put("ends", 0);
+
+        if (playersDB.has(uuid)) linkedAccount = playersDB.getJSONObject(uuid);
+        if (linkedAccount.has("vip")) vip = linkedAccount.getJSONObject("vip");
+
+        linkedAccount.put("vip", vip);
+        linkedAccount.put("discord", discordID);
+
+        playersDB.put(uuid, linkedAccount);
+        Core.settings.getDataDirectory().child("mods/MindustryBR/players.json").writeString(playersDB.toString(4));
+        return linkedAccount;
     }
 }

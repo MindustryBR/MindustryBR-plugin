@@ -1,8 +1,8 @@
 package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
-import MindustryBR.internal.classes.history.entry.BlockEntry;
+import MindustryBR.internal.Classes.History.LimitedQueue;
+import MindustryBR.internal.Classes.History.entry.BaseEntry;
+import MindustryBR.internal.Classes.History.entry.BlockEntry;
 import arc.struct.Seq;
 import arc.util.Log;
 import mindustry.game.EventType;

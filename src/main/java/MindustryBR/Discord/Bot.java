@@ -2,6 +2,7 @@ package MindustryBR.Discord;
 
 import MindustryBR.Discord.CustomListeners.MsgCreate;
 import arc.util.Log;
+import arc.util.Nullable;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
@@ -10,9 +11,13 @@ import static MindustryBR.Main.config;
 public class Bot {
     public static boolean logged = false;
 
+    @Nullable
     public static DiscordApi run() {
+        String token = config.getJSONObject("discord").getString("token");
+        if (token == null || token.isBlank() || token.equals("placeholder")) return null;
+
         DiscordApi bot = new DiscordApiBuilder()
-                .setToken(config.getJSONObject("discord").getString("token"))
+                .setToken(token)
                 .setAllIntents()
                 .login().join();
 

@@ -1,4 +1,4 @@
-package MindustryBR.internal.classes.history;
+package MindustryBR.internal.Classes.History;
 
 import java.util.LinkedList;
 

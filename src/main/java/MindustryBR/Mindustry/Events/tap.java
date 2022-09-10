@@ -1,7 +1,7 @@
 package MindustryBR.Mindustry.Events;
 
-import MindustryBR.internal.classes.history.LimitedQueue;
-import MindustryBR.internal.classes.history.entry.BaseEntry;
+import MindustryBR.internal.Classes.History.LimitedQueue;
+import MindustryBR.internal.Classes.History.entry.BaseEntry;
 import mindustry.game.EventType;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;

@@ -1,6 +1,6 @@
 package MindustryBR.Mindustry.Commands.server;
 
-import MindustryBR.internal.classes.commands.ServerCommand;
+import MindustryBR.internal.Classes.Commands.ServerCommand;
 import arc.Events;
 import arc.util.Log;
 import arc.util.Nullable;
